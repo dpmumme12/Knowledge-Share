@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="container-fluid">
+  <div class="row">
+    <!--   Desktop Navbar    -->
+    {% include "blocks/desktop_navbar.html" %}
+    <!--   Mobile Navbar    -->
+    {% include "blocks/mobile_navbar.html" %}
+    <!--   Main body    -->
+    <div class="col g-0">
+      <div class="main-body text-break">
+        <div class="header">
+          <div class="top-right-menu">
+            <div class="top-right-menu-item ">
+              <a class="top-right-menu-icon position-relative" href="#"><i class="fa-solid fa-bell"></i><span class="position-absolute top-100 start-100 translate-middle badge rounded-pill bg-danger badge">{{notifications}}</span></a>
+            </div>
+            <div class="top-right-menu-item">
+              <a class="top-right-menu-icon" href="#"><i class="fa-solid fa-circle-user"></i></a>
+            </div>
+          </div>
+        </div>    
+        {% block body %}
+        {% endblock body %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock main %}

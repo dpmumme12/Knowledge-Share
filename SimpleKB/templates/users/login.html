@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'users/login.css' %}'>
+{% endblock styles %}
+
+
+
+{% block main %}
+
+{% if form.errors %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill" style="padding-right: 15px;"></i>Invalid username and/or password.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% else %}
+{% endif %}
+
+<div class="container">
+    <div class="row" style="height: 100vh;">
+        <div class="col-lg-7" >
+            <div class="welcome-heading animate__animated animate__fadeIn animate__slow">
+                <h1 class="text-white" >Welcome!</h1>
+                <h4 class="text-white">This is the into message to users before siging in</h4>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="vertical-center">
+                <div class="card shadow-lg" >
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="pb-3">
+                                {{ form.username.label_tag }}
+                                {{ form.username }}
+                            </div>
+                            <div class="pb-3">
+                                {{ form.password.label_tag }}
+                                {{ form.password }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Log in</button>
+                        </form>
+                        <div style="text-align: center;"><small>Don't have an account? <a href="{% url 'users:register' %}" style="text-decoration: none;">Sign up</a></small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12" style="text-align: center;">
+            <div class="fixed-bottom">
+                <small><a href='https://www.freepik.com/vectors/background' style="color: white; opacity: 30%;">Background vector created by freepik - www.freepik.com</a></small>
+            </div>
+        </div>
+    </div>  
+</div>
+{% endblock main %}

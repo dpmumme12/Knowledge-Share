@@ -1,0 +1,21 @@
+body {
+    background-image: url("/static/images/5559852.jpg"); 
+}
+
+.card-placement {
+    width: 30%;
+    margin: 0;
+    position: relative;
+    -ms-transform: translateY(50%);
+    transform: translateY(50%);
+}
+
+
+@media all and (max-width:992px) {
+    .card-placement {
+        width: 100%;
+        -ms-transform: translateY(0);
+        transform: translateY(0);
+        margin-top: 30%;
+    }
+  }

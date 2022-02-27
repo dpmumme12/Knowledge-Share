@@ -1,0 +1,52 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'users/register.css' %}'>
+{% endblock styles %}
+
+{% block main %}
+
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="card-placement">
+            <div class="card shadow-lg" >
+                <div class="card-body">
+                    <h5 class="card-title">Sign Up</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="pb-3">
+                            <label for="{{ RegisterForm.username.id_for_label }}">Username:</label>
+                            {{ RegisterForm.username }}
+                            <div style="color: red;">{{ RegisterForm.username.errors }}</div>
+                        </div>
+                        <div class="pb-3">
+                            <label for="{{ RegisterForm.email.id_for_label }}">Email:</label>
+                            {{ RegisterForm.email }}
+                            <div style="color: red;">{{ RegisterForm.email.errors }}</div>
+                        </div>
+                        <div class="pb-3">
+                            <label for="{{ RegisterForm.password1.id_for_label }}">Password:</label>
+                            {{ RegisterForm.password1 }}
+                            <div style="color: red;">{{ RegisterForm.password1.errors }}</div>
+                        </div>
+                        <div class="pb-3">
+                            <label for="{{ RegisterForm.password2.id_for_label }}">Confirm Password:</label>
+                            {{ RegisterForm.password2 }}
+                            <div style="color: red;">{{ RegisterForm.password2.errors }}</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
+                    <div style="padding-top: 5px;"><small>Already have an account? <a href="{% url 'users:login' %}" style="text-decoration: none;">Log in here</a></small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12" style="text-align: center;">
+        <div class="fixed-bottom">
+            <small><a href='https://www.freepik.com/vectors/background' style="color: white; opacity: 30%;">Background vector created by freepik - www.freepik.com</a></small>
+        </div>
+    </div>
+</div>
+{% endblock main %}
+
