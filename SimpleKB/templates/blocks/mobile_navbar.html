@@ -1,18 +1,23 @@
-{% url 'knowledgebase:index' as home_url %}
+{% url 'knowledgebase:dashboard' as dashboard_url %}
+{% url 'knowledgebase:knowledgebase' as knowledgebase_url %}
 
 <div class="mobile-nav-bar">
     <nav class="navbar fixed-bottom nav-bg-color text-break">
       <div class="container-fluid">
         <ul class="nav" style="width: 100%">
           <li class="nav-item">
-            {% if request.path == home_url %}
-              <a class="icon-active" aria-current="page" href="#" ><i class="fa-solid fa-house fa-xl"></i></a>
+            {% if request.path == dashboard_url %}
+              <a class="icon-active" aria-current="page" href="{{dashboard_url}}" ><i class="fa-solid fa-house fa-xl"></i></a>
             {% else %}
-              <a class="nav-icon" aria-current="page" href="#" ><i class="fa-solid fa-house fa-xl"></i></a>
+              <a class="nav-icon" aria-current="page" href="{{dashboard_url}}" ><i class="fa-solid fa-house fa-xl"></i></a>
             {% endif %}
           </li>
           <li class="nav-item">
-            <a class="nav-icon" href="#"><i class="fa-solid fa-folder fa-xl"></i></a>
+            {% if request.path == knowledgebase_url %}
+              <a class="icon-active" href="{{knowledgebase_url}}"><i class="fa-solid fa-folder fa-xl"></i></a>
+            {% else %}
+              <a class="nav-icon" href="{{knowledgebase_url}}"><i class="fa-solid fa-folder fa-xl"></i></a>
+            {% endif %}
           </li>
           <li class="nav-item">
             <a class="nav-icon" href="#"><i class="fa-solid fa-envelope fa-xl"></i></a>

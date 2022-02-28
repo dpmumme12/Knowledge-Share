@@ -1,11 +1,23 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.views.generic import View
-from froala_editor.widgets import FroalaEditor
-from django import forms
+from .forms import PageForm
 
 # Create your views here.
-class Index(View):
+class DashboardView(View):
 
     def get(self, request):
-        return render(request, 'knowledgebase/index.html')
+        return render(request, 'knowledgebase/dashboard.html')
+
+
+class KnowledgeBaseView(View):
+
+    def get(self, request):
+        return render(request, 'knowledgebase/knowledgebase.html')
+
+
+class EditorView(View):
+
+    def get(self, request):
+        return render(request, 'knowledgebase/editor.html', {
+            'editor': PageForm()
+        })

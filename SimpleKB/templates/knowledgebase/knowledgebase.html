@@ -1,0 +1,10 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'knowledgebase/knowledgebase.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+hello kb <a href="{% url 'knowledgebase:editor' %}">editor</a>
+{% endblock body %}
