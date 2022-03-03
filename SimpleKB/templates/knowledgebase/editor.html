@@ -2,11 +2,12 @@
 {% load static %}
 
 {% block styles %}
+{{editor.media}}
 <link rel="stylesheet" href='{% static 'knowledgebase/editor.css' %}'>
 {% endblock styles %}
 
 {% block body %}
-
+{{editor}}
 {% endblock %}
 
 {% block scripts %}

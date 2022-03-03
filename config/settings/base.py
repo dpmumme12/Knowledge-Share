@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     'django_extensions',
     'fontawesomefree',
     'froala_editor',
+    'tinymce',
 ]
 
 LOCAL_APPS = [
@@ -139,10 +140,21 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-FROALA_EDITOR_PLUGINS = ('align', 'char_counter', 'code_beautifier', 'code_view', 'colors',
-                         'draggable', 'emoticons', 'entities', 'file', 'font_family', 'font_size',
-                         'fullscreen', 'image_manager', 'image', 'inline_style', 'line_breaker',
-                         'link', 'lists', 'paragraph_format', 'paragraph_style', 'quick_insert',
-                         'quote', 'save', 'table', 'url', 'video', 'markdown')
+# TinyMCE Settings
 
-FROALA_EDITOR_THEME = 'dark'
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 1000,
+    "menubar": True,
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+    "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | "
+    "bold italic backcolor | alignleft aligncenter "
+    "alignright alignjustify | bullist numlist outdent indent | "
+    "removeformat | help",
+    # "mobile": {
+    #     "theme": 'mobile',
+    #     "plugins": ['autosave', 'lists', 'autolink']
+    # }
+}

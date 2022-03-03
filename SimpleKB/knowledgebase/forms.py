@@ -1,5 +1,5 @@
 from django import forms
-from froala_editor.widgets import FroalaEditor
+from tinymce.widgets import TinyMCE
 
 class PageForm(forms.Form):
-    content = forms.CharField(widget=FroalaEditor())
+    content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))

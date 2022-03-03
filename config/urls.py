@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('SimpleKB.knowledgebase.urls', namespace='knowledgebase')),
     path('users/', include('SimpleKB.users.urls', namespace='users')),
-    path('froala_editor/', include('froala_editor.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ]
