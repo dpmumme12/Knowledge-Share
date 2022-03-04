@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block styles %}
+<script src="{% static 'knowledgebase/editor.js' %}"></script>
 {{editor.media}}
 <link rel="stylesheet" href='{% static 'knowledgebase/editor.css' %}'>
 {% endblock styles %}
@@ -11,5 +12,5 @@
 {% endblock %}
 
 {% block scripts %}
-
+<script>var token = '{{csrf_token}}';</script>
 {% endblock scripts %}

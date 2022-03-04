@@ -40,7 +40,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'django_extensions',
     'fontawesomefree',
-    'froala_editor',
     'tinymce',
 ]
 
@@ -152,7 +151,10 @@ TINYMCE_DEFAULT_CONFIG = {
     "toolbar": "undo redo | formatselect | "
     "bold italic backcolor | alignleft aligncenter "
     "alignright alignjustify | bullist numlist outdent indent | "
-    "removeformat | help",
+    "removeformat | help | paste",
+    "paste_data_images": True,
+    "paste_as_text": True,
+    "images_upload_handler": "image_upload_handler",
     # "mobile": {
     #     "theme": 'mobile',
     #     "plugins": ['autosave', 'lists', 'autolink']

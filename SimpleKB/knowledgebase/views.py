@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import View
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from .forms import PageForm
 
 # Create your views here.
@@ -21,3 +24,10 @@ class EditorView(View):
         return render(request, 'knowledgebase/editor.html', {
             'editor': PageForm()
         })
+
+
+class ImageUploadView(View):
+
+    def post(self, request):
+        print(request.FILES['file'].content_type)
+        return JsonResponse({'location': '/test'})
