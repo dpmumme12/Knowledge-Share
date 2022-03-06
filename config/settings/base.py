@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from re import T
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -141,20 +142,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # TinyMCE Settings
 
+TINYMCE_SPELLCHECKER = True
+
 TINYMCE_DEFAULT_CONFIG = {
     "theme": "silver",
-    "height": 1000,
     "menubar": True,
-    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+    "plugins": "toc,advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
     "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
-    "code,help,wordcount",
+    "code,help,wordcount,spellchecker,textcolor,tabfocus,codesample,nonbreaking,pagebreak",
     "toolbar": "undo redo | formatselect | "
     "bold italic backcolor | alignleft aligncenter "
-    "alignright alignjustify | bullist numlist outdent indent | "
+    "alignright alignjustify | bullist numlist outdent indent | toc |"
     "removeformat | help | paste",
     "paste_data_images": True,
     "paste_as_text": True,
     "images_upload_handler": "image_upload_handler",
+    "nonbreaking_force_tab": True,
+    "toolbar_sticky": True,
+    "skin": 'oxide',
+    # "image_title": True,
+    # "automatic_uploads": True,
+    # "file_picker_types": 'image',
+    # "file_picker_callback": "file_callback",
     # "mobile": {
     #     "theme": 'mobile',
     #     "plugins": ['autosave', 'lists', 'autolink']

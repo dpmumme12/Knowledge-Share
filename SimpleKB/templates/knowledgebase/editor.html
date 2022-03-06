@@ -8,9 +8,12 @@
 {% endblock styles %}
 
 {% block body %}
-{{editor}}
+<div class="editor-wrapper">
+    {{editor}}
+</div>
 {% endblock %}
 
 {% block scripts %}
+{{article.id|json_script:"article_id"}}
 <script>var token = '{{csrf_token}}';</script>
 {% endblock scripts %}
