@@ -21,8 +21,8 @@ class KnowledgeBaseView(View):
         return render(request, 'knowledgebase/knowledgebase.html')
 
 
-class EditorView(View):
-    template_name = 'knowledgebase/editor.html'
+class ArticleEditView(View):
+    template_name = 'knowledgebase/article_edit.html'
 
     def get(self, request, article_id=None):
         if article_id is None:
@@ -31,7 +31,7 @@ class EditorView(View):
                 title='Draft ' + datetime.now().strftime('%b %d %Y'),
                 article_status=Article.Status.DRAFT
             )
-            return redirect('knowledgebase:editor_id', article_id=article.id)
+            return redirect('knowledgebase:article_edit', article_id=article.id)
 
         article = get_object_or_404(Article, id=article_id)
         return render(request, self.template_name, {
@@ -39,7 +39,7 @@ class EditorView(View):
             'article': article,
         })
 
-    def post(self, request, article_id, **kwargs):
+    def post(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
         article.article_status = request.POST['SubmitButton']
         form = ArticleForm(request.POST, instance=article)
@@ -58,7 +58,7 @@ class ArticleDeleteView(DeleteView):
     success_url = reverse_lazy('knowledgebase:knowledgebase')
 
 
-class ImageUploadView(View):
+class ArticleImageUploadView(View):
 
     def post(self, request):
         if 'file' in request.FILES:

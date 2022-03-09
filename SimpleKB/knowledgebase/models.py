@@ -1,4 +1,4 @@
-from distutils.command.upload import upload
+import uuid as uuid_lib
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -19,6 +19,7 @@ class Article(TimeStampedModel):
     article_status = models.SmallIntegerField(choices=Status.choices)
     content = models.TextField(blank=True)
     version = models.IntegerField(default=0)
+    uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
 
 
 class ArticleImage(models.Model):

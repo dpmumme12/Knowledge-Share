@@ -1,11 +1,12 @@
 
 function image_upload_handler (blobInfo, success, failure, progress) {
     const article_id = JSON.parse(document.getElementById('article_id').textContent);
+    const article_upload_url = JSON.parse(document.getElementById('article_upload_url').textContent);
     var xhr, formData;
   
     xhr = new XMLHttpRequest();
     xhr.withCredentials = false;
-    xhr.open('POST', '/ImageUpload');
+    xhr.open('POST', article_upload_url);
     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken')); // manually set header
   
     xhr.upload.onprogress = function (e) {
