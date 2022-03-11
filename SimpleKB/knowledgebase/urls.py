@@ -8,6 +8,6 @@ urlpatterns = [
     path('KnowledgeBase', KnowledgeBaseView.as_view(), name='knowledgebase'),
     path('Article/Create', ArticleEditView.as_view(), name='article_create'),
     path('Article/Edit/<int:article_id>', ArticleEditView.as_view(), name='article_edit'),
-    path('Article/Delete.<int:pk>', ArticleDeleteView.as_view(), name='article_delete'),
+    path('Article/Delete/<int:pk>', ArticleDeleteView.as_view(), name='article_delete'),
     path('Article/ImageUpload', ArticleImageUploadView.as_view(), name='article_image_upload'),
 ]

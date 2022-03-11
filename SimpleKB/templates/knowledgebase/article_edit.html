@@ -8,21 +8,37 @@
 {% endblock styles %}
 
 {% block body %}
-<div class="pb-1 pt-4 text-end">
-    <div class="pe-2 d-inline-block">
-        <form action="{% url 'knowledgebase:article_delete' article.id%}" method="post" class="d-inline-block">
-            {% csrf_token %}
-            <button class="btn btn-danger" type="submit">Delete Draft</button>
-        </form>
-    </div>
-    <div class="pe-2 d-inline-block">
-        <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.Status.DRAFT}} form="ArticleForm">Save Draft</button>
-    </div>
-    <div class="pe-3 d-inline-block">
-        <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.Status.ACTIVE}} form="ArticleForm">Publish Draft</button>
-    </div>
-</div>
 <div class="editor-wrapper">
+    <div class="pb-3">
+        <div class="d-inline-block">
+            <select>
+                {% for version in article_versions %}
+                    <option>Version {{version.version}} - {{version.get_article_status_display}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="d-inline-block float-end">
+            {% if article.article_status == article.Status.DRAFT %}
+                <div class="pe-2 d-inline-block">
+                    <form action="{% url 'knowledgebase:article_delete' article.id%}" method="post" class="d-inline-block">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Delete Draft</button>
+                    </form>
+                </div>
+                <div class="pe-2 d-inline-block">
+                    <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.Status.DRAFT}} form="ArticleForm">Save Draft</button>
+                </div>
+                <div class="pe-3 d-inline-block">
+                    <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.Status.ACTIVE}} form="ArticleForm">Publish Draft</button>
+                </div>
+            {% else %}
+                <div class="pe-2 d-inline-block">
+                    
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
     <form method="post" id="ArticleForm">
         {% csrf_token %}
         <div class="pb-4">

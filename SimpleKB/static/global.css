@@ -2,6 +2,19 @@ body  {
     background-color: rgb(245, 245, 245);
 }
 
+/* .col-1 {
+    width: 70px;
+}
+
+.col {
+    padding-left: 3%;
+} */
+
+.t {
+    flex: 0 0 auto;
+    width: 70px;
+}
+
 .rounded-corners {
     border-radius: 20px;
 }
@@ -64,6 +77,28 @@ body  {
 
 .badge {
     font-size: 12px;
+}
+
+.alert {
+    height: 30px;
+    margin: auto;
+    line-height:30px;
+    padding:0px 15px;
+    padding-bottom: 1px;
+}
+
+.alert-close-button {
+  position: absolute;
+  right: 0;
+  padding-right: 1rem;
+  color: #000;
+}
+
+.alert-close-button:hover {
+    cursor: pointer;
+    color: #000;
+    text-decoration: none;
+    opacity: 0.55;
 }
 
 

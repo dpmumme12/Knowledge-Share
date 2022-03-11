@@ -4,6 +4,7 @@ from django.views.generic import View, DeleteView
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.contrib import messages
 from datetime import datetime
 from .forms import ArticleForm
 from .models import Article, ArticleImage
@@ -18,6 +19,7 @@ class DashboardView(View):
 class KnowledgeBaseView(View):
 
     def get(self, request):
+        messages.add_message(request, messages.INFO, 'Hello world.')
         return render(request, 'knowledgebase/knowledgebase.html')
 
 
@@ -33,10 +35,12 @@ class ArticleEditView(View):
             )
             return redirect('knowledgebase:article_edit', article_id=article.id)
 
-        article = get_object_or_404(Article, id=article_id)
+        current_article = get_object_or_404(Article, id=article_id)
+        article_versions = Article.objects.filter(uuid=current_article.uuid)
         return render(request, self.template_name, {
-            'ArticleForm': ArticleForm(instance=article),
-            'article': article,
+            'ArticleForm': ArticleForm(instance=current_article),
+            'article_versions': article_versions,
+            'article': current_article,
         })
 
     def post(self, request, article_id):
