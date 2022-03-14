@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegisterationForm
 
 
@@ -14,8 +15,9 @@ class RegisterationView(View):
     def post(self, request):
         form = UserRegisterationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
 
+            login(request, authenticate(username=user.username, password=user.password))
             return redirect(settings.LOGIN_REDIRECT_URL)
         else:
             return render(request, 'users/register.html', {'RegisterForm': form})

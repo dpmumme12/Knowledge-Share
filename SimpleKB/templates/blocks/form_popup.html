@@ -1,0 +1,42 @@
+{% comment %}
+Reusable popup with form submission. To use this popup in a template 
+use the 'include' tag like so 
+{% include 'blocks/form_popup.html' with id='id' title='title' form=Form %}
+
+include these attributes in button on your template to activate popup
+'data-bs-toggle="modal" data-bs-target="#id' where id is what you set as the input for the popup
+
+input vars:
+id - the id you will include on the button in your template to activate the popup
+title - the header of the popup
+form - form you wish for the popup to have
+
+{% endcomment %}
+
+<!-- Modal -->
+  <div class="modal fade" id="{{id}}" tabindex="-1" aria-labelledby="{{id}}Label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{title}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="pb-4">
+                  {{ field.label_tag}}
+                  {{ field }}
+                  <div style="color: red;">{{ field.errors }}</div>
+                </div>
+                {% endfor %}
+                <div class="text-end">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>

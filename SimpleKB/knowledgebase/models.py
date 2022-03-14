@@ -20,8 +20,18 @@ class Article(TimeStampedModel):
     content = models.TextField(blank=True)
     version = models.IntegerField(default=0)
     uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
+    folder = models.ForeignKey('Folder', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class ArticleImage(models.Model):
     article_id = models.ForeignKey('Article', on_delete=models.CASCADE)
     image = models.ImageField()
+
+
+class Folder(TimeStampedModel):
+    name = models.CharField(max_length=200)
+    parent_folder = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name

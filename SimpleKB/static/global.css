@@ -2,17 +2,13 @@ body  {
     background-color: rgb(245, 245, 245);
 }
 
-/* .col-1 {
+.col-nav {
+    flex: 0 0 auto;
     width: 70px;
 }
 
-.col {
+.main-body {
     padding-left: 3%;
-} */
-
-.t {
-    flex: 0 0 auto;
-    width: 70px;
 }
 
 .rounded-corners {
@@ -59,7 +55,6 @@ body  {
 }
 
 .top-right-menu {
-    padding-right: 40px;
     padding-top: 10px;
     display: inline-block;
 }
@@ -85,6 +80,12 @@ body  {
     line-height:30px;
     padding:0px 15px;
     padding-bottom: 1px;
+}
+
+.alert-error {
+    color: #771114;
+    background-color: #f4d2d3;
+    border-color: #eebbbd;
 }
 
 .alert-close-button {

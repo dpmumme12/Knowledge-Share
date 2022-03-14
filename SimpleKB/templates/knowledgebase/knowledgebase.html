@@ -6,6 +6,25 @@
 {% endblock styles %}
 
 {% block body %}
-hello kb 
-<a href="{% url 'knowledgebase:article_create' %}" class="btn btn-info">Create article</a>
+<div class="col-12 text-end">
+    <a href="{% url 'knowledgebase:article_create' %}" class="btn btn-info me-3">Create article <i class="fa-solid fa-plus fa-xs"></i></a>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateFolderModal">
+        Create Folder <i class="fa-solid fa-plus fa-xs"></i>
+    </button>
+</div>
+
+<div class="pt-3">
+    <ul class="list-group list-group-flush">
+        {% for folder in folders %}
+            <li class="list-group-item list-group-item-action">
+                <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."> 
+                {{folder.name}}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=FolderForm%}
+
 {% endblock body %}

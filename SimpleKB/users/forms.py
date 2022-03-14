@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User
 
 class UserRegisterationForm(UserCreationForm):
-    """ Inherits Django;s UserCreationForm to create new users with no privileges """
+    """ Inherits Django's UserCreationForm to create new users with no privileges """
 
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={
         'autocomplete': 'new-password',

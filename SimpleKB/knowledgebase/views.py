@@ -1,26 +1,49 @@
+from re import template
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.views.generic import View, DeleteView
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from datetime import datetime
-from .forms import ArticleForm
-from .models import Article, ArticleImage
+from .forms import ArticleForm, FolderForm
+from .models import Article, ArticleImage, Folder
 
 # Create your views here.
 class DashboardView(View):
+    template_name = 'knowledgebase/dashboard.html'
 
     def get(self, request):
-        return render(request, 'knowledgebase/dashboard.html')
+        return render(request, self.template_name)
 
 
 class KnowledgeBaseView(View):
+    template_name = 'knowledgebase/knowledgebase.html'
 
     def get(self, request):
-        messages.add_message(request, messages.INFO, 'Hello world.')
-        return render(request, 'knowledgebase/knowledgebase.html')
+        folders = list(Folder.objects.filter(owner=request.user))
+        folder_form = FolderForm(user=request.user)
+        folder_form.fields['parent_folder'].choices += [(folder.id, folder.name)
+                                                        for folder in folders]
+        return render(request, self.template_name, {
+            'FolderForm': folder_form,
+            'folders': folders
+        })
+
+    def post(self, request):
+        folder_form = FolderForm(request.POST, user=request.user)
+        if folder_form.is_valid():
+            instance = folder_form.save(commit=False)
+            instance.owner = request.user
+            instance.save()
+
+            messages.success(request, 'Folder created successfully!')
+            return redirect('knowledgebase:knowledgebase')
+
+        return render(request, self.template_name, {
+            'FolderForm': folder_form
+        })
 
 
 class ArticleEditView(View):
