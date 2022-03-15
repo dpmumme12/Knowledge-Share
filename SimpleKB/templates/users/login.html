@@ -10,9 +10,12 @@
 {% block main %}
 
 {% if form.errors %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <i class="bi bi-exclamation-triangle-fill" style="padding-right: 15px;"></i>Invalid username and/or password.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="alert-danger alert d-flex align-items-center alert-dismissible fade show animate__animated animate__fadeInDown">
+    <svg class="bi flex-shrink-0 me-2" width="17" height="17" role="img">
+        <use xlink:href="#exclamation-triangle-fill"/>
+    </svg>
+    Invalid username/password
+    <a class="alert-close-button" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
 </div>
 {% else %}
 {% endif %}
@@ -31,14 +34,13 @@
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
-                            <div class="pb-3">
-                                {{ form.username.label_tag }}
-                                {{ form.username }}
-                            </div>
-                            <div class="pb-3">
-                                {{ form.password.label_tag }}
-                                {{ form.password }}
-                            </div>
+                            {% for field in form %}
+                                <div class="pb-3">
+                                {{ field.label_tag}}
+                                {{ field }}
+                                <div style="color: red;">{{ field.errors }}</div>
+                                </div>
+                            {% endfor %}
                             <button type="submit" class="btn btn-primary">Log in</button>
                         </form>
                         <div style="text-align: center;"><small>Don't have an account? <a href="{% url 'users:register' %}" style="text-decoration: none;">Sign up</a></small></div>

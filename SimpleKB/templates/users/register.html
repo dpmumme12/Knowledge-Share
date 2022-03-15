@@ -15,26 +15,13 @@
                     <h5 class="card-title">Sign Up</h5>
                     <form method="post">
                         {% csrf_token %}
-                        <div class="pb-3">
-                            <label for="{{ RegisterForm.username.id_for_label }}">Username:</label>
-                            {{ RegisterForm.username }}
-                            <div style="color: red;">{{ RegisterForm.username.errors }}</div>
-                        </div>
-                        <div class="pb-3">
-                            <label for="{{ RegisterForm.email.id_for_label }}">Email:</label>
-                            {{ RegisterForm.email }}
-                            <div style="color: red;">{{ RegisterForm.email.errors }}</div>
-                        </div>
-                        <div class="pb-3">
-                            <label for="{{ RegisterForm.password1.id_for_label }}">Password:</label>
-                            {{ RegisterForm.password1 }}
-                            <div style="color: red;">{{ RegisterForm.password1.errors }}</div>
-                        </div>
-                        <div class="pb-3">
-                            <label for="{{ RegisterForm.password2.id_for_label }}">Confirm Password:</label>
-                            {{ RegisterForm.password2 }}
-                            <div style="color: red;">{{ RegisterForm.password2.errors }}</div>
-                        </div>
+                        {% for field in RegisterForm %}
+                            <div class="pb-3">
+                                {{ field.label_tag}}
+                                {{ field }}
+                                <div style="color: red;">{{ field.errors }}</div>
+                            </div>
+                        {% endfor %}
                         <button type="submit" class="btn btn-primary">Sign Up</button>
                     </form>
                     <div style="padding-top: 5px;"><small>Already have an account? <a href="{% url 'users:login' %}" style="text-decoration: none;">Log in here</a></small></div>
