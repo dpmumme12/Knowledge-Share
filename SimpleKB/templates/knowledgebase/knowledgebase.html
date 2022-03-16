@@ -15,14 +15,24 @@
 </div>
 
 <div class="pt-3">
-    <ul class="list-group list-group-flush">
-        {% for folder in folders %}
-            <li class="list-group-item list-group-item-action">
-                <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."> 
-                {{folder.name}}
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="col-12">
+        <div class="col-4 d-inline-block">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        </div>
+    </div>
+    <hr>
+    <div class="col-12">
+        <ul class="list-group list-group-flush">
+            {% for folder in folders %}
+                <li class="list-group-item list-group-item-action">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."> 
+                    {{folder.name}}
+                </li>
+            {% empty %}
+                No folders created yet...
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
 {% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=FolderForm%}
