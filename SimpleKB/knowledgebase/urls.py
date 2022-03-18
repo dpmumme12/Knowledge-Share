@@ -1,11 +1,13 @@
 from django.urls import path, re_path
 from .views import (DashboardView, KnowledgeBaseView, ArticleEditView,
-                    ArticleDeleteView, ArticleImageUploadView)
+                    ArticleDeleteView, ArticleImageUploadView, FolderDeleteView)
 
 app_name = 'knowledgebase'
 urlpatterns = [
     path('', DashboardView.as_view(), name='dashboard'),
     path('KnowledgeBase', KnowledgeBaseView.as_view(), name='knowledgebase'),
+    path('KnowledgeBase/<int:folder_id>', KnowledgeBaseView.as_view(), name='knowledgebase_id'),
+    path('Folder/Delete/<int:pk>', FolderDeleteView.as_view(), name='folder_delete'),
     path('Article/Create', ArticleEditView.as_view(), name='article_create'),
     path('Article/Edit/<int:article_id>', ArticleEditView.as_view(), name='article_edit'),
     path('Article/Delete/<int:pk>', ArticleDeleteView.as_view(), name='article_delete'),

@@ -2,11 +2,13 @@ from re import template
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.views.generic import View, DeleteView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from datetime import datetime
+from itertools import chain
 from .forms import ArticleForm, FolderForm
 from .models import Article, ArticleImage, Folder
 
@@ -21,17 +23,25 @@ class DashboardView(View):
 class KnowledgeBaseView(View):
     template_name = 'knowledgebase/knowledgebase.html'
 
-    def get(self, request):
+    def get(self, request, folder_id=None):
         folders = list(Folder.objects.filter(owner=request.user))
         folder_form = FolderForm(user=request.user)
         folder_form.fields['parent_folder'].choices += [(folder.id, folder.name)
                                                         for folder in folders]
+
+        if folder_id:
+            folders = Folder.objects.filter(parent_folder=folder_id, owner=request.user)
+        else:
+            folders = Folder.objects.filter(parent_folder=None, owner=request.user)
+            articles = Article.objects.filter(author=request.user, folder=None)
+            folder_content = list(chain(folders, articles))
+
         return render(request, self.template_name, {
             'FolderForm': folder_form,
-            'folders': folders
+            'folders': folder_content
         })
 
-    def post(self, request):
+    def post(self, request, **kwargs):
         folder_form = FolderForm(request.POST, user=request.user)
         if folder_form.is_valid():
             instance = folder_form.save(commit=False)
@@ -44,6 +54,12 @@ class KnowledgeBaseView(View):
         return render(request, self.template_name, {
             'FolderForm': folder_form
         })
+
+
+class FolderDeleteView(SuccessMessageMixin, DeleteView):
+    model = Folder
+    success_url = reverse_lazy('knowledgebase:knowledgebase')
+    success_message = 'Folder deleted successfully!'
 
 
 class ArticleEditView(View):
@@ -80,9 +96,10 @@ class ArticleEditView(View):
                 'article': article})
 
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(SuccessMessageMixin, DeleteView):
     model = Article
     success_url = reverse_lazy('knowledgebase:knowledgebase')
+    success_message = 'Article deleted successfully!'
 
 
 class ArticleImageUploadView(View):

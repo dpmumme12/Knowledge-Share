@@ -1,0 +1,17 @@
+.folder-ellipsis {
+    opacity: 0;
+}
+
+.folder-list-item:hover .folder-ellipsis {
+    opacity: 1;
+}
+
+.folder-ellipsis:hover {
+    cursor: pointer;
+}
+
+@media all and (max-width:992px) {
+    .folder-ellipsis {
+        opacity: 1;
+    }
+}

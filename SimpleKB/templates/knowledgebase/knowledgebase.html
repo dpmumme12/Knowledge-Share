@@ -20,13 +20,39 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         </div>
     </div>
-    <hr>
-    <div class="col-12">
+    <hr class="my-2">
+    <div class="col-12" >
         <ul class="list-group list-group-flush">
             {% for folder in folders %}
-                <li class="list-group-item list-group-item-action">
-                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."> 
-                    {{folder.name}}
+                <li class="list-group-item list-group-item-action folder-list-item">
+                    <div class="col-12 g-0">
+                        <div class="d-inline-block col-11">
+                            <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."> 
+                            <div class="d-inline-block col-9 position-relative">
+                                <a href="{% url 'knowledgebase:knowledgebase_id' folder.id %}" class="stretched-link text-decoration-none text-dark" >
+                                    {{folder.name}}
+                                </a>
+                            </div>
+                        </div>
+                    <div class="d-inline-block col-1 g-0 float-end">
+                        <div class="float-end">
+                            <a class="folder-ellipsis" style="color: gray;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                <div class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+                            </a>
+                            <ul class="dropdown-menu" style="min-width: 7rem;">
+                                <li class="dropdown-item">
+                                    <form action="{% url 'knowledgebase:folder_delete' folder.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-link text-decoration-none p-0" onclick="return confirm('Deleting folder will delete all content within it. Are you sure you want to delete it?')">
+                                            <i class="fa-solid fa-trash-can fa-xs text-secondary d-inline-block"></i>
+                                            <p class="text-danger d-inline-block ps-1 m-0">Delete</p>
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 </li>
             {% empty %}
                 No folders created yet...
@@ -34,6 +60,7 @@
         </ul>
     </div>
 </div>
+
 
 {% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=FolderForm%}
 
