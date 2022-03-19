@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.db.models import F, Value
 from datetime import datetime
 from itertools import chain
 from .forms import ArticleForm, FolderForm
@@ -24,25 +25,31 @@ class KnowledgeBaseView(View):
     template_name = 'knowledgebase/knowledgebase.html'
 
     def get(self, request, folder_id=None):
-        folders = list(Folder.objects.filter(owner=request.user))
         folder_form = FolderForm(user=request.user)
-        folder_form.fields['parent_folder'].choices += [(folder.id, folder.name)
-                                                        for folder in folders]
 
-        if folder_id:
-            folders = Folder.objects.filter(parent_folder=folder_id, owner=request.user)
-        else:
-            folders = Folder.objects.filter(parent_folder=None, owner=request.user)
-            articles = Article.objects.filter(author=request.user, folder=None)
-            folder_content = list(chain(folders, articles))
+        folders = (Folder
+                   .objects
+                   .filter(owner=request.user, parent_folder=folder_id)
+                   .annotate(object_type=Value('folder'))
+                   .only('name')
+                   )
+        articles = (Article
+                    .objects
+                    .filter(author=request.user, folder=folder_id)
+                    .annotate(name=F('title'), object_type=Value('article'))
+                    .only('id')
+                    )
+
+        folder_content = folders.union(articles)
 
         return render(request, self.template_name, {
             'FolderForm': folder_form,
-            'folders': folder_content
+            'folder_content': folder_content
         })
 
     def post(self, request, **kwargs):
         folder_form = FolderForm(request.POST, user=request.user)
+
         if folder_form.is_valid():
             instance = folder_form.save(commit=False)
             instance.owner = request.user
@@ -75,7 +82,10 @@ class ArticleEditView(View):
             return redirect('knowledgebase:article_edit', article_id=article.id)
 
         current_article = get_object_or_404(Article, id=article_id)
-        article_versions = Article.objects.filter(uuid=current_article.uuid)
+        article_versions = (Article
+                            .objects
+                            .filter(uuid=current_article.uuid)
+                            )
         return render(request, self.template_name, {
             'ArticleForm': ArticleForm(instance=current_article),
             'article_versions': article_versions,
@@ -106,7 +116,10 @@ class ArticleImageUploadView(View):
 
     def post(self, request):
         if 'file' in request.FILES:
-            article = Article.objects.get(id=request.POST['article_id'])
+            article = (Article
+                       .objects
+                       .get(id=request.POST['article_id'])
+                       )
             image = ArticleImage.objects.create(
                 article_id=article,
                 image=request.FILES['file']

@@ -23,14 +23,21 @@
     <hr class="my-2">
     <div class="col-12" >
         <ul class="list-group list-group-flush">
-            {% for folder in folders %}
+            {% for item in folder_content %}
                 <li class="list-group-item list-group-item-action folder-list-item">
                     <div class="col-12 g-0">
                         <div class="d-inline-block col-11">
                             <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."> 
                             <div class="d-inline-block col-9 position-relative">
-                                <a href="{% url 'knowledgebase:knowledgebase_id' folder.id %}" class="stretched-link text-decoration-none text-dark" >
-                                    {{folder.name}}
+                                <a href="{% if item.object_type == 'folder' %}
+                                            {% url 'knowledgebase:knowledgebase_id' item.id %}
+                                        {% else %}
+                                            
+                                        {% endif %}
+                                        "
+                                        class="stretched-link text-decoration-none text-dark" >
+                                    
+                                    {{item.name}} {{item.object_type}}
                                 </a>
                             </div>
                         </div>
@@ -41,7 +48,12 @@
                             </a>
                             <ul class="dropdown-menu" style="min-width: 7rem;">
                                 <li class="dropdown-item">
-                                    <form action="{% url 'knowledgebase:folder_delete' folder.id %}" method="post">
+                                    <form action="{% if item.object_type == 'folder' %}
+                                                    {% url 'knowledgebase:folder_delete' item.id %}
+                                                  {% else %}
+                                                    {% url 'knowledgebase:article_delete' item.id %}
+                                                  {% endif %}" 
+                                                  method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-link text-decoration-none p-0" onclick="return confirm('Deleting folder will delete all content within it. Are you sure you want to delete it?')">
                                             <i class="fa-solid fa-trash-can fa-xs text-secondary d-inline-block"></i>

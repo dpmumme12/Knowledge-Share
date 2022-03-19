@@ -27,5 +27,6 @@ class FolderForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['parent_folder'].widget.attrs.update({'class': 'form-select'})
         self.fields['parent_folder'].label = "Folder"
-        self.fields['parent_folder'].choices = [("", "(Root)")]
+        self.fields['parent_folder'].empty_label = "(Root)"
+        self.fields['parent_folder'].queryset = Folder.objects.filter(owner=self.user)
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
