@@ -2,6 +2,7 @@ import uuid as uuid_lib
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.utils.functional import cached_property
 from SimpleKB.utils.models import TimeStampedModel
 
 # Create your models here.
@@ -35,3 +36,10 @@ class Folder(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.name
+
+    @staticmethod
+    def UserFolders(user):
+        """
+        Returns a list of the users folders
+        """
+        return list(Folder.objects.filter(owner=user))

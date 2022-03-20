@@ -41,30 +41,40 @@
                                 </a>
                             </div>
                         </div>
-                    <div class="d-inline-block col-1 g-0 float-end">
-                        <div class="float-end">
-                            <a class="folder-ellipsis" style="color: gray;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                                <div class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></div>
-                            </a>
-                            <ul class="dropdown-menu" style="min-width: 7rem;">
-                                <li class="dropdown-item">
-                                    <form action="{% if item.object_type == 'folder' %}
-                                                    {% url 'knowledgebase:folder_delete' item.id %}
-                                                  {% else %}
-                                                    {% url 'knowledgebase:article_delete' item.id %}
-                                                  {% endif %}" 
-                                                  method="post">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-link text-decoration-none p-0" onclick="return confirm('Deleting folder will delete all content within it. Are you sure you want to delete it?')">
+                        <div class="d-inline-block col-1 g-0 float-end">
+                            <div class="float-end">
+                                <a class="folder-ellipsis" style="color: gray;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                    <div class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+                                </a>
+                                <ul class="dropdown-menu" style="min-width: 7rem;">
+                                    <li class="dropdown-item">
+                                        <button type="button" 
+                                                class="btn btn-link text-decoration-none p-0 text-dark change-folder-class"
+                                                data-change-folder-id="{{item.id}}"
+                                                data-change-folder-type="{{item.object_type}}"
+                                                >
+                                                Change Folder
+                                        </button>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <button type="button" 
+                                                class="btn btn-link text-decoration-none p-0 confirmation-popup-class" 
+                                                {% if item.object_type == 'folder' %}
+                                                    data-confirm-url="{% url 'knowledgebase:folder_delete' item.id %}"
+                                                    data-confirm-text="Deleting folder will delete all of its content. Are you sure?"
+                                                {% else %}
+                                                    data-confirm-url="{% url 'knowledgebase:article_delete' item.id %}"
+                                                    data-confirm-text="Are you sure you want to delete article?"
+                                                {% endif %}>
+
                                             <i class="fa-solid fa-trash-can fa-xs text-secondary d-inline-block"></i>
                                             <p class="text-danger d-inline-block ps-1 m-0">Delete</p>
                                         </button>
-                                    </form>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </li>
             {% empty %}
                 No folders created yet...
@@ -73,7 +83,39 @@
     </div>
 </div>
 
+<div class="modal fade" id="ChangeFolderPopup" tabindex="-1" aria-labelledby="ChangeFolderPopupLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change Folder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'knowledgebase:folder_change' %}" method="post">
+                {% csrf_token %}
+                {% for field in ChangeFolderForm %}
+                <div>
+                  {{ field.label_tag}}
+                  {{ field }}
+                  <div style="color: red;">{{ field.errors }}</div>
+                </div>
+                {% endfor %}
+                <div class="text-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-{% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=FolderForm%}
+
+{% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=CreateFolderForm%}
+{% include 'blocks/confirmation_popup.html' %}
 
 {% endblock body %}
+
+{% block scripts %}
+    <script src="{% static 'knowledgebase/knowledgebase.js' %}"></script>
+{% endblock scripts %}

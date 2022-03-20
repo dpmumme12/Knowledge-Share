@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.db.models import F, Value
 from datetime import datetime
 from itertools import chain
-from .forms import ArticleForm, FolderForm
+from .forms import ArticleForm, CreateFolderForm, ChangeFolderForm
 from .models import Article, ArticleImage, Folder
 
 # Create your views here.
@@ -25,7 +25,9 @@ class KnowledgeBaseView(View):
     template_name = 'knowledgebase/knowledgebase.html'
 
     def get(self, request, folder_id=None):
-        folder_form = FolderForm(user=request.user)
+        user_folders = Folder.UserFolders(request.user)
+        create_folder_form = CreateFolderForm(folders=user_folders)
+        change_folder_form = ChangeFolderForm(folders=user_folders)
 
         folders = (Folder
                    .objects
@@ -43,12 +45,14 @@ class KnowledgeBaseView(View):
         folder_content = folders.union(articles)
 
         return render(request, self.template_name, {
-            'FolderForm': folder_form,
+            'CreateFolderForm': create_folder_form,
+            'ChangeFolderForm': change_folder_form,
             'folder_content': folder_content
         })
 
     def post(self, request, **kwargs):
-        folder_form = FolderForm(request.POST, user=request.user)
+        user_folders = Folder.UserFolders(request.user)
+        folder_form = CreateFolderForm(request.POST, folders=user_folders)
 
         if folder_form.is_valid():
             instance = folder_form.save(commit=False)
@@ -59,7 +63,7 @@ class KnowledgeBaseView(View):
             return redirect('knowledgebase:knowledgebase')
 
         return render(request, self.template_name, {
-            'FolderForm': folder_form
+            'CreateFolderForm': folder_form
         })
 
 
@@ -67,6 +71,16 @@ class FolderDeleteView(SuccessMessageMixin, DeleteView):
     model = Folder
     success_url = reverse_lazy('knowledgebase:knowledgebase')
     success_message = 'Folder deleted successfully!'
+
+
+class FolderChangeView(View):
+    def post(self, request):
+        user_folders = Folder.UserFolders(request.user)
+        change_folder_form = ChangeFolderForm(request.POST, folders=user_folders)
+        if change_folder_form.is_valid():
+            Folder.objects.filter(id=change_folder_form.cleaned_data['objects'][0]['id']).update(
+                parent_folder=change_folder_form.cleaned_data['folder'])
+            print('---------------success--------------')
 
 
 class ArticleEditView(View):

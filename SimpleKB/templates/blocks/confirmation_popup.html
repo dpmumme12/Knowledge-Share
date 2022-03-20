@@ -1,0 +1,63 @@
+{% comment %}
+Reusable confiramtion popup. To use this popup in a template put
+the 'include' tag at the bottom of the body by your script tags like so.
+{% include 'blocks/confirmation_popup.html' %}
+
+To use the popup on an element you need to add 'confirmation-popup-class'
+to the elements classes and also add the attributes listed below to the element.
+
+attributes:
+data-confirm-text - the text to display on the popup
+data-confirm-url - the url that the popup is submitting to.
+
+This popup uses POST when submitting to url.
+
+{% endcomment %}
+
+<!-- Modal -->
+  <div class="modal fade" id="confirmation-popup" tabindex="-1" aria-labelledby="confirmation-popupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-end">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="text-center pt-2">
+            <h5 id="confirmation_popup_title" class="modal-title"></h5>
+            <form id="confirmation_popup_form" method="post">
+              {% csrf_token %}
+              <div class="pt-4">
+                  <div class="pe-1 d-inline-block">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  </div>
+                  <div class="ps-1 d-inline-block">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var elements = document.getElementsByClassName("confirmation-popup-class");
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener('click', show_confirmation_popup);
+  }
+
+  function show_confirmation_popup(event) {
+    var confirmation_popup = new bootstrap.Modal(document.getElementById('confirmation-popup'))
+    var button = event.currentTarget;
+    var confirm_text = button.getAttribute('data-confirm-text');
+    var confirm_url = button.getAttribute('data-confirm-url');
+
+    document.getElementById('confirmation_popup_title').innerHTML = confirm_text
+    document.getElementById('confirmation_popup_form').action = confirm_url
+
+    confirmation_popup.show()
+  }
+
+</script>

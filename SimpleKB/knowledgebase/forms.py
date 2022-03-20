@@ -16,17 +16,30 @@ class ArticleForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
 
 
-class FolderForm(forms.ModelForm):
+class CreateFolderForm(forms.ModelForm):
 
     class Meta:
         model = Folder
         fields = ['name', 'parent_folder']
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+        self.folders = kwargs.pop('folders', None)
         super().__init__(*args, **kwargs)
         self.fields['parent_folder'].widget.attrs.update({'class': 'form-select'})
         self.fields['parent_folder'].label = "Folder"
-        self.fields['parent_folder'].empty_label = "(Root)"
-        self.fields['parent_folder'].queryset = Folder.objects.filter(owner=self.user)
+        self.fields['parent_folder'].choices = [("", "(Root)")] + [(folder.id, folder.name)
+                                                                   for folder in self.folders]
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
+
+
+class ChangeFolderForm(forms.Form):
+    folder = forms.ChoiceField(required=False)
+    objects = forms.JSONField(label='')
+
+    def __init__(self, *args, **kwargs):
+        self.folders = kwargs.pop('folders', None)
+        super().__init__(*args, **kwargs)
+        self.fields['objects'].widget.attrs.update({'hidden': ''})
+        self.fields['folder'].widget.attrs.update({'class': 'form-select'})
+        self.fields['folder'].choices = [("", "(Root)")] + [(folder.id, folder.name)
+                                                            for folder in self.folders]
