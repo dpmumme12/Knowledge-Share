@@ -1,4 +1,3 @@
-from re import template
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.views.generic import View, DeleteView
@@ -8,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.db.models import F, Value
+from django.forms.models import model_to_dict
 from datetime import datetime
 from itertools import chain
 from .forms import ArticleForm, CreateFolderForm, ChangeFolderForm
@@ -27,7 +27,7 @@ class KnowledgeBaseView(View):
     def get(self, request, folder_id=None):
         user_folders = Folder.UserFolders(request.user)
         create_folder_form = CreateFolderForm(folders=user_folders)
-        change_folder_form = ChangeFolderForm(folders=user_folders)
+        change_folder_form = ChangeFolderForm()
 
         folders = (Folder
                    .objects
@@ -47,7 +47,8 @@ class KnowledgeBaseView(View):
         return render(request, self.template_name, {
             'CreateFolderForm': create_folder_form,
             'ChangeFolderForm': change_folder_form,
-            'folder_content': folder_content
+            'folder_content': folder_content,
+            'user_folders': [model_to_dict(folder) for folder in user_folders]
         })
 
     def post(self, request, **kwargs):
@@ -78,9 +79,23 @@ class FolderChangeView(View):
         user_folders = Folder.UserFolders(request.user)
         change_folder_form = ChangeFolderForm(request.POST, folders=user_folders)
         if change_folder_form.is_valid():
-            Folder.objects.filter(id=change_folder_form.cleaned_data['objects'][0]['id']).update(
-                parent_folder=change_folder_form.cleaned_data['folder'])
-            print('---------------success--------------')
+            folder_id = change_folder_form.cleaned_data['folder']
+            items = change_folder_form.cleaned_data['objects']
+            articles = list(filter(lambda x: x['object_type'] == 'article', items))
+            articles = [article['id'] for article in articles]
+            folders = list(filter(lambda x: x['object_type'] == 'folder', items))
+            folders = [folder['id'] for folder in folders]
+
+            if articles:
+                Article.objects.filter(id__in=articles).update(folder=folder_id)
+            if folders:
+                Folder.objects.filter(id__in=folders).update(parent_folder=folder_id)
+
+            messages.success(request, 'Folders updated successfully!')
+            return redirect('knowledgebase:knowledgebase')
+
+        messages.error(request, change_folder_form.errors.as_json(escape_html=True))
+        return redirect('knowledgebase:knowledgebase')
 
 
 class ArticleEditView(View):

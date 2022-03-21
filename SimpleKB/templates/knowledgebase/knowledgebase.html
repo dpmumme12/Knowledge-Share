@@ -19,6 +19,33 @@
         <div class="col-4 d-inline-block">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         </div>
+       
+        <div class="col-5 d-inline-block float-end">
+            <div class="action-items float-end">
+                <a id="actions-dropdown" class="form-select text-decoration-none action-items" data-bs-toggle="dropdown" >
+                    (Actions)
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" style="min-width: 7rem;">
+                    <li class="dropdown-item">
+                        <button id="change-folder-action" 
+                                type="button" 
+                                class="btn btn-link text-decoration-none p-0 text-dark"
+                                >
+                                Change Folder
+                        </button>
+                    </li>
+                    <li class="dropdown-item">
+                        <button id="delete-item-action"
+                                type="button" 
+                                class="btn btn-link text-decoration-none p-0 text-dark"
+                                >
+                                <i class="fa-solid fa-trash-can fa-xs text-secondary d-inline-block"></i>
+                                <p class="text-danger d-inline-block ps-1 m-0">Delete</p>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <hr class="my-2">
     <div class="col-12" >
@@ -27,7 +54,9 @@
                 <li class="list-group-item list-group-item-action folder-list-item">
                     <div class="col-12 g-0">
                         <div class="d-inline-block col-11">
-                            <input class="form-check-input me-1" type="checkbox" value="" aria-label="..."> 
+                            <input class="form-check-input me-1 item-checkbox-class" type="checkbox" value="" aria-label="..." 
+                                   data-change-folder-id="{{item.id}}"
+                                   data-change-folder-type="{{item.object_type}}"> 
                             <div class="d-inline-block col-9 position-relative">
                                 <a href="{% if item.object_type == 'folder' %}
                                             {% url 'knowledgebase:knowledgebase_id' item.id %}
@@ -117,5 +146,6 @@
 {% endblock body %}
 
 {% block scripts %}
+    {{user_folders|json_script:"user_folders"}}
     <script src="{% static 'knowledgebase/knowledgebase.js' %}"></script>
 {% endblock scripts %}

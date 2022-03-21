@@ -10,6 +10,18 @@
     cursor: pointer;
 }
 
+.action-items {
+    width: 120px ;
+}
+.action-items:hover {
+    color: inherit;
+}
+
+.disabled {
+    background-color: rgb(245, 245, 245);
+    pointer-events: none;
+}
+
 @media all and (max-width:992px) {
     .folder-ellipsis {
         opacity: 1;

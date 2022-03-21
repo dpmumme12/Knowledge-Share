@@ -11,31 +11,33 @@
     {% include "blocks/mobile_navbar.html" %}
     <!--   Main body    -->
     <div class="col g-0">
-      {% if messages %}
-          {% for message in messages %}
-            <div id="message_{{ forloop.counter }}"
-                 class="{% if message.tags %} alert-{{message.tags}} {% endif %} alert d-flex align-items-center alert-dismissible fade show animate__animated animate__fadeInDown">
-          
-                  <svg class="bi flex-shrink-0 me-2" width="17" height="17" role="img">
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                      <use xlink:href="#info-fill"/>
-                    {% endif %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                      <use xlink:href="#check-circle-fill"/>
-                    {% endif %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                      <use xlink:href="#exclamation-triangle-fill"/>
-                    {% endif %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                      <use xlink:href="#exclamation-triangle-fill"/>
-                    {% endif %}
-                  </svg>
+      <div id="messages">
+        {% if messages %}
+            {% for message in messages %}
+              <div id="message_{{ forloop.counter }}"
+                  class="{% if message.tags %} alert-{{message.tags}} {% endif %} alert d-flex align-items-center alert-dismissible fade show animate__animated animate__fadeInDown">
+            
+                    <svg class="bi flex-shrink-0 me-2" width="17" height="17" role="img">
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <use xlink:href="#info-fill"/>
+                      {% endif %}
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <use xlink:href="#check-circle-fill"/>
+                      {% endif %}
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                      {% endif %}
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                      {% endif %}
+                    </svg>
 
-                {{ message }}
-              <a class="alert-close-button" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
-            </div>
-          {% endfor %}
-        {% endif %}
+                  {{ message }}
+                <a class="alert-close-button" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
       <div class="main-body text-break pe-4">
         <div class="header pb-3">
           <div class="top-right-menu">

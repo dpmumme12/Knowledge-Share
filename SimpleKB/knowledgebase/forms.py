@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.models import model_to_dict
 from tinymce.widgets import TinyMCE
 from .models import Article, Folder
 
@@ -41,5 +42,38 @@ class ChangeFolderForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['objects'].widget.attrs.update({'hidden': ''})
         self.fields['folder'].widget.attrs.update({'class': 'form-select'})
-        self.fields['folder'].choices = [("", "(Root)")] + [(folder.id, folder.name)
-                                                            for folder in self.folders]
+        self.fields['folder'].choices = [("", "(Root)")]
+        if self.folders:
+            self.fields['folder'].choices += [(folder.id, folder.name)
+                                              for folder in self.folders]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        folder_id = cleaned_data.get('folder')
+        if not folder_id:
+            return cleaned_data
+
+        items = cleaned_data.get('objects')
+        folders = filter(lambda x: x['object_type'] == 'folder', items)
+        for folder in folders:
+            if folder['id'] == folder_id:
+                raise forms.ValidationError('Operation will cause folder inconsistency')
+
+            sub_folders = self.get_sub_folders(folder)
+            folder_id_in_sub_folders = list(filter(lambda x: x['id'] == int(folder_id),
+                                                   sub_folders))
+            if folder_id_in_sub_folders:
+                raise forms.ValidationError('Operation will cause folder inconsistency')
+
+        return cleaned_data
+
+    def get_sub_folders(self, folder):
+        folders = [model_to_dict(folder) for folder in self.folders]
+        sub_folders = list(filter(lambda x: x['parent_folder'] == int(folder['id']), folders))
+        out_sub_folders = sub_folders
+
+        for folder in sub_folders:
+            sub = self.get_sub_folders(folder)
+            out_sub_folders += sub
+
+        return out_sub_folders
