@@ -11,6 +11,35 @@ for (var i = 0; i < change_folder_elements.length; i++) {
 }
 
 document.getElementById('change-folder-action').addEventListener('click', multiple_change_folder);
+document.getElementById('delete-items-action').addEventListener('click', bulk_delete);
+
+/// FUnction for deleting mulple items at once
+function bulk_delete(event) {
+  var items = document.querySelectorAll(".item-checkbox-class");
+  var checked_items = [];
+  items.forEach(element => {
+    if (element.checked) {
+      checked_items.push(element);
+    }
+  });
+
+  if (checked_items.length === 0) {
+    error_message('No items are selected');
+    return;
+  }
+
+  var objects = [];
+  checked_items.forEach(element => {
+    var id = element.getAttribute('data-change-folder-id');
+    var object_type = element.getAttribute('data-change-folder-type');
+
+    objects.push({'id': id, 'object_type':object_type});
+  });
+
+  document.getElementById('id_bulk_delete-objects').value = JSON.stringify(objects);
+
+  document.getElementById('BulkDeleteButton').click();
+}
 
 
 /// Function for changing the folder for a single item
@@ -21,7 +50,7 @@ function single_change_folder(event) {
     var object_type = button.getAttribute('data-change-folder-type');
 
     var object = [{'id': id, 'object_type':object_type}];
-    document.getElementById('id_objects').value = JSON.stringify(object);
+    document.getElementById('id_change_folder-objects').value = JSON.stringify(object);
 
     if (object[0].object_type === 'folder') {
       var folders = filter_user_folders(object);
@@ -30,7 +59,7 @@ function single_change_folder(event) {
       var folders = user_folders;
     }
 
-    var folder_options = document.getElementById('id_folder');
+    var folder_options = document.getElementById('id_change_folder-folder');
 
     folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
 
@@ -53,13 +82,7 @@ function multiple_change_folder(event) {
   });
 
   if (checked_items.length === 0) {
-    document.getElementById('messages').innerHTML = `<div class=" alert-error alert d-flex align-items-center alert-dismissible fade show animate__animated animate__fadeInDown">
-                                                        <svg class="bi flex-shrink-0 me-2" width="17" height="17" role="img">
-                                                            <use xlink:href="#exclamation-triangle-fill"/>
-                                                        </svg>
-                                                        No items are selected
-                                                        <a class="alert-close-button" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
-                                                    </div>`;
+    error_message('No items are selected');
     return;
   }
   
@@ -73,7 +96,7 @@ function multiple_change_folder(event) {
     objects.push({'id': id, 'object_type':object_type});
   });
 
-  document.getElementById('id_objects').value = JSON.stringify(objects);
+  document.getElementById('id_change_folder-objects').value = JSON.stringify(objects);
 
   var folder_objects = objects.filter(x => x.object_type === 'folder');
   if (folder_objects.length !== 0) {
@@ -83,7 +106,7 @@ function multiple_change_folder(event) {
     var folders = user_folders
   }
 
-  var folder_options = document.getElementById('id_folder');
+  var folder_options = document.getElementById('id_change_folder-folder');
 
   folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
 

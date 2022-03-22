@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from .views import (DashboardView, KnowledgeBaseView, ArticleEditView,
                     ArticleDeleteView, ArticleImageUploadView, FolderDeleteView,
-                    FolderChangeView)
+                    FolderChangeView, BulkDeleteView)
 
 app_name = 'knowledgebase'
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
     path('KnowledgeBase/<int:folder_id>', KnowledgeBaseView.as_view(), name='knowledgebase_id'),
     path('Folder/Delete/<int:pk>', FolderDeleteView.as_view(), name='folder_delete'),
     path('Folder/Change', FolderChangeView.as_view(), name='folder_change'),
+    path('Folder/BulkDelete', BulkDeleteView.as_view(), name='bulk_delete'),
     path('Article/Create', ArticleEditView.as_view(), name='article_create'),
     path('Article/Edit/<int:article_id>', ArticleEditView.as_view(), name='article_edit'),
     path('Article/Delete/<int:pk>', ArticleDeleteView.as_view(), name='article_delete'),

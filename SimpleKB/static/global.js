@@ -14,3 +14,13 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function error_message(message) {
+    document.getElementById('messages').innerHTML = `<div class=" alert-error alert d-flex align-items-center alert-dismissible fade show animate__animated animate__fadeInDown">
+                                                        <svg class="bi flex-shrink-0 me-2" width="17" height="17" role="img">
+                                                            <use xlink:href="#exclamation-triangle-fill"/>
+                                                        </svg>
+                                                        ${message}
+                                                        <a class="alert-close-button" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
+                                                    </div>`;
+}

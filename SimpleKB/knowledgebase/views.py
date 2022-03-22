@@ -10,7 +10,7 @@ from django.db.models import F, Value
 from django.forms.models import model_to_dict
 from datetime import datetime
 from itertools import chain
-from .forms import ArticleForm, CreateFolderForm, ChangeFolderForm
+from .forms import ArticleForm, CreateFolderForm, ChangeFolderForm, BulkDeleteForm
 from .models import Article, ArticleImage, Folder
 
 # Create your views here.
@@ -27,7 +27,6 @@ class KnowledgeBaseView(View):
     def get(self, request, folder_id=None):
         user_folders = Folder.UserFolders(request.user)
         create_folder_form = CreateFolderForm(folders=user_folders)
-        change_folder_form = ChangeFolderForm()
 
         folders = (Folder
                    .objects
@@ -46,7 +45,8 @@ class KnowledgeBaseView(View):
 
         return render(request, self.template_name, {
             'CreateFolderForm': create_folder_form,
-            'ChangeFolderForm': change_folder_form,
+            'ChangeFolderForm': ChangeFolderForm(),
+            'BulkDeleteForm': BulkDeleteForm(),
             'folder_content': folder_content,
             'user_folders': [model_to_dict(folder) for folder in user_folders]
         })
@@ -79,22 +79,24 @@ class FolderChangeView(View):
         user_folders = Folder.UserFolders(request.user)
         change_folder_form = ChangeFolderForm(request.POST, folders=user_folders)
         if change_folder_form.is_valid():
-            folder_id = change_folder_form.cleaned_data['folder']
-            items = change_folder_form.cleaned_data['objects']
-            articles = list(filter(lambda x: x['object_type'] == 'article', items))
-            articles = [article['id'] for article in articles]
-            folders = list(filter(lambda x: x['object_type'] == 'folder', items))
-            folders = [folder['id'] for folder in folders]
-
-            if articles:
-                Article.objects.filter(id__in=articles).update(folder=folder_id)
-            if folders:
-                Folder.objects.filter(id__in=folders).update(parent_folder=folder_id)
+            change_folder_form.update()
 
             messages.success(request, 'Folders updated successfully!')
             return redirect('knowledgebase:knowledgebase')
 
         messages.error(request, change_folder_form.errors.as_json(escape_html=True))
+        return redirect('knowledgebase:knowledgebase')
+
+class BulkDeleteView(View):
+    def post(self, request):
+        bulk_delete_form = BulkDeleteForm(request.POST)
+        if bulk_delete_form.is_valid():
+            bulk_delete_form.delete()
+
+            messages.success(request, 'Deleted successfully!')
+            return redirect('knowledgebase:knowledgebase')
+
+        messages.error(request, bulk_delete_form.errors.as_json(escape_html=True))
         return redirect('knowledgebase:knowledgebase')
 
 

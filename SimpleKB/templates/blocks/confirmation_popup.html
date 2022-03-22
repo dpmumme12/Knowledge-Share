@@ -9,6 +9,7 @@ to the elements classes and also add the attributes listed below to the element.
 attributes:
 data-confirm-text - the text to display on the popup
 data-confirm-url - the url that the popup is submitting to.
+data-confirm-form - optional form for the confirmation to submit
 
 This popup uses POST when submitting to url.
 
@@ -31,7 +32,7 @@ This popup uses POST when submitting to url.
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                   </div>
                   <div class="ps-1 d-inline-block">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" id="confirmation_submit_button">Submit</button>
                   </div>
               </div>
             </form>
@@ -56,6 +57,10 @@ This popup uses POST when submitting to url.
 
     document.getElementById('confirmation_popup_title').innerHTML = confirm_text
     document.getElementById('confirmation_popup_form').action = confirm_url
+
+    if (button.hasAttribute('data-confirm-form')) {
+      document.getElementById('confirmation_submit_button').setAttribute("form", button.getAttribute('data-confirm-form'));
+    }
 
     confirmation_popup.show()
   }

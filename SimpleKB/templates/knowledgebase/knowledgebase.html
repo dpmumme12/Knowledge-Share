@@ -6,6 +6,7 @@
 {% endblock styles %}
 
 {% block body %}
+
 <div class="col-12 text-end">
     <a href="{% url 'knowledgebase:article_create' %}" class="btn btn-info me-3">Create article <i class="fa-solid fa-plus fa-xs"></i></a>
     <!-- Button trigger modal -->
@@ -15,6 +16,7 @@
 </div>
 
 <div class="pt-3">
+
     <div class="col-12">
         <div class="col-4 d-inline-block">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -35,7 +37,7 @@
                         </button>
                     </li>
                     <li class="dropdown-item">
-                        <button id="delete-item-action"
+                        <button id="delete-items-action"
                                 type="button" 
                                 class="btn btn-link text-decoration-none p-0 text-dark"
                                 >
@@ -47,9 +49,12 @@
             </div>
         </div>
     </div>
+
     <hr class="my-2">
+
     <div class="col-12" >
         <ul class="list-group list-group-flush">
+
             {% for item in folder_content %}
                 <li class="list-group-item list-group-item-action folder-list-item">
                     <div class="col-12 g-0">
@@ -108,9 +113,12 @@
             {% empty %}
                 No folders created yet...
             {% endfor %}
+
         </ul>
     </div>
 </div>
+
+{# Popups and include tags listed below #}
 
 <div class="modal fade" id="ChangeFolderPopup" tabindex="-1" aria-labelledby="ChangeFolderPopupLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -137,7 +145,11 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
+
+<form action="{% url 'knowledgebase:bulk_delete' %}" method="post" id="BulkDeleteForm"> {% csrf_token %} {{BulkDeleteForm}}</form>
+<button id="BulkDeleteButton" class="confirmation-popup-class" data-confirm-text="Deleting folders will delete all of its content. Are you sure?"
+        data-confirm-form="BulkDeleteForm" hidden></button>
 
 
 {% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=CreateFolderForm%}

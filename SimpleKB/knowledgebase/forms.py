@@ -34,6 +34,7 @@ class CreateFolderForm(forms.ModelForm):
 
 
 class ChangeFolderForm(forms.Form):
+    prefix = 'change_folder'
     folder = forms.ChoiceField(required=False)
     objects = forms.JSONField(label='')
 
@@ -77,3 +78,33 @@ class ChangeFolderForm(forms.Form):
             out_sub_folders += sub
 
         return out_sub_folders
+
+    def update(self):
+        folder_id = self.cleaned_data['folder']
+        items = self.cleaned_data['objects']
+        articles = list(filter(lambda x: x['object_type'] == 'article', items))
+        articles = [article['id'] for article in articles]
+        folders = list(filter(lambda x: x['object_type'] == 'folder', items))
+        folders = [folder['id'] for folder in folders]
+
+        if articles:
+            Article.objects.filter(id__in=articles).update(folder=folder_id)
+        if folders:
+            Folder.objects.filter(id__in=folders).update(parent_folder=folder_id)
+
+
+class BulkDeleteForm(forms.Form):
+    prefix = 'bulk_delete'
+    objects = forms.JSONField(label='', widget=forms.Textarea(attrs={'hidden': ''}))
+
+    def delete(self):
+        items = self.cleaned_data['objects']
+        articles = list(filter(lambda x: x['object_type'] == 'article', items))
+        articles = [article['id'] for article in articles]
+        folders = list(filter(lambda x: x['object_type'] == 'folder', items))
+        folders = [folder['id'] for folder in folders]
+
+        if articles:
+            Article.objects.filter(id__in=articles).delete()
+        if folders:
+            Folder.objects.filter(id__in=folders).delete()
