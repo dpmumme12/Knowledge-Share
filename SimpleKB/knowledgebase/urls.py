@@ -8,6 +8,7 @@ urlpatterns = [
     path('', DashboardView.as_view(), name='dashboard'),
     path('KnowledgeBase', KnowledgeBaseView.as_view(), name='knowledgebase'),
     path('KnowledgeBase/<int:folder_id>', KnowledgeBaseView.as_view(), name='knowledgebase_id'),
+    path('KnowledgeBase/Search', KnowledgeBaseView.as_view(), name='knowledgebase_search'),
     path('Folder/Delete/<int:pk>', FolderDeleteView.as_view(), name='folder_delete'),
     path('Folder/Change', FolderChangeView.as_view(), name='folder_change'),
     path('Folder/BulkDelete', BulkDeleteView.as_view(), name='bulk_delete'),

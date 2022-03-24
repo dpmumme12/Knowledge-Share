@@ -8,10 +8,12 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.db.models import F, Value
 from django.forms.models import model_to_dict
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank, TrigramSimilarity
 from datetime import datetime
 from itertools import chain
-from .forms import ArticleForm, CreateFolderForm, ChangeFolderForm, BulkDeleteForm
+from .forms import ArticleForm, CreateFolderForm, ChangeFolderForm, BulkDeleteForm, SearchForm
 from .models import Article, ArticleImage, Folder
+from .helpers import search_knowledgebase
 
 # Create your views here.
 class DashboardView(View):
@@ -24,26 +26,34 @@ class DashboardView(View):
 class KnowledgeBaseView(View):
     template_name = 'knowledgebase/knowledgebase.html'
 
-    def get(self, request, folder_id=None):
+    def get(self, request, **kwargs):
+        folder_id = kwargs.pop('folder_id', None)
+        search_form = SearchForm(request.GET)
         user_folders = Folder.UserFolders(request.user)
         create_folder_form = CreateFolderForm(folders=user_folders)
 
-        folders = (Folder
-                   .objects
-                   .filter(owner=request.user, parent_folder=folder_id)
-                   .annotate(object_type=Value('folder'))
-                   .only('name')
-                   )
-        articles = (Article
-                    .objects
-                    .filter(author=request.user, folder=folder_id)
-                    .annotate(name=F('title'), object_type=Value('article'))
-                    .only('id')
-                    )
+        if 'query' in request.GET and search_form.is_valid():
+            query = search_form.cleaned_data['query']
+            folder_content = search_knowledgebase(query, request.user)
 
-        folder_content = folders.union(articles)
+        else:
+            folders = (Folder
+                       .objects
+                       .filter(owner=request.user, parent_folder=folder_id)
+                       .annotate(object_type=Value('folder'))
+                       .only('name')
+                       )
+            articles = (Article
+                        .objects
+                        .filter(author=request.user, folder=folder_id)
+                        .annotate(name=F('title'), object_type=Value('article'))
+                        .only('id')
+                        )
+
+            folder_content = folders.union(articles)
 
         return render(request, self.template_name, {
+            'SearchForm': search_form,
             'CreateFolderForm': create_folder_form,
             'ChangeFolderForm': ChangeFolderForm(),
             'BulkDeleteForm': BulkDeleteForm(),
@@ -52,6 +62,7 @@ class KnowledgeBaseView(View):
         })
 
     def post(self, request, **kwargs):
+        folder_id = kwargs.pop('folder_id', None)
         user_folders = Folder.UserFolders(request.user)
         folder_form = CreateFolderForm(request.POST, folders=user_folders)
 

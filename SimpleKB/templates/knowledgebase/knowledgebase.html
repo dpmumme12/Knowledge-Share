@@ -19,7 +19,9 @@
 
     <div class="col-12">
         <div class="col-4 d-inline-block">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form method="get">
+                {{SearchForm}}
+            </form>
         </div>
        
         <div class="col-5 d-inline-block float-end">
@@ -71,7 +73,7 @@
                                         "
                                         class="stretched-link text-decoration-none text-dark" >
                                     
-                                    {{item.name}} {{item.object_type}}
+                                    {{item.name}} --- {{item.object_type}} --- {{item.rank}} ---- {{item.similarity}} --- {{item.score}}
                                 </a>
                             </div>
                         </div>
@@ -138,8 +140,12 @@
                 </div>
                 {% endfor %}
                 <div class="text-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="pe-1 d-inline-block">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="ps-1 d-inline-block">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </div>
             </form>
         </div>

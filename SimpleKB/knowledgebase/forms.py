@@ -33,6 +33,17 @@ class CreateFolderForm(forms.ModelForm):
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
 
 
+class SearchForm(forms.Form):
+    query = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['query'].label = ''
+        self.fields['query'].required = False
+        self.fields['query'].widget.attrs.update({'class': 'form-control',
+                                                  'placeholder': 'Search...'})
+
+
 class ChangeFolderForm(forms.Form):
     prefix = 'change_folder'
     folder = forms.ChoiceField(required=False)
