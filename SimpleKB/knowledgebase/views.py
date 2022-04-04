@@ -8,10 +8,8 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.db.models import F, Value
 from django.forms.models import model_to_dict
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank, TrigramSimilarity
 from datetime import datetime
-from itertools import chain
-from .forms import ArticleForm, CreateFolderForm, ChangeFolderForm, BulkDeleteForm, SearchForm
+from .forms import ArticleForm, FolderForm, BulkChangeFolderForm, BulkDeleteForm, SearchForm
 from .models import Article, ArticleImage, Folder
 from .helpers import search_knowledgebase
 
@@ -20,6 +18,7 @@ class DashboardView(View):
     template_name = 'knowledgebase/dashboard.html'
 
     def get(self, request):
+
         return render(request, self.template_name)
 
 
@@ -28,9 +27,25 @@ class KnowledgeBaseView(View):
 
     def get(self, request, **kwargs):
         folder_id = kwargs.pop('folder_id', None)
+
+        if folder_id:
+            current_folder = (Folder
+                              .objects
+                              .filter(id=folder_id)
+                              .select_related('parent_folder__parent_folder')
+                              .get()
+                              )
+        else:
+            current_folder = None
+
         search_form = SearchForm(request.GET)
         user_folders = Folder.UserFolders(request.user)
-        create_folder_form = CreateFolderForm(folders=user_folders)
+        create_folder_form = FolderForm(folder_id=folder_id,
+                                        folders=user_folders,
+                                        prefix='create_folder')
+        edit_folder_form = FolderForm(folder_id=folder_id,
+                                      folders=user_folders,
+                                      prefix='edit_folder')
 
         if 'query' in request.GET and search_form.is_valid():
             query = search_form.cleaned_data['query']
@@ -53,9 +68,11 @@ class KnowledgeBaseView(View):
             folder_content = folders.union(articles)
 
         return render(request, self.template_name, {
+            'current_folder': current_folder,
             'SearchForm': search_form,
             'CreateFolderForm': create_folder_form,
-            'ChangeFolderForm': ChangeFolderForm(),
+            'EditFolderForm': edit_folder_form,
+            'BulkChangeFolderForm': BulkChangeFolderForm(),
             'BulkDeleteForm': BulkDeleteForm(),
             'folder_content': folder_content,
             'user_folders': [model_to_dict(folder) for folder in user_folders]
@@ -64,19 +81,20 @@ class KnowledgeBaseView(View):
     def post(self, request, **kwargs):
         folder_id = kwargs.pop('folder_id', None)
         user_folders = Folder.UserFolders(request.user)
-        folder_form = CreateFolderForm(request.POST, folders=user_folders)
+        folder_form = FolderForm(request.POST, folders=user_folders, prefix='create_folder')
 
         if folder_form.is_valid():
             instance = folder_form.save(commit=False)
             instance.owner = request.user
             instance.save()
-
             messages.success(request, 'Folder created successfully!')
-            return redirect('knowledgebase:knowledgebase')
+        else:
+            messages.error(request, folder_form.errors.as_json(escape_html=True))
 
-        return render(request, self.template_name, {
-            'CreateFolderForm': folder_form
-        })
+        if folder_id:
+            return redirect('knowledgebase:knowledgebase_id', folder_id=folder_id)
+
+        return redirect('knowledgebase:knowledgebase')
 
 
 class FolderDeleteView(SuccessMessageMixin, DeleteView):
@@ -85,10 +103,10 @@ class FolderDeleteView(SuccessMessageMixin, DeleteView):
     success_message = 'Folder deleted successfully!'
 
 
-class FolderChangeView(View):
+class BulkFolderChangeView(View):
     def post(self, request):
         user_folders = Folder.UserFolders(request.user)
-        change_folder_form = ChangeFolderForm(request.POST, folders=user_folders)
+        change_folder_form = BulkChangeFolderForm(request.POST, folders=user_folders)
         if change_folder_form.is_valid():
             change_folder_form.update()
 
@@ -97,6 +115,7 @@ class FolderChangeView(View):
 
         messages.error(request, change_folder_form.errors.as_json(escape_html=True))
         return redirect('knowledgebase:knowledgebase')
+
 
 class BulkDeleteView(View):
     def post(self, request):
@@ -141,6 +160,7 @@ class ArticleEditView(View):
         if form.is_valid():
             form.save()
 
+            messages.success(request, 'Article created successfully!')
             return redirect('knowledgebase:knowledgebase')
         else:
             return render(request, self.template_name, {

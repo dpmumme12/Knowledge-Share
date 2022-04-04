@@ -3,6 +3,7 @@ from django.forms.models import model_to_dict
 from tinymce.widgets import TinyMCE
 from .models import Article, Folder
 
+
 class ArticleForm(forms.ModelForm):
 
     class Meta:
@@ -17,7 +18,8 @@ class ArticleForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
 
 
-class CreateFolderForm(forms.ModelForm):
+class FolderForm(forms.ModelForm):
+    pk = forms.IntegerField(widget=forms.HiddenInput(), label='', required=False)
 
     class Meta:
         model = Folder
@@ -25,11 +27,15 @@ class CreateFolderForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.folders = kwargs.pop('folders', None)
+        self.folder_id = kwargs.pop('folder_id', None)
         super().__init__(*args, **kwargs)
         self.fields['parent_folder'].widget.attrs.update({'class': 'form-select'})
         self.fields['parent_folder'].label = "Folder"
-        self.fields['parent_folder'].choices = [("", "(Root)")] + [(folder.id, folder.name)
-                                                                   for folder in self.folders]
+        if self.folders:
+            self.fields['parent_folder'].choices = [("", "(Root)")] + [(folder.id, folder.name)
+                                                                       for folder in self.folders]
+        if self.folder_id:
+            self.fields['parent_folder'].initial = self.folder_id
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
 
 
@@ -44,7 +50,7 @@ class SearchForm(forms.Form):
                                                   'placeholder': 'Search...'})
 
 
-class ChangeFolderForm(forms.Form):
+class BulkChangeFolderForm(forms.Form):
     prefix = 'change_folder'
     folder = forms.ChoiceField(required=False)
     objects = forms.JSONField(label='')

@@ -1,15 +1,16 @@
 {% comment %}
 Reusable popup with form submission. To use this popup in a template 
 use the 'include' tag like so 
-{% include 'blocks/form_popup.html' with id='id' title='title' form=Form "%}
+{% include 'blocks/form_popup.html' with id='id' title='title' form=Form action="/submit/url"%}
 
 include these attributes in button on your template to activate popup
-'data-bs-toggle="modal" data-bs-target="#id' where id is what you set as the input for the popup
+data-bs-toggle="modal" data-bs-target="#id" where id is what you set as the input for the popup
 
 input vars:
 id - the id you will include on the button in your template to activate the popup
 title - the header of the popup
 form - form you wish for the popup to have
+action - the action you want the form to submit too.
 
 {% endcomment %}
 
@@ -22,9 +23,13 @@ form - form you wish for the popup to have
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form method="post">
+            <form method="post" action="{{action}}">
                 {% csrf_token %}
-                {% for field in form %}
+                {# Include the hidden fields #}
+                {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
                 <div class="pb-4">
                   {{ field.label_tag}}
                   {{ field }}
@@ -33,7 +38,7 @@ form - form you wish for the popup to have
                 {% endfor %}
                 <div class="text-end">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>

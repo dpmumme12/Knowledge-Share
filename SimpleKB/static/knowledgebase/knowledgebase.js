@@ -4,16 +4,32 @@
 
 /// getting inital data and setting event listners
 const user_folders = JSON.parse(document.getElementById('user_folders').textContent);
+const folder_id = JSON.parse(document.getElementById('folder_id').textContent);
 var change_folder_elements = document.getElementsByClassName("change-folder-class");
+var edit_folder_elements = document.getElementsByClassName("edit-folder-class");
 
 for (var i = 0; i < change_folder_elements.length; i++) {
   change_folder_elements[i].addEventListener('click', single_change_folder);
 }
 
+for (var i = 0; i < edit_folder_elements.length; i++) {
+  edit_folder_elements[i].addEventListener('click', edit_folder);
+}
+
 document.getElementById('change-folder-action').addEventListener('click', multiple_change_folder);
 document.getElementById('delete-items-action').addEventListener('click', bulk_delete);
 
-/// FUnction for deleting mulple items at once
+
+function edit_folder(event) {
+  var button = event.currentTarget;
+  var id = button.getAttribute('data-item-id');
+  var name = button.getAttribute('data-item-name');
+
+  document.getElementById('id_edit_folder-pk').value = id;
+  document.getElementById('id_edit_folder-name').value = name;
+}
+
+/// Function for deleting mulple items at once
 function bulk_delete(event) {
   var items = document.querySelectorAll(".item-checkbox-class");
   var checked_items = [];
@@ -30,8 +46,8 @@ function bulk_delete(event) {
 
   var objects = [];
   checked_items.forEach(element => {
-    var id = element.getAttribute('data-change-folder-id');
-    var object_type = element.getAttribute('data-change-folder-type');
+    var id = element.getAttribute('data-item-id');
+    var object_type = element.getAttribute('data-item-type');
 
     objects.push({'id': id, 'object_type':object_type});
   });
@@ -46,8 +62,8 @@ function bulk_delete(event) {
 function single_change_folder(event) {
     var change_folder_popup = new bootstrap.Modal(document.getElementById('ChangeFolderPopup'))
     var button = event.currentTarget;
-    var id = button.getAttribute('data-change-folder-id');
-    var object_type = button.getAttribute('data-change-folder-type');
+    var id = button.getAttribute('data-item-id');
+    var object_type = button.getAttribute('data-item-type');
 
     var object = [{'id': id, 'object_type':object_type}];
     document.getElementById('id_change_folder-objects').value = JSON.stringify(object);
@@ -62,9 +78,20 @@ function single_change_folder(event) {
     var folder_options = document.getElementById('id_change_folder-folder');
 
     folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
+    if (folder_id == null) {
+      folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
+    }
+    else {
+      folder_options.innerHTML = '<option value="">(Root)</option>';
+    }
 
     folders.forEach(folder => {
-      folder_options.innerHTML += `<option value="${folder.id}" >${folder.name}</option>`
+      if (folder.id == folder_id) {
+        folder_options.innerHTML += `<option value="${folder.id}" selected="">${folder.name}</option>`;
+      }
+      else {
+        folder_options.innerHTML += `<option value="${folder.id}" >${folder.name}</option>`;
+      }
     });
 
     change_folder_popup.show();
@@ -90,8 +117,8 @@ function multiple_change_folder(event) {
 
   var objects = [];
   checked_items.forEach(element => {
-    var id = element.getAttribute('data-change-folder-id');
-    var object_type = element.getAttribute('data-change-folder-type');
+    var id = element.getAttribute('data-item-id');
+    var object_type = element.getAttribute('data-item-type');
 
     objects.push({'id': id, 'object_type':object_type});
   });
@@ -108,10 +135,20 @@ function multiple_change_folder(event) {
 
   var folder_options = document.getElementById('id_change_folder-folder');
 
-  folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
+  if (folder_id == null) {
+    folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
+  }
+  else {
+    folder_options.innerHTML = '<option value="">(Root)</option>';
+  }
 
   folders.forEach(folder => {
-    folder_options.innerHTML += `<option value="${folder.id}" >${folder.name}</option>`
+    if (folder.id == folder_id) {
+      folder_options.innerHTML += `<option value="${folder.id}" selected="">${folder.name}</option>`;
+    }
+    else {
+      folder_options.innerHTML += `<option value="${folder.id}" >${folder.name}</option>`;
+    }
   });
 
   change_folder_popup.show();

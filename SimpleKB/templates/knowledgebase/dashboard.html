@@ -6,5 +6,13 @@
 {% endblock styles %}
 
 {% block body %}
-dashboard
+<form method="post">
+    {{ formset.management_form }}
+    {% for form in formset %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        {{ form.as_p }}
+    {% endfor %}
+</form>
 {% endblock body %}
