@@ -7,7 +7,7 @@
 
 {% block body %}
 
-<div class="col-12 text-end">
+<div class="col-12 CreateActionContainer ">
     <a href="{% url 'knowledgebase:article_create' %}" class="btn btn-info me-3">Create article <i class="fa-solid fa-plus fa-xs"></i></a>
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateFolderModal">
@@ -18,13 +18,13 @@
 <div class="pt-3">
 
     <div class="col-12">
-        <div class="col-4 d-inline-block">
-            <form method="get">
+        <div class="search-form d-inline-block">
+            <form method="get" action="{% url 'knowledgebase:knowledgebase' %}"">
                 {{SearchForm}}
             </form>
         </div>
        
-        <div class="col-5 d-inline-block float-end">
+        <div class="d-inline-block float-end">
             <div class="action-items float-end">
                 <a id="actions-dropdown" class="form-select text-decoration-none action-items" data-bs-toggle="dropdown" >
                     (Actions)
@@ -51,6 +51,7 @@
             </div>
         </div>
     </div>
+
     
 
     <hr class="my-2">
@@ -111,12 +112,15 @@
                                                     class="btn btn-link text-decoration-none p-0 edit-folder-class"
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#EditFolderModal"
-                                                    data-item-name="{{item.name}}"
                                                 {% else %}
-                                                    class="btn btn-link text-decoration-none p-0 change-folder-class"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#ArticleHeaderModal"
+                                                    class="btn btn-link text-decoration-none p-0 edit-article-class"
                                                 {% endif %}
                                                 data-item-id="{{item.id}}"
                                                 data-item-type="{{item.object_type}}"
+                                                data-item-name="{{item.name}}"
+                                                data-item-parent_folder="{{item.directory}}"
                                                 >
 
                                             <i class="fa-solid fa-pen-to-square fa-xs text-secondary d-inline-block"></i>
@@ -189,8 +193,9 @@
         data-confirm-form="BulkDeleteForm" hidden></button>
 
 
-{% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=CreateFolderForm%}
-{% include 'blocks/form_popup.html' with id='EditFolderModal' title='Edit folder' form=EditFolderForm%}
+{% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=CreateFolderForm %}
+{% include 'blocks/form_popup.html' with id='EditFolderModal' title='Edit folder' form=EditFolderForm %}
+{% include 'blocks/form_popup.html' with id='ArticleHeaderModal' title='Edit Article' form=ArticleHeaderForm %}
 {% include 'blocks/confirmation_popup.html' %}
 
 {% endblock body %}

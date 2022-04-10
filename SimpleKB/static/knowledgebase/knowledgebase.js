@@ -5,28 +5,61 @@
 /// getting inital data and setting event listners
 const user_folders = JSON.parse(document.getElementById('user_folders').textContent);
 const folder_id = JSON.parse(document.getElementById('folder_id').textContent);
-var change_folder_elements = document.getElementsByClassName("change-folder-class");
+var edit_article_elements = document.getElementsByClassName("edit-article-class");
 var edit_folder_elements = document.getElementsByClassName("edit-folder-class");
-
-for (var i = 0; i < change_folder_elements.length; i++) {
-  change_folder_elements[i].addEventListener('click', single_change_folder);
-}
 
 for (var i = 0; i < edit_folder_elements.length; i++) {
   edit_folder_elements[i].addEventListener('click', edit_folder);
 }
 
+for (var i = 0; i < edit_article_elements.length; i++) {
+  edit_article_elements[i].addEventListener('click', edit_article);
+}
+
 document.getElementById('change-folder-action').addEventListener('click', multiple_change_folder);
 document.getElementById('delete-items-action').addEventListener('click', bulk_delete);
+
+function edit_article(event) {
+  var button = event.currentTarget;
+  var id = button.getAttribute('data-item-id');
+  var name = button.getAttribute('data-item-name');
+  var parent_folder = button.getAttribute('data-item-parent_folder');
+  if (parent_folder == 'None') {parent_folder = ''};
+
+  document.getElementById('id_article_header-folder').value = parent_folder;
+  document.getElementById('id_article_header-title').value = name;
+  document.getElementById('ArticleHeaderModal-form').setAttribute('action', `/KnowledgeBase/Article/Edit/${id}`)
+}
 
 
 function edit_folder(event) {
   var button = event.currentTarget;
   var id = button.getAttribute('data-item-id');
   var name = button.getAttribute('data-item-name');
+  var parent_folder = button.getAttribute('data-item-parent_folder');
+  if (parent_folder == 'None') {parent_folder = ''};
 
-  document.getElementById('id_edit_folder-pk').value = id;
   document.getElementById('id_edit_folder-name').value = name;
+  document.getElementById('EditFolderModal-form').setAttribute('action', `/Folder/Edit/${id}`)
+
+  var folder = [{'id': id, 'object_type':'folder'}];
+
+  var folders = filter_user_folders(folder);
+
+  var folder_options = document.getElementById('id_edit_folder-parent_folder');
+  
+  folder_options.innerHTML = '<option value="">(Root)</option>';
+  
+  folders.forEach(folder => {
+    if (folder.id == folder_id) {
+      folder_options.innerHTML += `<option value="${folder.id}" selected="">${folder.name}</option>`;
+    }
+    else {
+      folder_options.innerHTML += `<option value="${folder.id}" >${folder.name}</option>`;
+    }
+  });
+
+  folder_options.value = parent_folder;
 }
 
 /// Function for deleting mulple items at once
@@ -58,46 +91,6 @@ function bulk_delete(event) {
 }
 
 
-/// Function for changing the folder for a single item
-function single_change_folder(event) {
-    var change_folder_popup = new bootstrap.Modal(document.getElementById('ChangeFolderPopup'))
-    var button = event.currentTarget;
-    var id = button.getAttribute('data-item-id');
-    var object_type = button.getAttribute('data-item-type');
-
-    var object = [{'id': id, 'object_type':object_type}];
-    document.getElementById('id_change_folder-objects').value = JSON.stringify(object);
-
-    if (object[0].object_type === 'folder') {
-      var folders = filter_user_folders(object);
-    }
-    else {
-      var folders = user_folders;
-    }
-
-    var folder_options = document.getElementById('id_change_folder-folder');
-
-    folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
-    if (folder_id == null) {
-      folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
-    }
-    else {
-      folder_options.innerHTML = '<option value="">(Root)</option>';
-    }
-
-    folders.forEach(folder => {
-      if (folder.id == folder_id) {
-        folder_options.innerHTML += `<option value="${folder.id}" selected="">${folder.name}</option>`;
-      }
-      else {
-        folder_options.innerHTML += `<option value="${folder.id}" >${folder.name}</option>`;
-      }
-    });
-
-    change_folder_popup.show();
-}
-
-
 /// Function for changing the folder for a multiple item's
 function multiple_change_folder(event) {
   var items = document.querySelectorAll(".item-checkbox-class");
@@ -113,7 +106,7 @@ function multiple_change_folder(event) {
     return;
   }
   
-  var change_folder_popup = new bootstrap.Modal(document.getElementById('ChangeFolderPopup'))
+  var change_folder_popup = new bootstrap.Modal(document.getElementById('ChangeFolderPopup'));
 
   var objects = [];
   checked_items.forEach(element => {
@@ -130,7 +123,7 @@ function multiple_change_folder(event) {
     var folders = filter_user_folders(folder_objects);
   }
   else {
-    var folders = user_folders
+    var folders = user_folders;
   }
 
   var folder_options = document.getElementById('id_change_folder-folder');

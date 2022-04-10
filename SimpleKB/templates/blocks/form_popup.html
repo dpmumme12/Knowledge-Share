@@ -23,7 +23,7 @@ action - the action you want the form to submit too.
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form method="post" action="{{action}}">
+            <form id="{{id}}-form" method="post" action="{{action}}">
                 {% csrf_token %}
                 {# Include the hidden fields #}
                 {% for hidden in form.hidden_fields %}

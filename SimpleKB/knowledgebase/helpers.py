@@ -11,6 +11,7 @@ def search_knowledgebase(query, user):
     folders = (Folder
                .objects
                .annotate(object_type=Value('folder'),
+                         directory=F('parent_folder'),
                          rank=SearchRank(folder_vector, vector_query),
                          similarity=trgm_sim('name', query),
                          score=Sum(F('rank') + (F('similarity'))))
@@ -20,6 +21,7 @@ def search_knowledgebase(query, user):
     articles = (Article
                 .objects
                 .annotate(name=F('title'), object_type=Value('article'),
+                          directory=F('folder'),
                           rank=SearchRank(article_vector, vector_query),
                           similarity=trgm_sim('name', query),
                           score=Sum(F('rank') + F('similarity') + trgm_sim('content', query)))

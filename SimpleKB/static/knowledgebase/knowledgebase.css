@@ -11,10 +11,11 @@
 }
 
 .action-items {
-    width: 120px ;
+    width: 100%;
 }
 .action-items:hover {
     color: inherit;
+    cursor: pointer;
 }
 
 .disabled {
@@ -22,8 +23,31 @@
     pointer-events: none;
 }
 
+.search-form {
+    width: 35%;
+}
+
+.CreateActionContainer {
+    text-align: right;
+}
+
 @media all and (max-width:992px) {
     .folder-ellipsis {
         opacity: 1;
+    }
+
+    .search-form {
+        width: 50%;
+    }
+}
+
+@media all and (max-width:450px) {
+    .CreateActionContainer {
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    .search-form {
+        width: 60%;
     }
 }
