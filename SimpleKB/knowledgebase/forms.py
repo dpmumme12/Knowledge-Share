@@ -21,7 +21,8 @@ class ArticleForm(forms.ModelForm):
 
 
 class ArticleHeaderForm(forms.ModelForm):
-    """Form to edit the title and folder for an article.
+    """
+    Form to edit the title and folder for an article.
 
     Args:
         (folders) optional: folder options for the parent_folder field.
@@ -43,7 +44,8 @@ class ArticleHeaderForm(forms.ModelForm):
                                               for folder in self.folders]
 
 class FolderForm(forms.ModelForm):
-    """Form to create/edit folder.
+    """
+    Form to create/edit folder.
 
     Args:
         (folders) optional: folder options for the parent_folder field.
@@ -153,7 +155,8 @@ class BulkChangeFolderForm(forms.Form):
 
     @staticmethod
     def get_sub_folders(folder, in_folders):
-        """Gets all of folders that are inside the input folder.
+        """
+        Gets all of folders that are inside the input folder.
 
         Args:
             folder (dict): Takes the dict of a Folder insatnce ex: model_to_dict(Folder)
