@@ -11,6 +11,14 @@ from ..forms import ArticleForm
 from ..models import Article, ArticleImage, Folder
 
 
+class ArticleView(View):
+    template_name = 'knowledgebase/article_view.html'
+
+    def get(self, request, **kwargs):
+        article_id = kwargs.pop('article_id', None)
+        return render(request, self.template_name)
+
+
 class ArticleEditView(View):
     template_name = 'knowledgebase/article_edit.html'
 
@@ -42,7 +50,7 @@ class ArticleEditView(View):
             form.save()
 
             messages.success(request, 'Article created successfully!')
-            return redirect('knowledgebase:knowledgebase')
+            return redirect('knowledgebase:kb', username=request.user.username)
         else:
             return render(request, self.template_name, {
                 'ArticleForm': form,
@@ -51,8 +59,10 @@ class ArticleEditView(View):
 
 class ArticleDeleteView(SuccessMessageMixin, DeleteView):
     model = Article
-    success_url = reverse_lazy('knowledgebase:knowledgebase')
     success_message = 'Article deleted successfully!'
+
+    def get_success_url(self):
+        return reverse_lazy('knowledgebase:kb', kwargs={'username': self.request.user.username})
 
 
 class ArticleImageUploadView(View):

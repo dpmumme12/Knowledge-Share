@@ -1,6 +1,7 @@
 from django.db.models import F, Value, Sum
 from django.contrib.postgres.search import (SearchQuery, SearchVector,
                                             SearchRank, TrigramSimilarity as trgm_sim)
+from itertools import chain
 from .models import Article, Folder
 
 def search_knowledgebase(query, user):
@@ -10,23 +11,17 @@ def search_knowledgebase(query, user):
 
     folders = (Folder
                .objects
-               .annotate(object_type=Value('folder'),
-                         directory=F('parent_folder'),
-                         rank=SearchRank(folder_vector, vector_query),
+               .annotate(rank=SearchRank(folder_vector, vector_query),
                          similarity=trgm_sim('name', query),
                          score=Sum(F('rank') + (F('similarity'))))
                .filter(owner=user, score__gte=0.1)
-               .only('name')
                )
     articles = (Article
                 .objects
-                .annotate(name=F('title'), object_type=Value('article'),
-                          directory=F('folder'),
-                          rank=SearchRank(article_vector, vector_query),
-                          similarity=trgm_sim('name', query),
+                .annotate(rank=SearchRank(article_vector, vector_query),
+                          similarity=trgm_sim('title', query),
                           score=Sum(F('rank') + F('similarity') + trgm_sim('content', query)))
                 .filter(author=user, score__gte=0.1)
-                .only('id')
                 )
 
-    return folders.union(articles).order_by('-score')
+    return list(chain(folders, articles))

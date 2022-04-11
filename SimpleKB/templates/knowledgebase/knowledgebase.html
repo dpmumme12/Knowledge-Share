@@ -1,5 +1,6 @@
 {% extends 'layouts/base_knowledgebase.html' %}
 {% load static %}
+{% load utils_tags %}
 
 {% block styles %}
 <link rel="stylesheet" href='{% static 'knowledgebase/knowledgebase.css' %}'>
@@ -19,7 +20,7 @@
 
     <div class="col-12">
         <div class="search-form d-inline-block">
-            <form method="get" action="{% url 'knowledgebase:knowledgebase' %}"">
+            <form method="get" action="{% url 'knowledgebase:kb' kb_user.username %}"">
                 {{SearchForm}}
             </form>
         </div>
@@ -61,15 +62,15 @@
             <ol class="breadcrumb">
             {% if current_folder %}
                 {% if current_folder.parent_folder.parent_folder %}
-                    ...<li class="breadcrumb-item"><a href="{% url 'knowledgebase:knowledgebase_id' current_folder.parent_folder.parent_folder.id %}">{{current_folder.parent_folder.parent_folder.name}}</a></li>
+                    ...<li class="breadcrumb-item"><a href="{% url 'knowledgebase:kb_id' username=kb_user.username folder_id=current_folder.parent_folder.parent_folder.id %}">{{current_folder.parent_folder.parent_folder.name}}</a></li>
                 {% elif current_folder.parent_folder%}
-                    <li class="breadcrumb-item"><a href="{% url 'knowledgebase:knowledgebase' %}">Root</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'knowledgebase:kb' kb_user.username%}">Root</a></li>
                 {% endif %}
 
                 {% if current_folder.parent_folder %}
-                    <li class="breadcrumb-item"><a href="{% url 'knowledgebase:knowledgebase_id' current_folder.parent_folder.id %}">{{current_folder.parent_folder.name}}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'knowledgebase:kb_id' username=kb_user.username folder_id=current_folder.parent_folder.id %}">{{current_folder.parent_folder.name}}</a></li>
                 {% elif current_folder %}
-                    <li class="breadcrumb-item"><a href="{% url 'knowledgebase:knowledgebase' %}">Root</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'knowledgebase:kb' kb_user.username %}">Root</a></li>
                 {% endif %}
                 <li class="breadcrumb-item active" aria-current="page">{{current_folder.name}}</li>
             {% endif %}
@@ -84,21 +85,23 @@
                         <div class="d-inline-block col-11">
                             <input class="form-check-input me-1 item-checkbox-class" type="checkbox" value="" aria-label="..." 
                                    data-item-id="{{item.id}}"
-                                   data-item-type="{{item.object_type}}"> 
+                                   data-item-type="{% if item|is_folder_instance %}folder{% else %}article{% endif %}"> 
                             <div class="d-inline-block col-9 position-relative">
-                                {% if item.object_type == 'folder' %}
-                                    <a href="{% url 'knowledgebase:knowledgebase_id' item.id %}"
+                                {% if item|is_folder_instance %}
+                                    <a href="{% url 'knowledgebase:kb_id' username=kb_user.username folder_id=item.id %}"
                                     class="stretched-link text-decoration-none text-dark">
                                     
                                         <i class="fa-regular fa-folder px-2"></i> {{item.name}}
                                     </a>
                                 {% else %}    
-                                    <a href="{% url 'knowledgebase:article_edit' item.id %}"
+                                    <a href="{% url 'knowledgebase:article' item.id %}"
                                     class="stretched-link text-decoration-none text-dark">
-                                        <i class="fa-regular fa-file px-2 "></i> {{item.name}}
+                                        <i class="fa-regular fa-file px-2 "></i> {{item.title}}
                                     </a>
+                                    {{item.get_article_status_display}}
                                 {% endif %}
                             </div>
+                           
                         </div>
                         <div class="d-inline-block col-1 g-0 float-end">
                             <div class="float-end">
@@ -108,19 +111,21 @@
                                 <ul class="dropdown-menu" style="min-width: 7rem;">
                                     <li class="dropdown-item">
                                         <button type="button"
-                                                {% if item.object_type == 'folder' %}
+                                                {% if item|is_folder_instance %}
                                                     class="btn btn-link text-decoration-none p-0 edit-folder-class"
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#EditFolderModal"
+                                                    data-item-name="{{item.name}}"
+                                                    data-item-parent_folder="{{item.parent_folder_id}}"
                                                 {% else %}
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#ArticleHeaderModal"
+                                                    data-item-name="{{item.title}}"
                                                     class="btn btn-link text-decoration-none p-0 edit-article-class"
+                                                    data-item-parent_folder="{{item.folder_id}}"
                                                 {% endif %}
                                                 data-item-id="{{item.id}}"
-                                                data-item-type="{{item.object_type}}"
-                                                data-item-name="{{item.name}}"
-                                                data-item-parent_folder="{{item.directory}}"
+                                                data-item-type="{% if item|is_folder_instance %}folder{% else %}article{% endif %}"
                                                 >
 
                                             <i class="fa-solid fa-pen-to-square fa-xs text-secondary d-inline-block"></i>
@@ -130,7 +135,7 @@
                                     <li class="dropdown-item">
                                         <button type="button" 
                                                 class="btn btn-link text-decoration-none p-0 confirmation-popup-class" 
-                                                {% if item.object_type == 'folder' %}
+                                                {% if item|is_folder_instance %}
                                                     data-confirm-url="{% url 'knowledgebase:folder_delete' item.id %}"
                                                     data-confirm-text="Deleting folder will delete all of its content. Are you sure?"
                                                 {% else %}

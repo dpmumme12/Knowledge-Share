@@ -28,7 +28,7 @@ function edit_article(event) {
 
   document.getElementById('id_article_header-folder').value = parent_folder;
   document.getElementById('id_article_header-title').value = name;
-  document.getElementById('ArticleHeaderModal-form').setAttribute('action', `/KnowledgeBase/Article/Edit/${id}`)
+  document.getElementById('ArticleHeaderModal-form').setAttribute('action', `/KB/Article/Edit/${id}`)
 }
 
 
