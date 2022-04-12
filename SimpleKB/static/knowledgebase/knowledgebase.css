@@ -31,6 +31,20 @@
     text-align: right;
 }
 
+.col-2_5 {
+    flex: 0 0 auto;
+    width: 20.8333332%;
+}
+
+.col-0_5 {
+    flex: 0 0 auto;
+    width: 4.16666665%;
+}
+
+.article-status-div {
+    
+}
+
 @media all and (max-width:992px) {
     .folder-ellipsis {
         opacity: 1;
@@ -49,5 +63,9 @@
 
     .search-form {
         width: 60%;
+    }
+
+    .article-status {
+        font-size: 10px;
     }
 }

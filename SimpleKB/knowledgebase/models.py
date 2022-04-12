@@ -10,7 +10,7 @@ class Article(TimeStampedModel):
 
     class Status(models.IntegerChoices):
         DRAFT = 1, _('Draft')
-        ACTIVE = 2, _('Active')
+        PUBLISHED = 2, _('Published')
         HISTORY = 3, _('History')
         ARCHIVED = 4, _('Archived')
 

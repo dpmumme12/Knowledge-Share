@@ -77,33 +77,48 @@
             </ol>
         </nav>
         
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush pb-5">
 
             {% for item in folder_content %}
                 <li class="list-group-item list-group-item-action folder-list-item">
                     <div class="col-12 g-0">
-                        <div class="d-inline-block col-11">
+                        <div class="d-inline-block col-8 g-0">
                             <input class="form-check-input me-1 item-checkbox-class" type="checkbox" value="" aria-label="..." 
                                    data-item-id="{{item.id}}"
                                    data-item-type="{% if item|is_folder_instance %}folder{% else %}article{% endif %}"> 
-                            <div class="d-inline-block col-9 position-relative">
+                            <div class="d-inline-block col-10 g-0 position-relative">
                                 {% if item|is_folder_instance %}
                                     <a href="{% url 'knowledgebase:kb_id' username=kb_user.username folder_id=item.id %}"
                                     class="stretched-link text-decoration-none text-dark">
                                     
                                         <i class="fa-regular fa-folder px-2"></i> {{item.name}}
                                     </a>
-                                {% else %}    
-                                    <a href="{% url 'knowledgebase:article' item.id %}"
-                                    class="stretched-link text-decoration-none text-dark">
+                                {% else %}   
+                                    <a href="{% if item.article_status ==  item.Status.PUBLISHED %}
+                                                {% url 'knowledgebase:article' item.id %}
+                                            {% else %}
+                                                {% url 'knowledgebase:article_edit' item.id %}
+                                            {% endif %}"
+                                       class="stretched-link text-decoration-none text-dark">
                                         <i class="fa-regular fa-file px-2 "></i> {{item.title}}
                                     </a>
-                                    {{item.get_article_status_display}}
                                 {% endif %}
                             </div>
-                           
                         </div>
-                        <div class="d-inline-block col-1 g-0 float-end">
+                        <div class="d-inline-block col-2_5 position-absolute text-center">
+                            <div class="">
+                                <div class="article-status-div">
+                                    {% if item|is_article_instance %}
+                                        {% if item.article_status ==  item.Status.DRAFT %}
+                                            <span class="badge bg-secondary article-status">{{item.get_article_status_display}}</span>
+                                        {% elif item.article_status ==  item.Status.PUBLISHED%}
+                                            <span class="badge bg-success article-status">{{item.get_article_status_display}}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-inline-block .col-0_5 g-0 float-end">
                             <div class="float-end">
                                 <a class="folder-ellipsis" style="color: gray;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                                     <div class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></div>
