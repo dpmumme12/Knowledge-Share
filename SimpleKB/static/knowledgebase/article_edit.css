@@ -1,3 +1,9 @@
 .editor-wrapper {
     padding: 25px;
 }
+
+@media all and (max-width:450px) {
+    .editor-wrapper {
+        padding: 25px 0 50px 0;
+    }
+}

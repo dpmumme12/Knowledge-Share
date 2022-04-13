@@ -10,26 +10,19 @@
 {% block body %}
 <div class="editor-wrapper">
     <div class="pb-3">
-        <div class="d-inline-block">
-            <select>
-                {% for version in article_versions %}
-                    <option>Version {{version.version}} - {{version.get_article_status_display}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="d-inline-block float-end">
+        <div class="pb-5 d-inline-block float-end">
                 <div class="pe-2 d-inline-block">
                     <form action="{% url 'knowledgebase:article_delete' article.id%}" method="post" class="d-inline-block">
                         {% csrf_token %}
-                        <button class="btn btn-danger" type="submit">Delete Draft</button>
+                        <button class="btn btn-danger" type="submit">Delete Version</button>
                     </form>
                 </div>
             {% if article.article_status == article.Status.DRAFT %}
                 <div class="pe-2 d-inline-block">
-                    <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.Status.DRAFT}} form="ArticleForm">Save Draft</button>
+                    <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.Status.DRAFT}} form="ArticleForm">Save</button>
                 </div>
                 <div class="pe-3 d-inline-block">
-                    <button class="btn btn-success" type="submit" name="SubmitButton" value={{article.Status.PUBLISHED}} form="ArticleForm">Publish Draft</button>
+                    <button class="btn btn-success" type="submit" name="SubmitButton" value={{article.Status.PUBLISHED}} form="ArticleForm">Publish</button>
                 </div>
             {% else %}
                 <div class="pe-2 d-inline-block">
@@ -39,6 +32,13 @@
                     <button class="btn btn-success" type="submit" name="SubmitButton" value="NewVersion" form="ArticleForm">Create New Version</button>
                 </div>
             {% endif %}
+        </div>
+        <div class="d-inline-block">
+            <select>
+                {% for version in article_versions %}
+                    <option>Version {{version.version}} - {{version.get_article_status_display}}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 
