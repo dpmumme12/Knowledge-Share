@@ -1,10 +1,10 @@
-from django.db.models import F, Value, Sum
+from django.db.models import F, Value, Sum, Q
 from django.contrib.postgres.search import (SearchQuery, SearchVector,
                                             SearchRank, TrigramSimilarity as trgm_sim)
 from itertools import chain
 from .models import Article, Folder
 
-def search_knowledgebase(query, user):
+def search_knowledgebase(query: str, user: object):
     vector_query = SearchQuery(query)
     folder_vector = SearchVector('name', weight='A')
     article_vector = SearchVector('title', weight='A') + SearchVector('content', weight='B')
@@ -25,3 +25,22 @@ def search_knowledgebase(query, user):
                 )
 
     return list(chain(folders, articles))
+
+
+def publish_article(article: Article):
+    (Article
+     .objects
+     .filter(Q(uuid=article.uuid), ~Q(id=article.id))
+     .update(article_status=Article.Article_Status.ARCHIVED,
+             version_status=Article.Version_Status.HISTORY)
+     )
+
+    article.article_status = Article.Article_Status.PUBLISHED
+    article.Version_Status = Article.Version_Status.ACTIVE
+    article.save()
+
+    return article
+
+
+def create_new_version(article: Article):
+    Article.objects.filter(uuid=article.uuid, version_status=Article.Version_Status.NEW_VERSION)

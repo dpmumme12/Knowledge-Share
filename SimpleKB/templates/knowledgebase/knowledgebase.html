@@ -109,9 +109,9 @@
                             <div class="">
                                 <div class="article-status-div">
                                     {% if item|is_article_instance %}
-                                        {% if item.article_status ==  item.Status.DRAFT %}
+                                        {% if item.article_status ==  item.Article_Status.DRAFT %}
                                             <span class="badge bg-secondary article-status">{{item.get_article_status_display}}</span>
-                                        {% elif item.article_status ==  item.Status.PUBLISHED%}
+                                        {% elif item.article_status ==  item.Article_Status.PUBLISHED%}
                                             <span class="badge bg-success article-status">{{item.get_article_status_display}}</span>
                                         {% endif %}
                                     {% endif %}

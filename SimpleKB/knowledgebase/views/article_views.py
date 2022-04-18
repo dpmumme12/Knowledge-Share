@@ -9,6 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 from ..forms import ArticleForm
 from ..models import Article, ArticleImage, Folder
+from ..helpers import publish_article, create_new_version
 
 
 class ArticleView(View):
@@ -44,12 +45,18 @@ class ArticleEditView(View):
 
     def post(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
-        article.article_status = request.POST['SubmitButton']
         form = ArticleForm(request.POST, instance=article)
+        submit_type = int(request.POST['SubmitButton'])
+        if submit_type == Article.Version_Status.NEW_VERSION:
+            create_new_version(article)
+
         if form.is_valid():
             form.save()
-
-            messages.success(request, 'Article created successfully!')
+            if submit_type == Article.Article_Status.PUBLISHED:
+                publish_article(article)
+                messages.success(request, 'Article published successfully!')
+            else:
+                messages.success(request, 'Article saved successfully!')
             return redirect('knowledgebase:kb', username=request.user.username)
         else:
             return render(request, self.template_name, {

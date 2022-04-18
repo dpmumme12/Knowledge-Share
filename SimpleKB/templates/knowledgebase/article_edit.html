@@ -12,25 +12,21 @@
     <div class="pb-3">
         <div class="pb-5 d-inline-block float-end">
                 <div class="pe-2 d-inline-block">
-                    <form action="{% url 'knowledgebase:article_delete' article.id%}" method="post" class="d-inline-block">
-                        {% csrf_token %}
-                        <button class="btn btn-danger" type="submit">Delete Version</button>
-                    </form>
+                    <button class="btn btn-danger" type="submit">Delete Version</button>
                 </div>
-            {% if article.article_status == article.Status.DRAFT %}
+            {% if article.article_status == article.Article_Status.DRAFT or  article.article_status == article.Article_Status.PUBLISHED%}
                 <div class="pe-2 d-inline-block">
-                    <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.Status.DRAFT}} form="ArticleForm">Save</button>
+                    <button class="btn btn-info" type="submit" name="SubmitButton" form="ArticleForm">Save</button>
                 </div>
-                <div class="pe-3 d-inline-block">
-                    <button class="btn btn-success" type="submit" name="SubmitButton" value={{article.Status.PUBLISHED}} form="ArticleForm">Publish</button>
-                </div>
-            {% else %}
-                <div class="pe-2 d-inline-block">
-                    <button class="btn btn-info" type="submit" name="SubmitButton" value={{article.article_status}} form="ArticleForm">Save</button>
-                </div>
-                <div class="pe-3 d-inline-block">
-                    <button class="btn btn-success" type="submit" name="SubmitButton" value="NewVersion" form="ArticleForm">Create New Version</button>
-                </div>
+                {% if article.article_status == article.Article_Status.DRAFT %}
+                    <div class="pe-3 d-inline-block">
+                        <button class="btn btn-success" type="submit" name="SubmitButton" value={{article.Article_Status.PUBLISHED}} form="ArticleForm">Publish</button>
+                    </div>
+                {% else %}
+                    <div class="pe-3 d-inline-block">
+                        <button class="btn btn-success" type="submit" name="SubmitButton" value={{article.Version_Status.NEW_VERSION}} form="ArticleForm">Create New Version</button>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
         <div class="d-inline-block">
