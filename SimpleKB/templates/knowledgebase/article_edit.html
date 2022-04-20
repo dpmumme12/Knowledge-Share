@@ -12,13 +12,23 @@
     <div class="pb-3">
         <div class="pb-5 d-inline-block float-end">
                 <div class="pe-2 d-inline-block">
-                    <button class="btn btn-danger" type="submit">Delete Version</button>
+                    {% if  article.version_status_id == article.Version_Status.ACTIVE %}
+                        <button class="btn btn-danger confirmation-popup-class" 
+                                type="submit"
+                                data-confirm-text="Deleting active version of article will delete every version. Are you sure?"
+                                data-confirm-url="{% url 'knowledgebase:article_delete' article.id %}">Delete Article</button>
+                    {% else %}
+                        <button class="btn btn-danger confirmation-popup-class" 
+                            type="submit"
+                            data-confirm-text="Delete article version?"
+                            data-confirm-url="{% url 'knowledgebase:article_delete' article.id %}">Delete Version</button>
+                    {% endif %}
                 </div>
-            {% if article.article_status == article.Article_Status.DRAFT or  article.article_status == article.Article_Status.PUBLISHED%}
+            {% if article.article_status_id == article.Article_Status.DRAFT or article.article_status_id == article.Article_Status.PUBLISHED %}
                 <div class="pe-2 d-inline-block">
                     <button class="btn btn-info" type="submit" name="SubmitButton" form="ArticleForm">Save</button>
                 </div>
-                {% if article.article_status == article.Article_Status.DRAFT %}
+                {% if article.article_status_id == article.Article_Status.DRAFT %}
                     <div class="pe-3 d-inline-block">
                         <button class="btn btn-success" type="submit" name="SubmitButton" value={{article.Article_Status.PUBLISHED}} form="ArticleForm">Publish</button>
                     </div>
@@ -32,7 +42,7 @@
         <div class="d-inline-block">
             <select>
                 {% for version in article_versions %}
-                    <option>Version {{version.version}} - {{version.get_article_status_display}}</option>
+                    <option>Version {{version.version}} - {{version.get_article_status_id_display}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -51,6 +61,9 @@
         </div>
     </form>
 </div>
+
+{% include 'blocks/confirmation_popup.html' %}
+
 {% endblock %}
 
 {% block scripts %}

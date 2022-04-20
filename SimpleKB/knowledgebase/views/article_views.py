@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.views.generic import View, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
@@ -28,7 +28,8 @@ class ArticleEditView(View):
             article = Article.objects.create(
                 author=request.user,
                 title='Draft ' + datetime.now().strftime('%b %d %Y'),
-                article_status=Article.Status.DRAFT
+                article_status_id=Article.Article_Status.DRAFT,
+                version_status_id=Article.Version_Status.ACTIVE
             )
             return redirect('knowledgebase:article_edit', article_id=article.id)
 
@@ -46,9 +47,14 @@ class ArticleEditView(View):
     def post(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
         form = ArticleForm(request.POST, instance=article)
-        submit_type = int(request.POST['SubmitButton'])
+        submit_type = request.POST['SubmitButton']
+        if submit_type:
+            submit_type = int(submit_type)
+
         if submit_type == Article.Version_Status.NEW_VERSION:
-            create_new_version(article)
+            new_version = create_new_version(article)
+            messages.info(request, 'New version created')
+            return redirect('knowledgebase:article_edit', article_id=new_version.id)
 
         if form.is_valid():
             form.save()
@@ -67,6 +73,17 @@ class ArticleEditView(View):
 class ArticleDeleteView(SuccessMessageMixin, DeleteView):
     model = Article
     success_message = 'Article deleted successfully!'
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        if self.object.version_status_id == Article.Version_Status.ACTIVE:
+            Article.objects.filter(uuid=self.object.uuid).delete()
+        else:
+            self.object.delete()
+
+        return HttpResponseRedirect(success_url)
 
     def get_success_url(self):
         return reverse_lazy('knowledgebase:kb', kwargs={'username': self.request.user.username})

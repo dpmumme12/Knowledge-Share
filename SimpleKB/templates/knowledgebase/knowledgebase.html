@@ -94,8 +94,8 @@
                                         <i class="fa-regular fa-folder px-2"></i> {{item.name}}
                                     </a>
                                 {% else %}   
-                                    <a href="{% if item.article_status ==  item.Status.PUBLISHED %}
-                                                {% url 'knowledgebase:article' item.id %}
+                                    <a href="{% if item.article_status_id ==  item.Article_Status.PUBLISHED %}
+                                                {% url 'knowledgebase:article_edit' item.id %}
                                             {% else %}
                                                 {% url 'knowledgebase:article_edit' item.id %}
                                             {% endif %}"
@@ -109,10 +109,10 @@
                             <div class="">
                                 <div class="article-status-div">
                                     {% if item|is_article_instance %}
-                                        {% if item.article_status ==  item.Article_Status.DRAFT %}
-                                            <span class="badge bg-secondary article-status">{{item.get_article_status_display}}</span>
-                                        {% elif item.article_status ==  item.Article_Status.PUBLISHED%}
-                                            <span class="badge bg-success article-status">{{item.get_article_status_display}}</span>
+                                        {% if item.article_status_id ==  item.Article_Status.DRAFT %}
+                                            <span class="badge bg-secondary article-status">{{item.get_article_status_id_display}}</span>
+                                        {% elif item.article_status_id ==  item.Article_Status.PUBLISHED%}
+                                            <span class="badge bg-success article-status">{{item.get_article_status_id_display}}</span>
                                         {% endif %}
                                     {% endif %}
                                 </div>

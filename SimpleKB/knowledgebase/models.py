@@ -21,10 +21,10 @@ class Article(TimeStampedModel):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=200, blank=True)
     slug = models.SlugField(max_length=200, blank=True)
-    article_status = models.SmallIntegerField(choices=Article_Status.choices)
+    article_status_id = models.SmallIntegerField(choices=Article_Status.choices)
     content = models.TextField(blank=True)
     version = models.IntegerField(default=0)
-    version_status = models.SmallIntegerField(choices=Version_Status.choices)
+    version_status_id = models.SmallIntegerField(choices=Version_Status.choices)
     uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
     folder = models.ForeignKey('Folder', on_delete=models.CASCADE, null=True, blank=True)
 
