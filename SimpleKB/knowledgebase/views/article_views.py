@@ -5,6 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.db.models import Q
 from django.contrib import messages
 from datetime import datetime
 from ..forms import ArticleForm
@@ -37,9 +38,10 @@ class ArticleEditView(View):
         article_versions = (Article
                             .objects
                             .filter(uuid=current_article.uuid)
+                            .order_by('-id')
                             )
         return render(request, self.template_name, {
-            'ArticleForm': ArticleForm(instance=current_article),
+            'ArticleForm': ArticleForm(user=request.user, instance=current_article),
             'article_versions': article_versions,
             'article': current_article,
         })

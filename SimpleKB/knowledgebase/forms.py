@@ -10,14 +10,18 @@ class ArticleForm(forms.ModelForm):
     """
     class Meta:
         model = Article
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'folder']
         widgets = {
             'content': TinyMCE(attrs={'cols': 80, 'rows': 30}),
         }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['folder'].widget.attrs.update({'class': 'form-select'})
+        self.fields['folder'].empty_label = '(Root)'
+        self.fields['folder'].queryset = Folder.objects.filter(owner=self.user)
 
 
 class ArticleHeaderForm(forms.ModelForm):

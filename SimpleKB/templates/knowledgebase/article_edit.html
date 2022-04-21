@@ -40,20 +40,34 @@
             {% endif %}
         </div>
         <div class="d-inline-block">
-            <select>
+            <a id="actions-dropdown" class="form-select text-decoration-none article-versions" data-bs-toggle="dropdown">
+                Version {{article.version}} - {{article.get_article_status_id_display}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 {% for version in article_versions %}
-                    <option>Version {{version.version}} - {{version.get_article_status_id_display}}</option>
+                <li>
+                    <a class="dropdown-item article-versions-item" {% if version.id != article.id %}href="{% url 'knowledgebase:article_edit' version.id %}"{% endif %}>
+                        Version {{version.version}} - {{version.get_article_status_id_display}}
+                    </a>
+                </li>
                 {% endfor %}
-            </select>
+            </ul>
         </div>
     </div>
 
     <form method="post" id="ArticleForm">
         {% csrf_token %}
-        <div class="pb-4">
-            <label for="{{ ArticleForm.title.id_for_label }}">Title:</label>
-            {{ ArticleForm.title }}
-            <div style="color: red;">{{ ArticleForm.title.errors }}</div>
+        <div class="pb-4 d-inline-block col-12">
+            <div class="d-inline-block col-sm-8 article-title">
+                <label for="{{ ArticleForm.title.id_for_label }}">Title:</label>
+                {{ ArticleForm.title }}
+                <div style="color: red;">{{ ArticleForm.title.errors }}</div>
+            </div>
+            <div class="d-inline-block col-sm-2 folder-dropdown">
+                <label for="{{ ArticleForm.folder.id_for_label }}">Folder:</label>
+                {{ ArticleForm.folder }}
+                <div style="color: red;">{{ ArticleForm.folder.errors }}</div>
+            </div>
         </div>
         <div class="pb-3">
             {{ ArticleForm.content }}
