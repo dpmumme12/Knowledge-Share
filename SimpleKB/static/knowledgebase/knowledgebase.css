@@ -10,6 +10,10 @@
     cursor: pointer;
 }
 
+.folder-content {
+    padding-bottom: 5rem;
+}
+
 .action-items {
     width: 100%;
 }
@@ -39,10 +43,6 @@
 .col-0_5 {
     flex: 0 0 auto;
     width: 4.16666665%;
-}
-
-.article-status-div {
-    
 }
 
 @media all and (max-width:992px) {

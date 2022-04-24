@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.db.models import F, Value
 from django.forms.models import model_to_dict
+from django.core.paginator import Paginator
 from itertools import chain
 from ..forms import (ArticleForm, FolderForm, BulkChangeFolderForm, BulkDeleteForm,
                      SearchForm, ArticleHeaderForm)
@@ -62,10 +63,21 @@ class KnowledgeBaseView(View):
                        )
             articles = (Article
                         .objects
-                        .filter(author=kb_user, folder=folder_id)
+                        .filter(author=kb_user,
+                                folder=folder_id,
+                                version_status_id=Article.Version_Status.ACTIVE)
                         )
 
             folder_content = list(chain(folders, articles))
+
+        folder_content.sort(key=lambda x: x.name.lower()
+                            if isinstance(x, Folder)
+                            else x.title.lower())
+
+        paginator = Paginator(folder_content, 15)
+
+        page_number = request.GET.get('page')
+        folder_content = paginator.get_page(page_number)
 
         return render(request, self.template_name, {
             'current_folder': current_folder,

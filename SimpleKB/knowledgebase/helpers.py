@@ -21,7 +21,9 @@ def search_knowledgebase(query: str, user: object) -> list:
                 .annotate(rank=SearchRank(article_vector, vector_query),
                           similarity=trgm_sim('title', query),
                           score=Sum(F('rank') + F('similarity') + trgm_sim('content', query)))
-                .filter(author=user, score__gte=0.1)
+                .filter(author=user,
+                        score__gte=0.1,
+                        version_status_id=Article.Version_Status.ACTIVE)
                 )
 
     return list(chain(folders, articles))

@@ -29,4 +29,12 @@
         float: initial;
         width: 100%;
     }
+
+    .action-button {
+        font-size: .79rem;
+    }
+
+    .end-div {
+        padding-right: 0 !important;
+    }
 }

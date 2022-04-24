@@ -20,7 +20,7 @@
 
     <div class="col-12">
         <div class="search-form d-inline-block">
-            <form method="get" action="{% url 'knowledgebase:kb' kb_user.username %}"">
+            <form method="get" action="{% url 'knowledgebase:kb' kb_user.username %}">
                 {{SearchForm}}
             </form>
         </div>
@@ -57,7 +57,7 @@
 
     <hr class="my-2">
 
-    <div class="col-12" >
+    <div class="col-12 folder-content">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
             {% if current_folder %}
@@ -77,7 +77,7 @@
             </ol>
         </nav>
         
-        <ul class="list-group list-group-flush pb-5">
+        <ul class="list-group list-group-flush pb-3">
 
             {% for item in folder_content %}
                 <li class="list-group-item list-group-item-action folder-list-item">
@@ -95,12 +95,17 @@
                                     </a>
                                 {% else %}   
                                     <a href="{% if item.article_status_id ==  item.Article_Status.PUBLISHED %}
-                                                {% url 'knowledgebase:article_edit' item.id %}
+                                                {% url 'knowledgebase:article' item.id %}
                                             {% else %}
                                                 {% url 'knowledgebase:article_edit' item.id %}
                                             {% endif %}"
                                        class="stretched-link text-decoration-none text-dark">
-                                        <i class="fa-regular fa-file px-2 "></i> {{item.title}}
+                                        <i class="fa-regular fa-file-lines px-2 "></i> 
+                                        {% if item.title %}
+                                            {{item.title}}
+                                        {% elif item.article_status_id ==  item.Article_Status.DRAFT%}
+                                            Draft {{item.created_on}}
+                                        {% endif %}
                                     </a>
                                 {% endif %}
                             </div>
@@ -124,29 +129,43 @@
                                     <div class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></div>
                                 </a>
                                 <ul class="dropdown-menu" style="min-width: 7rem;">
-                                    <li class="dropdown-item">
-                                        <button type="button"
-                                                {% if item|is_folder_instance %}
+                                    {% if item|is_folder_instance %}
+                                        <li class="dropdown-item">
+                                            <button type="button"
                                                     class="btn btn-link text-decoration-none p-0 edit-folder-class"
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#EditFolderModal"
                                                     data-item-name="{{item.name}}"
                                                     data-item-parent_folder="{{item.parent_folder_id}}"
-                                                {% else %}
+                                                    data-item-id="{{item.id}}"
+                                                    data-item-type="folder"
+                                                    >
+                                                <i class="fa-solid fa-pen-to-square fa-xs text-secondary d-inline-block"></i>
+                                                <p class="text-dark d-inline-block ps-1 m-0">Edit</p>
+                                            </button>
+                                        </li>
+                                    {% else %}
+                                        <li class="dropdown-item">
+                                            <button type="button"
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#ArticleHeaderModal"
                                                     data-item-name="{{item.title}}"
                                                     class="btn btn-link text-decoration-none p-0 edit-article-class"
                                                     data-item-parent_folder="{{item.folder_id}}"
-                                                {% endif %}
-                                                data-item-id="{{item.id}}"
-                                                data-item-type="{% if item|is_folder_instance %}folder{% else %}article{% endif %}"
-                                                >
-
-                                            <i class="fa-solid fa-pen-to-square fa-xs text-secondary d-inline-block"></i>
-                                            <p class="text-dark d-inline-block ps-1 m-0">Edit</p>
-                                        </button>
-                                    </li>
+                                                    data-item-id="{{item.id}}"
+                                                    data-item-type="article"
+                                                    >
+                                                <i class="fa-solid fa-pen-to-square fa-xs text-secondary d-inline-block"></i>
+                                                <p class="text-dark d-inline-block ps-1 m-0">Edit Header</p>
+                                            </button>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a class="btn btn-link text-decoration-none p-0" href="{% url 'knowledgebase:article_edit' item.id%}">
+                                                <i class="fa-solid fa-file-lines fa-xs text-secondary d-inline-block"></i>
+                                                <p class="text-dark d-inline-block ps-1 m-0">Edit Body</p>
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                     <li class="dropdown-item">
                                         <button type="button" 
                                                 class="btn btn-link text-decoration-none p-0 confirmation-popup-class" 
@@ -170,8 +189,52 @@
             {% empty %}
                 No folders created yet...
             {% endfor %}
-
         </ul>
+
+        {% if folder_content.has_other_pages %}
+        <div>
+            <span class="d-inline-block bottom-0">
+                Page {{ folder_content.number }} of {{ folder_content.paginator.num_pages }}
+            </span>
+            <span class="d-inline-block float-end">
+                <nav>
+                    <ul class="pagination">
+                        {% if folder_content.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if SearchForm.query.value %}query={{SearchForm.query.value}}&{% endif %}page={{ folder_content.previous_page_number }}" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% for page in folder_content.paginator.page_range %}
+                        {% if page > folder_content.number|add:-3 and page < folder_content.number|add:3  %}
+                        <li class="page-item {% if folder_content.number == page  %}active{% endif %}"><a class="page-link" href="?{% if SearchForm.query.value %}query={{SearchForm.query.value}}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if folder_content.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if SearchForm.query.value %}query={{SearchForm.query.value}}&{% endif %}page={{ folder_content.next_page_number }}" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                  </nav>
+            </span>
+        </div>
+        {% endif %}
     </div>
 </div>
 

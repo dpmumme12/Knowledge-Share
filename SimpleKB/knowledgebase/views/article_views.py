@@ -28,7 +28,6 @@ class ArticleEditView(View):
         if article_id is None:
             article = Article.objects.create(
                 author=request.user,
-                title='Draft ' + datetime.now().strftime('%b %d %Y'),
                 article_status_id=Article.Article_Status.DRAFT,
                 version_status_id=Article.Version_Status.ACTIVE
             )
@@ -48,7 +47,7 @@ class ArticleEditView(View):
 
     def post(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
-        form = ArticleForm(request.POST, instance=article)
+        form = ArticleForm(request.POST, user=request.user, instance=article)
         submit_type = request.POST['SubmitButton']
         if submit_type:
             submit_type = int(submit_type)
