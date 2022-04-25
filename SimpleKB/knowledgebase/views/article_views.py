@@ -18,7 +18,8 @@ class ArticleView(View):
 
     def get(self, request, **kwargs):
         article_id = kwargs.pop('article_id', None)
-        return render(request, self.template_name)
+        article = get_object_or_404(Article, id=article_id)
+        return render(request, self.template_name, {'article': article})
 
 
 class ArticleEditView(View):

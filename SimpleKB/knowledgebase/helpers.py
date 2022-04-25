@@ -4,7 +4,7 @@ from django.contrib.postgres.search import (SearchQuery, SearchVector,
 from itertools import chain
 from .models import Article, Folder
 
-def search_knowledgebase(query: str, user: object) -> list:
+def search_knowledgebase(query: str, kb_user, request_user) -> list:
     vector_query = SearchQuery(query)
     folder_vector = SearchVector('name', weight='A')
     article_vector = SearchVector('title', weight='A') + SearchVector('content', weight='B')
@@ -14,17 +14,20 @@ def search_knowledgebase(query: str, user: object) -> list:
                .annotate(rank=SearchRank(folder_vector, vector_query),
                          similarity=trgm_sim('name', query),
                          score=Sum(F('rank') + (F('similarity'))))
-               .filter(owner=user, score__gte=0.1)
+               .filter(owner=kb_user, score__gte=0.1)
                )
     articles = (Article
                 .objects
                 .annotate(rank=SearchRank(article_vector, vector_query),
                           similarity=trgm_sim('title', query),
                           score=Sum(F('rank') + F('similarity') + trgm_sim('content', query)))
-                .filter(author=user,
+                .filter(author=kb_user,
                         score__gte=0.1,
                         version_status_id=Article.Version_Status.ACTIVE)
                 )
+
+    if request_user != kb_user:
+        articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)
 
     return list(chain(folders, articles))
 

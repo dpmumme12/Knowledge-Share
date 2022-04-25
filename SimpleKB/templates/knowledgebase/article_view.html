@@ -6,7 +6,14 @@
 {% endblock styles %}
 
 {% block body %}
-
+<div style="width: auto;">
+<h1>{{article.title}}</h1>
+<div>
+    {% autoescape off %}
+        {{article.content}}
+    {% endautoescape %}
+</div>
+</div>
 {% endblock %}
 
 {% block scripts %}

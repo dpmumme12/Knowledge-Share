@@ -52,9 +52,9 @@ class KnowledgeBaseView(View):
         edit_folder_form = FolderForm(folder_id=folder_id,
                                       prefix='edit_folder')
 
-        if 'query' in request.GET and search_form.is_valid():
+        if search_form.data.get('query') and search_form.is_valid():
             query = search_form.cleaned_data['query']
-            folder_content = search_knowledgebase(query, kb_user)
+            folder_content = search_knowledgebase(query, kb_user, request.user)
 
         else:
             folders = (Folder
@@ -67,6 +67,8 @@ class KnowledgeBaseView(View):
                                 folder=folder_id,
                                 version_status_id=Article.Version_Status.ACTIVE)
                         )
+            if request.user != kb_user:
+                articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)
 
             folder_content = list(chain(folders, articles))
 

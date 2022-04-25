@@ -8,6 +8,7 @@
 
 {% block body %}
 
+{% if request.user == kb_user %}
 <div class="col-12 CreateActionContainer ">
     <a href="{% url 'knowledgebase:article_create' %}" class="btn btn-info me-3">Create article <i class="fa-solid fa-plus fa-xs"></i></a>
     <!-- Button trigger modal -->
@@ -15,6 +16,7 @@
         Create Folder <i class="fa-solid fa-plus fa-xs"></i>
     </button>
 </div>
+{% endif %}
 
 <div class="pt-4">
 
@@ -24,7 +26,7 @@
                 {{SearchForm}}
             </form>
         </div>
-       
+       {% if request.user == kb_user %}
         <div class="d-inline-block float-end">
             <div class="action-items float-end">
                 <a id="actions-dropdown" class="form-select text-decoration-none action-items" data-bs-toggle="dropdown" >
@@ -51,6 +53,7 @@
                 </ul>
             </div>
         </div>
+        {% endif %}
     </div>
 
     
@@ -83,9 +86,11 @@
                 <li class="list-group-item list-group-item-action folder-list-item">
                     <div class="col-12 g-0">
                         <div class="d-inline-block col-8 g-0">
+                            {% if request.user == kb_user %}
                             <input class="form-check-input me-1 item-checkbox-class" type="checkbox" value="" aria-label="..." 
                                    data-item-id="{{item.id}}"
-                                   data-item-type="{% if item|is_folder_instance %}folder{% else %}article{% endif %}"> 
+                                   data-item-type="{% if item|is_folder_instance %}folder{% else %}article{% endif %}">
+                            {% endif %}
                             <div class="d-inline-block col-10 g-0 position-relative">
                                 {% if item|is_folder_instance %}
                                     <a href="{% url 'knowledgebase:kb_id' username=kb_user.username folder_id=item.id %}"
@@ -110,6 +115,7 @@
                                 {% endif %}
                             </div>
                         </div>
+                        {% if request.user == kb_user %}
                         <div class="d-inline-block col-2_5 position-absolute text-center">
                             <div class="">
                                 <div class="article-status-div">
@@ -123,8 +129,10 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         <div class="d-inline-block .col-0_5 g-0 float-end">
                             <div class="float-end">
+                                {% if request.user == kb_user %}
                                 <a class="folder-ellipsis" style="color: gray;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                                     <div class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></div>
                                 </a>
@@ -184,6 +192,8 @@
                                 </ul>
                             </div>
                         </div>
+                        
+                        {% endif %}
                     </div>
                 </li>
             {% empty %}
@@ -238,6 +248,7 @@
     </div>
 </div>
 
+{% if request.user == kb_user %}
 {# Popups and include tags listed below #}
 
 <div class="modal fade" id="ChangeFolderPopup" tabindex="-1" aria-labelledby="ChangeFolderPopupLabel" aria-hidden="true">
@@ -280,11 +291,16 @@
 {% include 'blocks/form_popup.html' with id='EditFolderModal' title='Edit folder' form=EditFolderForm %}
 {% include 'blocks/form_popup.html' with id='ArticleHeaderModal' title='Edit Article' form=ArticleHeaderForm %}
 {% include 'blocks/confirmation_popup.html' %}
+{% endif %}
 
 {% endblock body %}
 
 {% block scripts %}
+{% if request.user == kb_user %}
     {{user_folders|json_script:"user_folders"}}
     {{current_folder.id|json_script:"folder_id"}}
     <script src="{% static 'knowledgebase/knowledgebase.js' %}"></script>
+{% endif %}
 {% endblock scripts %}
+
+
