@@ -2,19 +2,30 @@
 {% load static %}
 
 {% block styles %}
+<link rel="stylesheet" href="{% static 'prism.css' %}">
 <link rel="stylesheet" href="{% static 'knowledgebase/article_view.css' %}">
 {% endblock styles %}
 
 {% block body %}
-<div style="width: auto;">
-<h1>{{article.title}}</h1>
 <div>
-    {% autoescape off %}
-        {{article.content}}
-    {% endautoescape %}
+    <div class="d-inline-block float-start">
+        <img src="{% static 'images/user.png' %}" alt="" class="rounded-circle profile-img">
+    </div>
+    <div class="d-inline-block ps-4 pt-1">
+        <h5>{{article.author.username}}</h5>
+        <small><p>{{article.created_on|date:"N j, Y"}}</p></small>
+    </div>
 </div>
+<div class="pt-3">
+    <h1>{{article.title}}</h1>
+    <div>
+        {% autoescape off %}
+            {{article.content}}
+        {% endautoescape %}
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'prism.js' %}"></script>
 {% endblock scripts %}

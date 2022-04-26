@@ -8,6 +8,16 @@
 
 {% block body %}
 
+<div>
+    <div class="d-inline-block float-start">
+        <img src="{% static 'images/user.png' %}" alt="" class="rounded-circle profile-img">
+    </div>
+    <div class="d-inline-block ps-4">
+        <h5>{{kb_user.username}}'s</h5>
+        <h3>Knowledgebase</h3>
+    </div>
+</div>
+
 {% if request.user == kb_user %}
 <div class="col-12 CreateActionContainer ">
     <a href="{% url 'knowledgebase:article_create' %}" class="btn btn-info me-3">Create article <i class="fa-solid fa-plus fa-xs"></i></a>
@@ -21,6 +31,7 @@
 <div class="pt-4">
 
     <div class="col-12">
+
         <div class="search-form d-inline-block">
             <form method="get" action="{% url 'knowledgebase:kb' kb_user.username %}">
                 {{SearchForm}}

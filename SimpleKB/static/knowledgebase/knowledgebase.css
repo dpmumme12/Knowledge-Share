@@ -45,6 +45,12 @@
     width: 4.16666665%;
 }
 
+.profile-img {
+    width: 60px;
+    height: auto;
+}
+
+
 @media all and (max-width:992px) {
     .folder-ellipsis {
         opacity: 1;
