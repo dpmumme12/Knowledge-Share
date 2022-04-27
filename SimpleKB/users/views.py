@@ -23,3 +23,10 @@ class RegisterationView(View):
             return redirect(settings.LOGIN_REDIRECT_URL)
         else:
             return render(request, 'users/register.html', {'RegisterForm': form})
+
+
+class UserSettingsView(View):
+    template_name = 'users/settings.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

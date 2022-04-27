@@ -9,10 +9,10 @@
 {% block body %}
 <div>
     <div class="d-inline-block float-start">
-        <img src="{% static 'images/user.png' %}" alt="" class="rounded-circle profile-img">
+        <img src="{% if article.author.ProfileImage %}{% static article.author.ProfileImage %}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img">
     </div>
-    <div class="d-inline-block ps-4 pt-1">
-        <h5>{{article.author.username}}</h5>
+    <div class="d-inline-block ps-3 pt-1">
+        <h5>{% if article.author.first_name %} {{article.author.first_name}} {{article.author.last_name}}{% else %}{{article.author.username}}{% endif %}</h5>
         <small><p>{{article.created_on|date:"N j, Y"}}</p></small>
     </div>
 </div>

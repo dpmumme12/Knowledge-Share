@@ -1,5 +1,6 @@
 {% url 'knowledgebase:dashboard' as dashboard_url %}
 {% url 'knowledgebase:kb' request.user.username as knowledgebase_url %}
+{% url 'users:settings' as settings_url %}
 
 <div class="mobile-nav-bar">
     <nav class="navbar fixed-bottom nav-bg-color text-break">
@@ -21,6 +22,13 @@
           </li>
           <li class="nav-item">
             <a class="nav-icon" href="#"><i class="fa-solid fa-envelope fa-xl"></i></a>
+          </li>
+          <li class="nav-item">
+            {% if request.path == settings_url %}
+             <a class="icon-active" href="{{settings_url}}"><i class="fa-solid fa-gear fa-xl"></i></a>
+            {% else %}
+             <a class="nav-icon" href="{{settings_url}}"><i class="fa-solid fa-gear fa-xl"></i></a>
+            {% endif %}
           </li>
         </ul>
       </div>

@@ -4,3 +4,4 @@ from django.db import models
 # Create your models here.
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    ProfileImage = models.ImageField('profile_images', null=True, blank=True)

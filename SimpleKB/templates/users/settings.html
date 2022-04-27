@@ -1,0 +1,26 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'knowledgebase/settings.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+<div class="d-inline-block" style="width: 100px;">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Active</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link disabled">Disabled</a>
+        </li>
+    </ul>
+</div>
+<div class="vr d-inline-block" style="height: 100%;"></div>
+{% endblock body %}
