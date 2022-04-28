@@ -1,0 +1,38 @@
+.settings-div {
+    display: inline-flex;
+}
+
+.nav-border {
+    display: inline-block;
+    align-self: stretch;
+    width: 1px;
+    min-height: 1em;
+    background-color: currentColor;
+    opacity: .25;
+    height: 600px;
+}
+
+.settings-nav {
+    flex-direction: column;
+}
+
+@media all and (max-width:500px) {
+    .settings-div {
+        display: block;
+    }
+
+    .settings-nav {
+        flex-direction: row;
+    }
+    
+    .nav-border {
+        display: block;
+        align-self: auto;
+        width: auto;
+        min-height: 0;
+        background-color: currentColor;
+        opacity: .25;
+        height: auto;
+        border-bottom: 1px solid currentColor;
+    }
+}

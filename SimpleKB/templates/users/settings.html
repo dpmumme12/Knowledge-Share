@@ -2,25 +2,49 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href='{% static 'knowledgebase/settings.css' %}'>
+<link rel="stylesheet" href='{% static 'users/settings.css' %}'>
 {% endblock styles %}
 
 {% block body %}
-<div class="d-inline-block" style="width: 100px;">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Active</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link disabled">Disabled</a>
-        </li>
-    </ul>
+<div class="settings-div">
+    <div>
+        <ul class="nav settings-nav">
+            <li class="">
+            <a class="nav-link active" aria-current="page" href="#">Active</a>
+            </li>
+            <li class="">
+            <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="">
+            <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="">
+            <a class="nav-link disabled">Disabled</a>
+            </li>
+        </ul>
+    </div>
+    <div class="nav-border"></div>
+    <div class="ps-2">
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Default file input example</label>
+            <input class="form-control" type="file" id="formFile">
+          </div>
+          <div class="mb-3">
+            <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+            <input class="form-control" type="file" id="formFileMultiple" multiple>
+          </div>
+          <div class="mb-3">
+            <label for="formFileDisabled" class="form-label">Disabled file input example</label>
+            <input class="form-control" type="file" id="formFileDisabled" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="formFileSm" class="form-label">Small file input example</label>
+            <input class="form-control form-control-sm" id="formFileSm" type="file">
+          </div>
+          <div>
+            <label for="formFileLg" class="form-label">Large file input example</label>
+            <input class="form-control form-control-lg" id="formFileLg" type="file">
+          </div>
+    </div>
 </div>
-<div class="vr d-inline-block" style="height: 100%;"></div>
 {% endblock body %}
