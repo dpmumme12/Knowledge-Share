@@ -6,45 +6,45 @@
 {% endblock styles %}
 
 {% block body %}
-<div class="settings-div">
-    <div>
-        <ul class="nav settings-nav">
-            <li class="">
-            <a class="nav-link active" aria-current="page" href="#">Active</a>
-            </li>
-            <li class="">
-            <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="">
-            <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="">
-            <a class="nav-link disabled">Disabled</a>
+<div class="settings-div w-100">
+    <div class="text-nowrap">
+        <ul class="nav settings-nav" id="SettingsNav" role="tablist">
+            <li>
+              <a class="nav-link settings-nav-item active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" role="tab" aria-controls="home" aria-selected="true">Account</a>
             </li>
         </ul>
     </div>
-    <div class="nav-border"></div>
-    <div class="ps-2">
-        <div class="mb-3">
-            <label for="formFile" class="form-label">Default file input example</label>
-            <input class="form-control" type="file" id="formFile">
+    <div class="settings-nav-border"></div>
+    <div class="tab-content settings-tab-content w-100" id="SettingsTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="border-bottom w-75">
+            <h1>Account Settings</h1>
           </div>
-          <div class="mb-3">
-            <label for="formFileMultiple" class="form-label">Multiple files input example</label>
-            <input class="form-control" type="file" id="formFileMultiple" multiple>
+          <div class="pt-3 pb-5 account-settings-form">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {% for field in UserForm.visible_fields %}
+              <div class="pb-4">
+                {{ field.label_tag}}
+                <br>
+                {{ field }}
+                <div class="form-errors">{{ field.errors }}</div>
+              </div>
+              {% endfor %}
+              <button type="submit" class="btn btn-primary">Save</button>
+            </form>
           </div>
-          <div class="mb-3">
-            <label for="formFileDisabled" class="form-label">Disabled file input example</label>
-            <input class="form-control" type="file" id="formFileDisabled" disabled>
+          <h5 class="lh-1" style="color: rgb(216, 0, 0);">Danger</h5>
+          <div class="delete-account-div">
+            <button type="button" 
+                    class="btn btn-danger confirmation-popup-class"
+                    data-confirm-url="{% url 'users:delete_account' %}"
+                    data-confirm-text="Deleting account is irreversible. Are you sure?">Delete Account</button>
           </div>
-          <div class="mb-3">
-            <label for="formFileSm" class="form-label">Small file input example</label>
-            <input class="form-control form-control-sm" id="formFileSm" type="file">
-          </div>
-          <div>
-            <label for="formFileLg" class="form-label">Large file input example</label>
-            <input class="form-control form-control-lg" id="formFileLg" type="file">
-          </div>
+        </div>
+      </div>
     </div>
 </div>
+
+{% include 'blocks/confirmation_popup.html' with is_deletion=True %}
 {% endblock body %}

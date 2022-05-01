@@ -61,17 +61,17 @@
             <div class="d-inline-block col-sm-8 article-title">
                 <label for="{{ ArticleForm.title.id_for_label }}">Title:</label>
                 {{ ArticleForm.title }}
-                <div style="color: red;">{{ ArticleForm.title.errors }}</div>
+                <div class="form-errors">{{ ArticleForm.title.errors }}</div>
             </div>
             <div class="d-inline-block col-sm-2 folder-dropdown">
                 <label for="{{ ArticleForm.folder.id_for_label }}">Folder:</label>
                 {{ ArticleForm.folder }}
-                <div style="color: red;">{{ ArticleForm.folder.errors }}</div>
+                <div class="form-errors">{{ ArticleForm.folder.errors }}</div>
             </div>
         </div>
         <div class="pb-3">
             {{ ArticleForm.content }}
-            <div style="color: red;">{{ ArticleForm.content.errors }}</div>
+            <div class="form-errors">{{ ArticleForm.content.errors }}</div>
         </div>
     </form>
 </div>

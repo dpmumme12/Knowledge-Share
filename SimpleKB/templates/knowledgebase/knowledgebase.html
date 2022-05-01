@@ -10,7 +10,7 @@
 
 <div class="user-card">
     <div class="d-inline-block float-start">
-        <img src="{% if kb_user.ProfileImage %}{% static kb_user.ProfileImage %}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img">
+        <img src="{% if kb_user.profile_image %}{{kb_user.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img">
     </div>
     <div class="d-inline-block ps-3">
         <h5>{% if kb_user.first_name %} {{kb_user.first_name}} {{kb_user.last_name}}'s{% else %}{{kb_user.username}}'s{% endif %}</h5>
@@ -279,7 +279,7 @@
                 <div>
                   {{ field.label_tag}}
                   {{ field }}
-                  <div style="color: red;">{{ field.errors }}</div>
+                  <div class="form-errors">{{ field.errors }}</div>
                 </div>
                 {% endfor %}
                 <div class="text-center">
@@ -304,7 +304,7 @@
 {% include 'blocks/form_popup.html' with id='CreateFolderModal' title='Create new folder' form=CreateFolderForm %}
 {% include 'blocks/form_popup.html' with id='EditFolderModal' title='Edit folder' form=EditFolderForm %}
 {% include 'blocks/form_popup.html' with id='ArticleHeaderModal' title='Edit Article' form=ArticleHeaderForm %}
-{% include 'blocks/confirmation_popup.html' %}
+{% include 'blocks/confirmation_popup.html' with is_deletion=True %}
 {% endif %}
 
 {% endblock body %}

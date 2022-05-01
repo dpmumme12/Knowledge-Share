@@ -2,11 +2,12 @@
     display: inline-flex;
 }
 
-.nav-border {
+.settings-nav-border {
     display: inline-block;
     align-self: stretch;
     width: 1px;
     min-height: 1em;
+    min-width: 1px;
     background-color: currentColor;
     opacity: .25;
     height: 600px;
@@ -14,6 +15,38 @@
 
 .settings-nav {
     flex-direction: column;
+    padding-right: 20px;
+}
+
+.settings-nav-item {
+    cursor: pointer;
+    color: rgb(150, 150, 150);
+}
+
+.settings-nav-item.active {
+    text-decoration: underline;
+    color: rgb(85, 85, 85);
+}
+
+.settings-tab-content {
+    padding-left: 25px;
+}
+
+.account-settings-form {
+    width: 450px;
+}
+
+.delete-account-div {
+    border: 0.2px solid rgb(216, 0, 0);
+    height: 80px;
+    width: 300px;
+    padding: 20px;
+}
+
+@media all and (max-width:650px) {
+    .account-settings-form {
+        width: 100%;
+    }
 }
 
 @media all and (max-width:500px) {
@@ -23,9 +56,15 @@
 
     .settings-nav {
         flex-direction: row;
+        padding-right: 0px;
+    }
+
+    .settings-tab-content {
+        padding-left: 0px;
+        padding-top: 10px;
     }
     
-    .nav-border {
+    .settings-nav-border {
         display: block;
         align-self: auto;
         width: auto;

@@ -71,6 +71,12 @@ body  {
     font-size: 28px;
 }
 
+.top-right-menu-img {
+    height: 33px;
+    width: 33px;
+    margin-bottom: 6px;
+}
+
 .badge {
     font-size: 12px;
 }
@@ -101,6 +107,10 @@ body  {
     color: #000;
     text-decoration: none;
     opacity: 0.55;
+}
+
+.form-errors {
+    color: rgb(225, 0, 0);
 }
 
 

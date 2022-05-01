@@ -41,7 +41,7 @@
       <div class="main-body text-break">
         <div class="header pb-3">
           <div class="top-right-menu">
-            <div class="top-right-menu-item ">
+            <div class="top-right-menu-item">
               <a class="top-right-menu-icon position-relative" href="#">
                 <i class="fa-solid fa-bell"></i>
                 <span class="position-absolute top-100 start-100 translate-middle badge rounded-pill bg-danger badge">{{notifications}}</span>
@@ -49,7 +49,7 @@
             </div>
             <div class="top-right-menu-item">
               <a class="top-right-menu-icon dropdown" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                <i class="fa-solid fa-circle-user"></i>
+                <img src="{% if request.user.profile_image %}{{request.user.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle top-right-menu-img">
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'users:logout' %}"><i class="fa-solid fa-right-from-bracket pe-3"></i>Logout</a></li>

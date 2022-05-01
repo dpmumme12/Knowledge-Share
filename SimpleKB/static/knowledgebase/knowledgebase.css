@@ -46,8 +46,8 @@
 }
 
 .profile-img {
-    width: 60px;
-    height: auto;
+    width: 70px;
+    height: 70px;
 }
 
 @media all and (max-width:992px) {
