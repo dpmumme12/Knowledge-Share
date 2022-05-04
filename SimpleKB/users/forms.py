@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import (UserCreationForm, AuthenticationForm, PasswordChangeForm,
+                                       PasswordResetForm, SetPasswordForm)
 from .models import User
 
 class UserRegisterationForm(UserCreationForm):
@@ -31,10 +32,19 @@ class LoginForm(AuthenticationForm):
             self.fields[field].widget.attrs.update({'class': 'form-control rounded-corners'})
 
 
+class ChangePasswordForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
 class UserSettingsForm(forms.ModelForm):
     """
     Settings form to set alter user's data
     """
+    prefix = 'change_folder'
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'profile_image']
@@ -49,3 +59,17 @@ class UserSettingsForm(forms.ModelForm):
         self.fields['profile_image'].widget.clear_checkbox_label = 'Delete'
         self.fields['profile_image'].widget.initial_text = 'Current'
         self.fields['profile_image'].label = 'Profile image'
+
+
+class ResetPasswodForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control rounded-corners'})
+
+
+class PasswordSetForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control rounded-corners'})

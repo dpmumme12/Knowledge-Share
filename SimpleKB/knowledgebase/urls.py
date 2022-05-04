@@ -2,8 +2,8 @@ from django.urls import path
 from .views.knowledgebase_views import (DashboardView, KnowledgeBaseView, FolderDeleteView,
                                         FolderEditView, BulkFolderChangeView, BulkDeleteView,
                                         KB_ArticleEditView)
-from .views.article_views import (ArticleView, ArticleEditView,
-                                  ArticleDeleteView, ArticleImageUploadView)
+from .views.article_views import (ArticleView, ArticleEditView, ArticleDeleteView,
+                                  ArticleImageUploadView, RemoveForeignArticleView)
 
 app_name = 'knowledgebase'
 urlpatterns = [
@@ -23,4 +23,7 @@ urlpatterns = [
     path('Article/Edit/<int:article_id>', ArticleEditView.as_view(), name='article_edit'),
     path('Article/Delete/<int:pk>', ArticleDeleteView.as_view(), name='article_delete'),
     path('Article/ImageUpload', ArticleImageUploadView.as_view(), name='article_image_upload'),
+    path('Article/RemoveForeign/<int:article_id>',
+         RemoveForeignArticleView.as_view(),
+         name='article_remove_foreign'),
 ]

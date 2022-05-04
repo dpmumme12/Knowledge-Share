@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import model_to_dict
 from tinymce.widgets import TinyMCE
-from .models import Article, Folder
+from .models import Article, Folder, Article_User
 
 
 class ArticleForm(forms.ModelForm):
@@ -213,3 +213,22 @@ class BulkDeleteForm(forms.Form):
             Article.objects.filter(id__in=articles).delete()
         if folders:
             Folder.objects.filter(id__in=folders).delete()
+
+
+class ArticleUserForm(forms.ModelForm):
+    """
+    Form for users to add another users article to
+    their knowledgebase.
+    """
+    class Meta:
+        model = Article_User
+        fields = ['article', 'user', 'folder']
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['article'].widget = forms.HiddenInput()
+        self.fields['user'].widget = forms.HiddenInput()
+        self.fields['folder'].widget.attrs.update({'class': 'form-select'})
+        self.fields['folder'].empty_label = '(Root)'
+        self.fields['folder'].queryset = Folder.objects.filter(owner=self.user)

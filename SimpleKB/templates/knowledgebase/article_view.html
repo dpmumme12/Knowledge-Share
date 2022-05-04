@@ -15,15 +15,30 @@
         <h5>{% if article.author.first_name %} {{article.author.first_name}} {{article.author.last_name}}{% else %}{{article.author.username}}{% endif %}</h5>
         <small><p>{{article.created_on|date:"N j, Y"}}</p></small>
     </div>
+    <div class="d-inline-block float-end">
+        {% if article.author == request.user %}
+        {% else %}
+            {% if request.user in article.foreign_users.all %}
+            <form action="{% url 'knowledgebase:article_remove_foreign' article.id %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-danger" >remove from knowledgebase</button>
+            </form>
+            {% else %}
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#article-user-form">Add to knowledgebase</button>
+            {% endif %}
+        {% endif %}
+    </div>
 </div>
 <div class="pt-3">
     <h1>{{article.title}}</h1>
-    <div>
+    <div class="pt-2">
         {% autoescape off %}
             {{article.content}}
         {% endautoescape %}
     </div>
 </div>
+
+{% include 'blocks/form_popup.html' with id='article-user-form' title='Add article to knowledgebase' form=ArticleUserForm %}
 {% endblock %}
 
 {% block scripts %}

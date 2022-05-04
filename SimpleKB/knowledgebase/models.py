@@ -27,6 +27,10 @@ class Article(TimeStampedModel):
     version_status_id = models.SmallIntegerField(choices=Version_Status.choices)
     uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
     folder = models.ForeignKey('Folder', on_delete=models.CASCADE, null=True, blank=True)
+    foreign_users = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                           through='Article_User',
+                                           through_fields=('article', 'user'),
+                                           related_name='foreign_articles')
 
 
 class ArticleImage(models.Model):
@@ -48,3 +52,14 @@ class Folder(TimeStampedModel):
         Returns a list of the users folders
         """
         return list(Folder.objects.filter(owner=user))
+
+
+class Article_User(models.Model):
+    article = models.ForeignKey('Article', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    folder = models.ForeignKey('Folder', on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['article', 'user'], name='unique article_user')
+        ]

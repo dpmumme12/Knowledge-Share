@@ -1,0 +1,69 @@
+body {
+    background-image: url("/static/images/5559852.jpg"); 
+}
+
+.card-placement {
+    width: 30%;
+    margin: 0;
+    position: relative;
+    -ms-transform: translateY(20%);
+    transform: translateY(20%);
+}
+
+.password-reset-card-placement {
+    width: 30%;
+    margin: 0;
+    position: relative;
+    -ms-transform: translateY(150%);
+    transform: translateY(150%);
+}
+
+.password-confirm-card-placement {
+    width: 30%;
+    margin: 0;
+    position: relative;
+    -ms-transform: translateY(100%);
+    transform: translateY(100%);
+}
+
+.password-email-sent-card-placement {
+    width: 30%;
+    margin: 0;
+    position: relative;
+    -ms-transform: translateY(300%);
+    transform: translateY(300%);
+}
+
+
+@media all and (max-width:992px) {
+    .card-placement {
+        width: 100%;
+        -ms-transform: translateY(10%);
+        transform: translateY(10%);
+    }
+
+    .password-reset-card-placement {
+        width: 100%;
+        margin: 0;
+        position: relative;
+        -ms-transform: translateY(90%);
+        transform: translateY(90%);
+    }
+
+    .password-confirm-card-placement {
+        width: 100%;
+        margin: 0;
+        position: relative;
+        -ms-transform: translateY(50%);
+        transform: translateY(50%);
+    }
+
+    .password-email-sent-card-placement {
+        width: auto;
+        margin: 0;
+        position: relative;
+        -ms-transform: translateY(250%);
+        transform: translateY(250%);
+    }
+  }
+  

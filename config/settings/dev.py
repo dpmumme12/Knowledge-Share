@@ -30,3 +30,13 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = get_env_var('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = get_env_var('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = get_env_var('EMAIL_HOST_USER')
+DEFAULT_TO_EMAIL = get_env_var('DEFAULT_TO_EMAIL')

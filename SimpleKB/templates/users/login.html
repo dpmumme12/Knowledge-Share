@@ -41,7 +41,12 @@
                                 <div class="form-errors">{{ field.errors }}</div>
                                 </div>
                             {% endfor %}
-                            <button type="submit" class="btn btn-primary">Log in</button>
+                            <div class="d-inline-block">
+                                <button type="submit" class="btn btn-primary">Log in</button>
+                                <small class="ps-2">
+                                    <a href="{% url 'users:password_reset' %}" style="text-decoration: none;">Forgot password?</a>
+                                </small>
+                            </div>
                         </form>
                         <div style="text-align: center;"><small>Don't have an account? <a href="{% url 'users:register' %}" style="text-decoration: none;">Sign up</a></small></div>
                     </div>

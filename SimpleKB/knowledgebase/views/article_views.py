@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.contrib import messages
 from datetime import datetime
-from ..forms import ArticleForm
+from ..forms import ArticleForm, ArticleUserForm
 from ..models import Article, ArticleImage, Folder
 from ..helpers import publish_article, create_new_version
 
@@ -18,8 +18,30 @@ class ArticleView(View):
 
     def get(self, request, **kwargs):
         article_id = kwargs.pop('article_id', None)
-        article = get_object_or_404(Article, id=article_id)
-        return render(request, self.template_name, {'article': article})
+        article = (Article
+                   .objects
+                   .filter(id=article_id)
+                   .select_related('author')
+                   .get()
+                   )
+        article_user_form = ArticleUserForm(user=request.user,
+                                            initial={'article': article,
+                                                     'user': request.user})
+        return render(request, self.template_name, {
+            'article': article,
+            'ArticleUserForm': article_user_form
+        })
+
+    def post(self, request, **kwargs):
+        article_id = kwargs.pop('article_id', None)
+        article_user_form = ArticleUserForm(request.POST, user=request.user)
+        if article_user_form.is_valid():
+            article_user_form.save()
+            messages.success(request, 'Article added to knowledgebase!')
+        else:
+            messages.error(request, article_user_form.errors.as_json(escape_html=True))
+
+        return redirect('knowledgebase:article', article_id=article_id)
 
 
 class ArticleEditView(View):
@@ -105,3 +127,13 @@ class ArticleImageUploadView(View):
             return JsonResponse({'location': image.image.url})
         else:
             return JsonResponse('No image found', safe=False)
+
+
+class RemoveForeignArticleView(View):
+    def post(self, request, **kwargs):
+        article_id = kwargs.pop('article_id', None)
+        article = get_object_or_404(Article, id=article_id)
+        article.foreign_users.remove(request.user)
+        messages.success(request, 'Article removed from knowledgebase!')
+
+        return redirect('knowledgebase:article', article_id=article_id)

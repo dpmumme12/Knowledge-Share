@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout, get_user, get_user_model
+from django.contrib.auth import (authenticate, login, logout, get_user,
+                                 get_user_model, update_session_auth_hash)
 from django.contrib import messages
-from .forms import UserRegisterationForm, UserSettingsForm
+from .forms import UserRegisterationForm, UserSettingsForm, ChangePasswordForm
 
 
 # Create your views here.
@@ -32,16 +33,28 @@ class UserSettingsView(View):
 
     def get(self, request):
         user = get_user(request)
-        return render(request, self.template_name, {'UserForm': UserSettingsForm(instance=user)})
+        return render(request, self.template_name,
+                      {'UserForm': UserSettingsForm(instance=user),
+                       'PasswordChangeForm': ChangePasswordForm(user)})
 
     def post(self, request):
         user = get_user(request)
-        settings_form = UserSettingsForm(request.POST, request.FILES, instance=user)
-        if settings_form.is_valid():
-            settings_form.save()
-            messages.success(request, 'User updated successfully!')
+        if 'user-settings-form' in request.POST:
+            settings_form = UserSettingsForm(request.POST, request.FILES, instance=user)
+            change_password_form = ChangePasswordForm(user)
+            if settings_form.is_valid():
+                settings_form.save()
+                messages.success(request, 'User updated successfully!')
+        elif 'change-password-form' in request.POST:
+            settings_form = UserSettingsForm(instance=user)
+            change_password_form = ChangePasswordForm(request.user, request.POST)
+            if change_password_form.is_valid():
+                change_password_form.save()
+                update_session_auth_hash(request, change_password_form.user)
+                messages.success(request, 'Password changed successfully!')
 
-        return render(request, self.template_name, {'UserForm': settings_form})
+        return render(request, self.template_name, {'UserForm': settings_form,
+                                                    'PasswordChangeForm': change_password_form})
 
 
 class DeleteAccountView(View):
