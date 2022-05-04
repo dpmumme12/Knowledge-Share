@@ -17,6 +17,7 @@
     </div>
     <div class="d-inline-block float-end">
         {% if article.author == request.user %}
+            <a href="{% url 'knowledgebase:article_edit' article.id%}" class="btn btn-secondary">Edit</a>
         {% else %}
             {% if request.user in article.foreign_users.all %}
             <form action="{% url 'knowledgebase:article_remove_foreign' article.id %}" method="post">
