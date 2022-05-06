@@ -67,10 +67,16 @@ class KnowledgeBaseView(View):
                                 folder=folder_id,
                                 version_status_id=Article.Version_Status.ACTIVE)
                         )
+            foreign_articles = (user_model
+                                .objects
+                                .get(id=kb_user.id, article_user__folder=folder_id)
+                                .foreign_articles.filter()
+                                .select_related('author')
+                                )
             if request.user != kb_user:
                 articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)
 
-            folder_content = list(chain(folders, articles))
+            folder_content = list(chain(folders, articles, foreign_articles))
 
         folder_content.sort(key=lambda x: x.name.lower()
                             if isinstance(x, Folder)

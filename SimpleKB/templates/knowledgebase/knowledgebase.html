@@ -94,13 +94,19 @@
         <ul class="list-group list-group-flush pb-3">
 
             {% for item in folder_content %}
-                <li class="list-group-item list-group-item-action folder-list-item shadow-sm">
+                <li class="list-group-item list-group-item-action folder-list-item shadow-sm" {% if item|is_article_instance and not item.author_id == kb_user.id %} style="padding-left: .75rem;" {% endif %}>
                     <div class="col-12 g-0">
                         <div class="d-inline-block col-8 g-0">
+                            {% if item|is_article_instance and not item.author_id == kb_user.id %}
+                            <div class="d-inline-block">
+                                <img src="{% if item.author.profile_image %}{{item.author.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle folder-item-img">
+                            </div>
+                            {% else %}
                             {% if request.user == kb_user %}
                             <input class="form-check-input me-1 item-checkbox-class" type="checkbox" value="" aria-label="..." 
                                    data-item-id="{{item.id}}"
                                    data-item-type="{% if item|is_folder_instance %}folder{% else %}article{% endif %}">
+                            {% endif %}
                             {% endif %}
                             <div class="d-inline-block col-10 g-0 position-relative">
                                 {% if item|is_folder_instance %}
@@ -133,7 +139,7 @@
                         <div class="d-inline-block col-2_5 position-absolute text-center">
                             <div class="">
                                 <div class="article-status-div">
-                                    {% if item|is_article_instance %}
+                                    {% if item|is_article_instance and item.author_id == kb_user.id %}
                                         {% if item.article_status_id ==  item.Article_Status.DRAFT %}
                                             <span class="badge bg-secondary article-status">{{item.get_article_status_id_display}}</span>
                                         {% elif item.article_status_id ==  item.Article_Status.PUBLISHED%}

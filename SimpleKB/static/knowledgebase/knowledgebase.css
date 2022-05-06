@@ -50,6 +50,13 @@
     height: 70px;
 }
 
+.folder-item-img {
+    width: 25px;
+    height: 25px;
+    margin-bottom: 17px;
+    vertical-align: baseline;
+}
+
 @media all and (max-width:992px) {
     .folder-ellipsis {
         opacity: 1;
