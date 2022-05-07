@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import View, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect, JsonResponse
@@ -136,4 +136,4 @@ class RemoveForeignArticleView(View):
         article.foreign_users.remove(request.user)
         messages.success(request, 'Article removed from knowledgebase!')
 
-        return redirect('knowledgebase:article', article_id=article_id)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

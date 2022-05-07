@@ -187,11 +187,15 @@ class BulkChangeFolderForm(forms.Form):
         articles = [article['id'] for article in articles]
         folders = list(filter(lambda x: x['object_type'] == 'folder', items))
         folders = [folder['id'] for folder in folders]
+        foreign_articles = list(filter(lambda x: x['object_type'] == 'foreign_article', items))
+        foreign_articles = [article_user['id'] for article_user in foreign_articles]
 
         if articles:
             Article.objects.filter(id__in=articles).update(folder=folder_id)
         if folders:
             Folder.objects.filter(id__in=folders).update(parent_folder=folder_id)
+        if foreign_articles:
+            Article_User.objects.filter(id__in=foreign_articles).update(folder=folder_id)
 
 
 class BulkDeleteForm(forms.Form):

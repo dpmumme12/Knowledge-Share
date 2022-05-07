@@ -7,6 +7,11 @@ const user_folders = JSON.parse(document.getElementById('user_folders').textCont
 const folder_id = JSON.parse(document.getElementById('folder_id').textContent);
 var edit_article_elements = document.getElementsByClassName("edit-article-class");
 var edit_folder_elements = document.getElementsByClassName("edit-folder-class");
+var change_folder_elements = document.getElementsByClassName("change-folder-class");
+
+for (var i = 0; i < change_folder_elements.length; i++) {
+  change_folder_elements[i].addEventListener('click', single_change_folder);
+}
 
 for (var i = 0; i < edit_folder_elements.length; i++) {
   edit_folder_elements[i].addEventListener('click', edit_folder);
@@ -91,6 +96,46 @@ function bulk_delete(event) {
 }
 
 
+/// Function for changing the folder for a single item
+function single_change_folder(event) {
+  var change_folder_popup = new bootstrap.Modal(document.getElementById('ChangeFolderPopup'))
+  var button = event.currentTarget;
+  var id = button.getAttribute('data-item-id');
+  var object_type = button.getAttribute('data-item-type');
+
+  var object = [{'id': id, 'object_type':object_type}];
+  document.getElementById('id_change_folder-objects').value = JSON.stringify(object);
+
+  if (object[0].object_type === 'folder') {
+    var folders = filter_user_folders(object);
+  }
+  else {
+    var folders = user_folders;
+  }
+
+  var folder_options = document.getElementById('id_change_folder-folder');
+
+  folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
+  if (folder_id == null) {
+    folder_options.innerHTML = '<option value="" selected="">(Root)</option>';
+  }
+  else {
+    folder_options.innerHTML = '<option value="">(Root)</option>';
+  }
+
+  folders.forEach(folder => {
+    if (folder.id == folder_id) {
+      folder_options.innerHTML += `<option value="${folder.id}" selected="">${folder.name}</option>`;
+    }
+    else {
+      folder_options.innerHTML += `<option value="${folder.id}" >${folder.name}</option>`;
+    }
+  });
+
+  change_folder_popup.show();
+}
+
+
 /// Function for changing the folder for a multiple item's
 function multiple_change_folder(event) {
   var items = document.querySelectorAll(".item-checkbox-class");
@@ -150,7 +195,7 @@ function multiple_change_folder(event) {
 
 
 /// takes a list of folder objects and filters out any folders that would
-///   cause folder structure inconsistency
+/// cause folder structure inconsistency
 function filter_user_folders(objects) {
   var folders = user_folders;
   user_folders.forEach(folder => {

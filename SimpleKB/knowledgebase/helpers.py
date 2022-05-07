@@ -29,17 +29,22 @@ def search_knowledgebase(query: str, kb_user, request_user) -> list:
                         score__gte=0.1,
                         version_status_id=Article.Version_Status.ACTIVE)
                 )
-    foreign_articles = (user_model
-                        .objects
-                        .get(id=kb_user.id)
-                        .foreign_articles
-                        .annotate(rank=SearchRank(article_vector, vector_query),
-                                  similarity=trgm_sim('title', query),
-                                  score=Sum(
-                                      F('rank') + F('similarity') + trgm_sim('content', query))
-                                  )
-                        .filter(score__gte=0.1)
-                        )
+
+    try:
+        foreign_articles = (user_model
+                            .objects
+                            .get(id=kb_user.id)
+                            .foreign_articles
+                            .annotate(rank=SearchRank(article_vector, vector_query),
+                                      similarity=trgm_sim('title', query),
+                                      article_user_id=F('article_user__id'),
+                                      score=Sum(
+                                          F('rank') + F('similarity') + trgm_sim('content', query))
+                                      )
+                            .filter(score__gte=0.1)
+                            )
+    except user_model.DoesNotExist:
+        foreign_articles = []
 
     if request_user != kb_user:
         articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)

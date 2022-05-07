@@ -67,12 +67,18 @@ class KnowledgeBaseView(View):
                                 folder=folder_id,
                                 version_status_id=Article.Version_Status.ACTIVE)
                         )
-            foreign_articles = (user_model
-                                .objects
-                                .get(id=kb_user.id, article_user__folder=folder_id)
-                                .foreign_articles.filter()
-                                .select_related('author')
-                                )
+            try:
+                foreign_articles = (user_model
+                                    .objects
+                                    .get(id=kb_user.id, article_user__folder=folder_id)
+                                    .foreign_articles
+                                    .annotate(article_user_id=F('article_user__id'))
+                                    .filter()
+                                    .select_related('author')
+                                    )
+            except user_model.DoesNotExist:
+                foreign_articles = []
+
             if request.user != kb_user:
                 articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)
 
