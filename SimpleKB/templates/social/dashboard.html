@@ -1,0 +1,54 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'social/dashboard.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+
+<div class="card text-center w-100">
+    <div class="card-body">
+      <div class="card-title">
+        <div>
+            <img src="{% if dashboard_user.profile_image %}{{dashboard_user.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img">
+        </div>
+        {% if  dashboard_user.first_name and dashboard_user.last_name%}
+            <h4>
+                {{dashboard_user.first_name}} {{dashboard_user.last_name}}
+            </h4>
+        {% endif %}
+        <h5>
+            @{{dashboard_user.username}}
+        </h5>
+        <div class="pt-2">
+            <div class="d-inline-block pe-3">
+                <h6>following</h6>
+                <p>{{dashboard_user.count_following}}</p>
+            </div>
+            <div class="d-inline-block ps-3">
+                <h6>followers</h6>
+                <p>{{dashboard_user.count_followers}}</p>
+            </div>
+        </div>
+      </div>
+      <p class="card-text">{{dashboard_user.bio}}</p>
+      {% if not dashboard_user == request.user %}
+      {% if not dashboard_user in request.user.following %}
+        <a href="#" class="btn btn-primary">Follow</a>
+      {% else %}
+        <a href="#" class="btn btn-danger">Unfollow</a>
+      {% endif %}
+      {% endif %}
+    </div>
+</div>
+<div class="pt-5">
+<div class="card text-center activity-card pt-2">
+    <div class="card-body">
+      <h5 class="card-title">Special title treatment</h5>
+      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+</div>
+{% endblock body %}

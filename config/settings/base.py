@@ -44,12 +44,14 @@ THIRD_PARTY_APPS = [
     'fontawesomefree',
     'tinymce',
     "debug_toolbar",
+    'rest_framework',
 ]
 
 LOCAL_APPS = [
     'SimpleKB.users',
     'SimpleKB.knowledgebase',
     'SimpleKB.utils',
+    'SimpleKB.social',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -143,6 +145,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Rest Framework settings
+
+REST_FRAMEWORK = {
+    'URL_FIELD_NAME': 'http://127.0.0.1:8000'
+}
+
 
 # TinyMCE Settings
 

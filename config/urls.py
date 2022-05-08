@@ -20,7 +20,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('SimpleKB.knowledgebase.urls', namespace='knowledgebase')),
+    path('', include('SimpleKB.social.urls', namespace='scoial')),
+    path('knowledgebase/', include('SimpleKB.knowledgebase.urls', namespace='knowledgebase')),
     path('users/', include('SimpleKB.users.urls', namespace='users')),
     path('tinymce/', include('tinymce.urls')),
 ]

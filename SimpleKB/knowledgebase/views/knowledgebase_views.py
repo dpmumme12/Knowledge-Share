@@ -17,13 +17,6 @@ from ..models import Article, ArticleImage, Folder
 from ..helpers import search_knowledgebase
 
 # Create your views here.
-class DashboardView(View):
-    template_name = 'knowledgebase/dashboard.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
-
-
 class KnowledgeBaseView(View):
     template_name = 'knowledgebase/knowledgebase.html'
 

@@ -1,0 +1,1 @@
+User.objects.get(id=18).following.all().annotate(is_following=Exists(User.objects.get(id=18).following.filter(id=OuterRef('pk'))))

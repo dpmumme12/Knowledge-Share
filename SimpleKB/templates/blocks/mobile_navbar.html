@@ -1,4 +1,4 @@
-{% url 'knowledgebase:dashboard' as dashboard_url %}
+{% url 'social:dashboard' request.user.username as dashboard_url %}
 {% url 'knowledgebase:kb' request.user.username as knowledgebase_url %}
 {% url 'users:settings' as settings_url %}
 

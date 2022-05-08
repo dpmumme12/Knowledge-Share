@@ -47,7 +47,7 @@ class UserSettingsForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'profile_image']
+        fields = ['username', 'first_name', 'last_name', 'email', 'bio', 'profile_image']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -55,6 +55,7 @@ class UserSettingsForm(forms.ModelForm):
         self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
         self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['bio'].widget.attrs.update({'class': 'form-control'})
         self.fields['profile_image'].widget.attrs.update({'class': 'form-control'})
         self.fields['profile_image'].widget.clear_checkbox_label = 'Delete'
         self.fields['profile_image'].widget.initial_text = 'Current'
