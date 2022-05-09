@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import F, Value
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
+from SimpleKB.knowledgebase.models import Article
 
 # Create your views here.
 class DashboardView(View):
@@ -18,4 +19,13 @@ class DashboardView(View):
     def get(self, request, *args, **kwargs):
         username = kwargs.pop('username', None)
         dasboard_user = get_user_model().objects.get(username=username)
-        return render(request, self.template_name, {'dashboard_user': dasboard_user})
+        recent_articles = (Article
+                           .objects
+                           .filter(author=dasboard_user,
+                                   article_status_id=Article.Article_Status.PUBLISHED
+                                   )
+                           .order_by('-updated_on')[:5]
+                           )
+        return render(request, self.template_name, {
+            'dashboard_user': dasboard_user,
+            'recent_articles': recent_articles})

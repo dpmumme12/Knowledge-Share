@@ -9,13 +9,15 @@
 {% block body %}
 
 <div class="user-card">
+    <a href="{% url 'social:dashboard' kb_user.username %}" class="text-decoration-none">
     <div class="d-inline-block float-start">
         <img src="{% if kb_user.profile_image %}{{kb_user.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img">
     </div>
-    <div class="d-inline-block ps-3">
+    <div class="d-inline-block ps-3 text-dark">
         <h5>{% if kb_user.first_name %} {{kb_user.first_name}} {{kb_user.last_name}}'s{% else %}{{kb_user.username}}'s{% endif %}</h5>
         <h3>Knowledgebase</h3>
     </div>
+    </a>
 </div>
 
 {% if request.user == kb_user %}
@@ -99,7 +101,9 @@
                         <div class="d-inline-block col-8 g-0">
                             {% if item|is_article_instance and not item.author_id == kb_user.id %}
                             <div class="d-inline-block">
+                                <a href="{% url 'social:dashboard' item.author.username %}">
                                 <img src="{% if item.author.profile_image %}{{item.author.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle folder-item-img">
+                                </a>
                             </div>
                             {% else %}
                             {% if request.user == kb_user %}

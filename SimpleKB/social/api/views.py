@@ -5,9 +5,9 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView, GenericAPIView
-from .serializers import UserFollowSerializer
+from .serializers import UserFollowSerializer, FollowUnFollowSerializer
 
 USER_MODEL = get_user_model()
 
@@ -18,17 +18,24 @@ class FollowingListView(ListAPIView):
 
     def get_queryset(self):
         requested_user = self.request.user
-        return (USER_MODEL
-                .objects
-                .get(id=self.kwargs['pk'])
-                .following
-                .all()
-                .annotate(is_following=Exists(USER_MODEL.
-                                              objects
-                                              .get(id=requested_user.id)
-                                              .following
-                                              .filter(id=OuterRef('pk'))))
-                )
+        print(requested_user.id)
+        query = (USER_MODEL
+                 .objects
+                 .get(id=self.kwargs['pk'])
+                 .following
+                 .all()
+                 )
+        if requested_user.is_authenticated:
+            query = (query
+                     .annotate(is_following=Exists(USER_MODEL
+                                                   .objects
+                                                   .get(id=requested_user.id)
+                                                   .following
+                                                   .filter(id=OuterRef('pk'))
+                                                   )
+                               )
+                     )
+        return query
 
 
 class FollowerListView(ListAPIView):
@@ -37,28 +44,44 @@ class FollowerListView(ListAPIView):
 
     def get_queryset(self):
         requested_user = self.request.user
-        return (USER_MODEL
-                .objects
-                .get(id=self.kwargs['pk'])
-                .followers
-                .all()
-                .annotate(is_following=Exists(USER_MODEL.
-                                              objects
-                                              .get(id=requested_user.id)
-                                              .following
-                                              .filter(id=OuterRef('pk'))))
-                )
+        query = (USER_MODEL
+                 .objects
+                 .get(id=self.kwargs['pk'])
+                 .followers
+                 .all()
+                 )
+        if requested_user.is_authenticated:
+            query = (query
+                     .annotate(is_following=Exists(USER_MODEL
+                                                   .objects
+                                                   .get(id=requested_user.id)
+                                                   .following
+                                                   .filter(id=OuterRef('pk'))
+                                                   )
+                               )
+                     )
+        return query
 
 
-class FollowUnfollowView(APIView):
+class FollowUnfollowView(GenericAPIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
+    serializer_class = FollowUnFollowSerializer
 
     def post(self, request, pk):
-        user = USER_MODEL.objects.get(id=pk)
-        if user in request.user.following.all():
-            request.user.following.remove(user)
-        else:
-            request.user.following.add(user)
-
-        return Response(status=status.HTTP_200_OK)
+        try:
+            user = USER_MODEL.objects.get(id=pk)
+            if user in request.user.following.all():
+                request.user.following.remove(user)
+                user.followers.remove(request.user)
+                serializer = self.serializer_class(data={'user_id': user.id,
+                                                         'is_following': False})
+            else:
+                request.user.following.add(user)
+                user.followers.add(request.user)
+                serializer = self.serializer_class(data={'user_id': user.id,
+                                                         'is_following': True})
+            if serializer.is_valid():
+                return Response(serializer.data, status.HTTP_200_OK)
+        except Exception as e:
+            raise APIException(str(e), status.HTTP_500_INTERNAL_SERVER_ERROR)

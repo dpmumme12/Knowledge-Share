@@ -3,7 +3,20 @@
     width: 100px;
 }
 
-.activity-card {
+.popup-profile-img {
+    height: 50px;
+    width: 50px;
+}
+
+.popup-card-div {
     width: 45%;
+}
+
+.activity-card {
+    width: 48%;
+}
+
+.follow-div:hover {
+    cursor: pointer;
 }
 
