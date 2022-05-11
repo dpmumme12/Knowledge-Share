@@ -7,18 +7,18 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView, GenericAPIView
+from SimpleKB.utils.schema_generators import CustomGenericView
 from .serializers import UserFollowSerializer, FollowUnFollowSerializer
 
 USER_MODEL = get_user_model()
 
 
 class FollowingListView(ListAPIView):
-    queryset = USER_MODEL.objects.all()
     serializer_class = UserFollowSerializer
 
     def get_queryset(self):
         requested_user = self.request.user
-        print(requested_user.id)
+        print(self.request.method)
         query = (USER_MODEL
                  .objects
                  .get(id=self.kwargs['pk'])
@@ -39,7 +39,6 @@ class FollowingListView(ListAPIView):
 
 
 class FollowerListView(ListAPIView):
-    queryset = USER_MODEL.objects.all()
     serializer_class = UserFollowSerializer
 
     def get_queryset(self):
@@ -63,10 +62,14 @@ class FollowerListView(ListAPIView):
         return query
 
 
-class FollowUnfollowView(GenericAPIView):
+class FollowUnfollowView(CustomGenericView):
+    """
+    this is a test description
+    """
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = FollowUnFollowSerializer
+    response_serializer = FollowUnFollowSerializer
+    request_serializer = None
 
     def post(self, request, pk):
         try:
@@ -74,13 +77,13 @@ class FollowUnfollowView(GenericAPIView):
             if user in request.user.following.all():
                 request.user.following.remove(user)
                 user.followers.remove(request.user)
-                serializer = self.serializer_class(data={'user_id': user.id,
-                                                         'is_following': False})
+                serializer = self.response_serializer(data={'user_id': user.id,
+                                                            'is_following': False})
             else:
                 request.user.following.add(user)
                 user.followers.add(request.user)
-                serializer = self.serializer_class(data={'user_id': user.id,
-                                                         'is_following': True})
+                serializer = self.response_serializer(data={'user_id': user.id,
+                                                            'is_following': True})
             if serializer.is_valid():
                 return Response(serializer.data, status.HTTP_200_OK)
         except Exception as e:
