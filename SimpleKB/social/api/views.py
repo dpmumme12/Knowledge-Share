@@ -7,13 +7,22 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView, GenericAPIView
-from SimpleKB.utils.schema_generators import CustomGenericView
+from rest_framework.schemas.openapi import AutoSchema
+from SimpleKB.utils.schema_generators import SerializerSchemaMixin
 from .serializers import UserFollowSerializer, FollowUnFollowSerializer
 
 USER_MODEL = get_user_model()
 
 
 class FollowingListView(ListAPIView):
+    """
+    List all of the user's the user is following
+    ````````````````````````````````````````````
+    Returns a list of users that the user is following.
+    :param integer pk: the ID of the user to retrieve following for.
+    """
+
+    schema = AutoSchema(operation_id_base='Following')
     serializer_class = UserFollowSerializer
 
     def get_queryset(self):
@@ -39,6 +48,14 @@ class FollowingListView(ListAPIView):
 
 
 class FollowerListView(ListAPIView):
+    """
+    List all of the users followers
+    ```````````````````````````````
+    Returns a list of users that are following the input user.
+    :param integer pk: the ID of the user to retrieve followers for.
+    """
+
+    schema = AutoSchema(operation_id_base='Followers')
     serializer_class = UserFollowSerializer
 
     def get_queryset(self):
@@ -62,14 +79,16 @@ class FollowerListView(ListAPIView):
         return query
 
 
-class FollowUnfollowView(CustomGenericView):
+class FollowUnfollowView(SerializerSchemaMixin, GenericAPIView):
     """
-    this is a test description
+    Will follow a user if you are not following and
+    unfollow the user if you are following
     """
+
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
+    serializer_class = FollowUnFollowSerializer
     response_serializer = FollowUnFollowSerializer
-    request_serializer = None
 
     def post(self, request, pk):
         try:
@@ -85,6 +104,6 @@ class FollowUnfollowView(CustomGenericView):
                 serializer = self.response_serializer(data={'user_id': user.id,
                                                             'is_following': True})
             if serializer.is_valid():
-                return Response(serializer.data, status.HTTP_200_OK)
+                return Response(serializer.data, status.HTTP_201_CREATED)
         except Exception as e:
             raise APIException(str(e), status.HTTP_500_INTERNAL_SERVER_ERROR)

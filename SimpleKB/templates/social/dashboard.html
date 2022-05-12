@@ -43,36 +43,38 @@
     </div>
 </div>
 <div class="pt-4 pb-3">
-  <div class="card text-center activity-card pt-2 d-inline-block">
-      <div class="card-body">
-        <h3 class="card-title">Recent articles</h3>
-        <div class="border-bottom pt-1"></div>
-        <ul class="list-group list-group-flush">
-          {% for article in recent_articles %}
-          <li class="list-group-item text-start">
-            <h4 class="mb-0">{{article.title}}</h4>
-            <small>Updated on: {{article.updated_on}}</small>
-            <p class="pt-2">{{article.content|striptags|truncatewords_html:20}}&nbsp;&nbsp;<a href="{% url 'knowledgebase:article' article.id %}">view more</a></p>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
+  <div class="pb-4 activity-card d-inline-block">
+    <div class="card text-center pt-2">
+        <div class="card-body">
+          <h3 class="card-title">Recent articles</h3>
+          <div class="border-bottom pt-1"></div>
+          <ul class="list-group list-group-flush">
+            {% for article in recent_articles %}
+            <li class="list-group-item text-start">
+              <h4 class="mb-0">{{article.title}}</h4>
+              <small>Updated on: {{article.updated_on}}</small>
+              <p class="pt-2">{{article.content|striptags|truncatewords_html:20}}&nbsp;&nbsp;<a href="{% url 'knowledgebase:article' article.id %}">view more</a></p>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
   </div>
-  <div class="card text-center activity-card pt-2 d-inline-block float-end">
-    <div class="card-body">
-      <h4 class="card-title">Check out {% if  dashboard_user.first_name and dashboard_user.last_name %} 
-                                        {{dashboard_user.first_name}} {{dashboard_user.last_name}}'s 
-                                       {% else %} {{dashboard_user.username}}'s 
-                                       {% endif %} knowledgebase</h4>
-      <div class="pt-4">
-      <a href="{% url 'knowledgebase:kb' dashboard_user.username %}" class="btn btn-primary">View knowledgebase</a>
+  <div class="kb-card activity-card d-inline-block float-end">
+    <div class="card text-center pt-2">
+      <div class="card-body">
+        <h4 class="card-title">Check out {% if  dashboard_user.first_name and dashboard_user.last_name %} 
+                                          {{dashboard_user.first_name}} {{dashboard_user.last_name}}'s 
+                                        {% else %} {{dashboard_user.username}}'s 
+                                        {% endif %} knowledgebase</h4>
+        <div class="pt-4">
+        <a href="{% url 'knowledgebase:kb' dashboard_user.username %}" class="btn btn-primary">View knowledgebase</a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 </div>
-
-
 
 
 <!-- modals -->

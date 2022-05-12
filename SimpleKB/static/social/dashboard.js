@@ -33,7 +33,7 @@ function follow_unfollow(event) {
       };
     })
     .then((resp) => {
-      if (resp.status_code === 200) {
+      if (resp.status_code === 201) {
         if (resp.data.is_following) {
           button.classList.remove("btn-primary");
           button.classList.add("btn-danger");
@@ -52,6 +52,7 @@ function follow_unfollow(event) {
       }
     });
 }
+
 
 function get_following(event) {
   var modal = new bootstrap.Modal(

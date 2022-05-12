@@ -9,6 +9,8 @@ app_name = 'social'
 urlpatterns = [
     path('dashboard/<str:username>', DashboardView.as_view(), name='dashboard'),
 
+
+    # API endpoints
     path('api/following/<int:pk>', FollowingListView.as_view(), name='following'),
     path('api/followers/<int:pk>', FollowerListView.as_view(), name='followers'),
     path('api/follow-unfollow/<int:pk>', FollowUnfollowView.as_view(), name='follow_unfollow'),

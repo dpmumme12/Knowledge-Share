@@ -20,3 +20,17 @@
     cursor: pointer;
 }
 
+.kb-card {
+    padding-bottom: 1.5rem;
+}
+
+@media all and (max-width:600px) {
+    .activity-card {
+        width: 100%;
+        display: block;
+    }
+
+    .kb-card {
+        padding-bottom: 4rem;
+    }
+}

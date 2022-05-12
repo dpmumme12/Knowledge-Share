@@ -12,5 +12,5 @@ class UserFollowSerializer(serializers.ModelSerializer):
 
 
 class FollowUnFollowSerializer(serializers.Serializer):
-    is_following = serializers.BooleanField(default=False)
+    is_following = serializers.BooleanField()
     user_id = serializers.IntegerField()
