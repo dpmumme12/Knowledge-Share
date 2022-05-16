@@ -1,0 +1,38 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'social/message_detail.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+<div>
+  <div class="col-lg-8">
+    <div class="d-inline-block">
+      <h3>@{{user.username}}</h3>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="d-inline-block"><img src="{% static 'images/user.png' %}" alt="Profile Picture" class="rounded-circle profile-img"></div>
+          <div class="d-inline-block"><p class="m-0 position-fixed">@Usernamewarefwaefwefwawf</p></div>
+          <div class="d-inline-block float-end">
+            <small>seiuhwief awfifa vrfwi</small>
+          </div>
+          <div class="pt-3">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur perspiciatis earum unde saepe, praesentium quidem quo iusto numquam. sicing elit. Pariatur perspiciatis earum unde saepe, praesentium quidem quo iusto numquam.
+            </p> 
+          </div>
+        </li>
+      </ul>
+  </div>
+</div>
+
+{% endblock body %}
+
+{% block scripts %}
+{% static 'images/user.png' as default_user_img %}
+{{default_user_img|json_script:"default_user_img"}}
+{{request.user.id|json_script:"user_id"}}
+<script src="{% static 'social/message_detail.js' %}"></script>
+{% endblock scripts %}

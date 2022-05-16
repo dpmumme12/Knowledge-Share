@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from ..models import Message
 
 USER_MODEL = get_user_model()
 
@@ -14,3 +15,9 @@ class UserFollowSerializer(serializers.ModelSerializer):
 class FollowUnFollowSerializer(serializers.Serializer):
     is_following = serializers.BooleanField()
     user_id = serializers.IntegerField()
+
+
+class MessagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'recipient', 'content', 'message_sent_date']

@@ -1,20 +1,16 @@
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import View, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.db.models import F, Value
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
-from itertools import chain
 from ..forms import (ArticleForm, FolderForm, BulkChangeFolderForm, BulkDeleteForm,
                      SearchForm, ArticleHeaderForm)
-from ..models import Article, ArticleImage, Folder
-from ..helpers import search_knowledgebase
+from ..models import Article, Folder
+from ..helpers import search_knowledgebase, get_knowledgebase
 
 # Create your views here.
 class KnowledgeBaseView(View):
@@ -25,7 +21,10 @@ class KnowledgeBaseView(View):
         folder_id = kwargs.pop('folder_id', None)
         username = kwargs.pop('username', None)
         kb_user = user_model.objects.get(username=username)
+        current_folder = None
+        user_folders = Folder.UserFolders(kb_user)
 
+        # Getting the parent folders for the breadcrumb links
         if folder_id:
             current_folder = (Folder
                               .objects
@@ -33,11 +32,9 @@ class KnowledgeBaseView(View):
                               .select_related('parent_folder__parent_folder')
                               .get()
                               )
-        else:
-            current_folder = None
 
+        # Initializing forms for the page
         search_form = SearchForm(request.GET)
-        user_folders = Folder.UserFolders(request.user)
         article_header_form = ArticleHeaderForm(folders=user_folders)
         create_folder_form = FolderForm(folder_id=folder_id,
                                         folders=user_folders,
@@ -45,44 +42,15 @@ class KnowledgeBaseView(View):
         edit_folder_form = FolderForm(folder_id=folder_id,
                                       prefix='edit_folder')
 
+        # Querying to get the current folders content
         if search_form.data.get('query') and search_form.is_valid():
             query = search_form.cleaned_data['query']
             folder_content = search_knowledgebase(query, kb_user, request.user)
 
         else:
-            folders = (Folder
-                       .objects
-                       .filter(owner=kb_user, parent_folder=folder_id)
-                       )
-            articles = (Article
-                        .objects
-                        .filter(author=kb_user,
-                                folder=folder_id,
-                                version_status_id=Article.Version_Status.ACTIVE)
-                        )
-            try:
-                foreign_articles = (user_model
-                                    .objects
-                                    .get(id=kb_user.id, article_user__folder=folder_id)
-                                    .foreign_articles
-                                    .annotate(article_user_id=F('article_user__id'))
-                                    .filter()
-                                    .select_related('author')
-                                    )
-            except user_model.DoesNotExist:
-                foreign_articles = []
-
-            if request.user != kb_user:
-                articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)
-
-            folder_content = list(chain(folders, articles, foreign_articles))
-
-        folder_content.sort(key=lambda x: x.name.lower()
-                            if isinstance(x, Folder)
-                            else x.title.lower())
+            folder_content = get_knowledgebase(folder_id, kb_user, request.user)
 
         paginator = Paginator(folder_content, 15)
-
         page_number = request.GET.get('page')
         folder_content = paginator.get_page(page_number)
 

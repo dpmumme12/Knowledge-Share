@@ -5,6 +5,8 @@ from django.contrib.postgres.search import (SearchQuery, SearchVector,
 from itertools import chain
 from .models import Article, Folder
 
+USER_MODEL = get_user_model()
+
 def search_knowledgebase(query: str, kb_user, request_user) -> list:
     user_model = get_user_model()
     vector_query = SearchQuery(query)
@@ -31,7 +33,7 @@ def search_knowledgebase(query: str, kb_user, request_user) -> list:
                 )
 
     try:
-        foreign_articles = (user_model
+        foreign_articles = (USER_MODEL
                             .objects
                             .get(id=kb_user.id)
                             .foreign_articles
@@ -49,7 +51,44 @@ def search_knowledgebase(query: str, kb_user, request_user) -> list:
     if request_user != kb_user:
         articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)
 
-    return list(chain(folders, articles, foreign_articles))
+    folder_content = list(chain(folders, articles, foreign_articles))
+
+    return folder_content.sort(key=lambda x: x.name.lower()
+                               if isinstance(x, Folder) else x.title.lower())
+
+
+def get_knowledgebase(folder_id, kb_user, request_user):
+    folders = (Folder
+               .objects
+               .filter(owner=kb_user, parent_folder=folder_id)
+               )
+    articles = (Article
+                .objects
+                .filter(author=kb_user,
+                        folder=folder_id,
+                        version_status_id=Article.Version_Status.ACTIVE)
+                )
+    try:
+        foreign_articles = (USER_MODEL
+                            .objects
+                            .get(id=kb_user.id, article_user__folder=folder_id)
+                            .foreign_articles
+                            .annotate(article_user_id=F('article_user__id'))
+                            .filter()
+                            .select_related('author')
+                            )
+    except USER_MODEL.DoesNotExist:
+        foreign_articles = []
+
+    if request_user != kb_user:
+        articles = articles.filter(article_status_id=Article.Article_Status.PUBLISHED)
+
+    folder_content = list(chain(folders, articles, foreign_articles))
+
+    folder_content.sort(key=lambda x: x.name.lower()
+                        if isinstance(x, Folder) else x.title.lower())
+
+    return folder_content
 
 
 def publish_article(article: Article) -> Article:

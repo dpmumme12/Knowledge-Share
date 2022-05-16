@@ -15,18 +15,21 @@ from ..helpers import publish_article, create_new_version
 
 class ArticleView(View):
     template_name = 'knowledgebase/article_view.html'
+    article_user_form = ArticleForm
 
     def get(self, request, **kwargs):
         article_id = kwargs.pop('article_id', None)
+        article_user_form = None
         article = (Article
                    .objects
                    .filter(id=article_id)
                    .select_related('author')
                    .get()
                    )
-        article_user_form = ArticleUserForm(user=request.user,
-                                            initial={'article': article,
-                                                     'user': request.user})
+        if request.user.is_authenticated:
+            article_user_form = ArticleUserForm(user=request.user,
+                                                initial={'article': article,
+                                                         'user': request.user})
         return render(request, self.template_name, {
             'article': article,
             'ArticleUserForm': article_user_form

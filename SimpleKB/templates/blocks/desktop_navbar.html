@@ -1,10 +1,12 @@
 {% url 'social:dashboard' request.user.username as dashboard_url %}
 {% url 'knowledgebase:kb' request.user.username as knowledgebase_url %}
+{% url 'social:messages' as messages_url %}
 {% url 'users:settings' as settings_url %}
 
 <div class="col-nav g-0 nav-bar-desktop">
     <div class="nav-bar-col nav-bg-color text-break">
       <ul class="nav flex-column">
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
           {% if request.path == dashboard_url %}
             <a class=" icon-active" aria-current="page" href="{{dashboard_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard"><i class="fa-solid fa-house fa-2x"></i></a>
@@ -12,6 +14,8 @@
             <a class="nav-icon" aria-current="page" href="{{dashboard_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard"><i class="fa-solid fa-house fa-2x"></i></a>
           {% endif %}
         </li>
+        {% endif %}
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
           {% if request.path == knowledgebase_url %}
             <a class="icon-active" href="{{knowledgebase_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="KnowledgeBase"><i class="fa-solid fa-folder fa-2x"></i></a>
@@ -19,9 +23,17 @@
             <a class="nav-icon" href="{{knowledgebase_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="KnowledgeBase"><i class="fa-solid fa-folder fa-2x"></i></a>
           {% endif %}
         </li>
+        {% endif %}
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-icon" href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Messages"><i class="fa-solid fa-envelope fa-2x"></i></a>
+          {% if request.path == messages_url %}
+          <a class="icon-active" href="{{messages_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Messages"><i class="fa-solid fa-envelope fa-2x"></i></a>
+          {% else %}
+          <a class="nav-icon" href="{{messages_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Messages"><i class="fa-solid fa-envelope fa-2x"></i></a>
+          {% endif %}
         </li>
+        {% endif %}
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
           {% if request.path == settings_url %}
            <a class="icon-active" href="{{settings_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Settings"><i class="fa-solid fa-gear fa-2x"></i></a>
@@ -29,6 +41,7 @@
            <a class="nav-icon" href="{{settings_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Settings"><i class="fa-solid fa-gear fa-2x"></i></a>
           {% endif %}
         </li>
+        {% endif %}
       </ul>
     </div>
 </div>

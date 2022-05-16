@@ -6,6 +6,7 @@
     <nav class="navbar fixed-bottom nav-bg-color text-break">
       <div class="container-fluid">
         <ul class="nav" style="width: 100%">
+          {% if request.user.is_authenticated %}
           <li class="nav-item">
             {% if request.path == dashboard_url %}
               <a class="icon-active" aria-current="page" href="{{dashboard_url}}" ><i class="fa-solid fa-house fa-xl"></i></a>
@@ -13,6 +14,8 @@
               <a class="nav-icon" aria-current="page" href="{{dashboard_url}}" ><i class="fa-solid fa-house fa-xl"></i></a>
             {% endif %}
           </li>
+          {% endif %}
+          {% if request.user.is_authenticated %}
           <li class="nav-item">
             {% if request.path == knowledgebase_url %}
               <a class="icon-active" href="{{knowledgebase_url}}"><i class="fa-solid fa-folder fa-xl"></i></a>
@@ -20,9 +23,13 @@
               <a class="nav-icon" href="{{knowledgebase_url}}"><i class="fa-solid fa-folder fa-xl"></i></a>
             {% endif %}
           </li>
+          {% endif %}
+          {% if request.user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-icon" href="#"><i class="fa-solid fa-envelope fa-xl"></i></a>
           </li>
+          {% endif %}
+          {% if request.user.is_authenticated %}
           <li class="nav-item">
             {% if request.path == settings_url %}
              <a class="icon-active" href="{{settings_url}}"><i class="fa-solid fa-gear fa-xl"></i></a>
@@ -30,6 +37,7 @@
              <a class="nav-icon" href="{{settings_url}}"><i class="fa-solid fa-gear fa-xl"></i></a>
             {% endif %}
           </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
