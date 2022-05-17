@@ -1,6 +1,5 @@
 const main_follow_button = document.getElementById("main-follow-button");
-const default_user_img =
-  document.getElementById("default_user_img").textContent;
+const default_user_img = document.getElementById("default_user_img").textContent;
 const user_id = document.getElementById("user_id").textContent;
 
 if (main_follow_button !== null) {

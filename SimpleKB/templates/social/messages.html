@@ -21,7 +21,7 @@
       {% else %}
       <a href="{% url 'social:message_detail' message.sender.username %}" class="text-decoration-none">
       {% endif %}
-      <li class="list-group-item">
+      <li class="list-group-item shadow-sm">
         <div>
         {% if request.user == message.sender %}
           <div class="d-inline-block"><img src="{% if message.recipient.profile_image %}{{ message.recipient.profile_image}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img"></div>

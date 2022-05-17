@@ -6,25 +6,51 @@
 {% endblock styles %}
 
 {% block body %}
-<div>
+<div class="pb-5">
   <div class="col-lg-8">
-    <div class="d-inline-block">
-      <h3>@{{user.username}}</h3>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <div class="d-inline-block"><img src="{% static 'images/user.png' %}" alt="Profile Picture" class="rounded-circle profile-img"></div>
-          <div class="d-inline-block"><p class="m-0 position-fixed">@Usernamewarefwaefwefwawf</p></div>
-          <div class="d-inline-block float-end">
-            <small>seiuhwief awfifa vrfwi</small>
+    <section class="msger">
+      <header class="msger-header">
+        <div class="msger-header-title">@{{user.username}}
+        </div>
+      </header>
+    
+      <main class="msger-chat">
+        <!-- <div class="msg left-msg">
+          <img src="{{request.user.profile_image.url}}" class="msg-img"/>
+    
+          <div class="msg-bubble">
+            <div class="msg-info">
+              <div class="msg-info-name">BOT</div>
+              <div class="msg-info-time">12:45</div>
+            </div>
+    
+            <div class="msg-text">
+              Hi, welcome to SimpleChat! Go ahead and send me a message. 😄
+            </div>
           </div>
-          <div class="pt-3">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur perspiciatis earum unde saepe, praesentium quidem quo iusto numquam. sicing elit. Pariatur perspiciatis earum unde saepe, praesentium quidem quo iusto numquam.
-            </p> 
+        </div>
+    
+        <div class="msg right-msg">
+          <img src="{{request.user.profile_image.url}}" class="msg-img"/>
+    
+          <div class="msg-bubble">
+            <div class="msg-info">
+              <div class="msg-info-name">Sajad</div>
+              <div class="msg-info-time">12:46</div>
+            </div>
+    
+            <div class="msg-text">
+              You can change your name in JS section!
+            </div>
           </div>
-        </li>
-      </ul>
+        </div> -->
+      </main>
+    
+      <form class="msger-inputarea">
+        <input type="text" class="msger-input" placeholder="Enter your message...">
+        <button type="submit" class="msger-send-btn">Send</button>
+      </form>
+    </section>
   </div>
 </div>
 
