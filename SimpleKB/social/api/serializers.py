@@ -20,4 +20,4 @@ class FollowUnFollowSerializer(serializers.Serializer):
 class MessagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['id', 'sender', 'recipient', 'content', 'message_sent_date']
+        fields = ['sender', 'recipient', 'content', 'message_sent_date']

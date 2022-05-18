@@ -71,4 +71,4 @@ class MessageDetailView(View):
 
     def get(self, request, username):
         user = get_object_or_404(USER_MODEL, username=username)
-        return render(request, self.template_name, {'user': user})
+        return render(request, self.template_name, {'chat_user': user})

@@ -6,7 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
-from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, GenericAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.schemas.openapi import AutoSchema
 from SimpleKB.utils.schema_generators import SerializerSchemaMixin
 from .serializers import UserFollowSerializer, FollowUnFollowSerializer, MessagesSerializer
@@ -111,11 +112,17 @@ class FollowUnfollowView(SerializerSchemaMixin, GenericAPIView):
             raise APIException(str(e), status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class MessagesListView(ListAPIView):
+class MessagesListView(ListModelMixin, CreateModelMixin, GenericAPIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = MessagesSerializer
     pagination_class = SmallResultSetPagination
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
     def get_queryset(self):
         foreign_username = self.request.query_params['username']
@@ -125,5 +132,6 @@ class MessagesListView(ListAPIView):
                              & Q(recipient__username=foreign_username))
                             | (Q(recipient=self.request.user)
                                & Q(sender__username=foreign_username)))
+                    .order_by('-message_sent_date')
                     )
         return queryset

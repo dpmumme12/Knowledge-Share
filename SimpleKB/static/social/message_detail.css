@@ -28,7 +28,6 @@ display: flex;
 flex-flow: column wrap;
 justify-content: space-between;
 width: 100%;
-max-width: 867px;
 border: var(--border);
 border-radius: 5px;
 background: var(--msger-bg);

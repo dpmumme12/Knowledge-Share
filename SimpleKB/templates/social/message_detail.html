@@ -8,42 +8,15 @@
 {% block body %}
 <div class="pb-5">
   <div class="col-lg-8">
+    <div class="text-end pb-1"><button class="btn btn-success" style="background: rgb(0, 196, 65);">Refresh <i class="fa-solid fa-rotate"></i></button></div>
     <section class="msger">
       <header class="msger-header">
-        <div class="msger-header-title">@{{user.username}}
+        <div class="msger-header-title">@{{chat_user.username}}
         </div>
       </header>
     
       <main class="msger-chat">
-        <!-- <div class="msg left-msg">
-          <img src="{{request.user.profile_image.url}}" class="msg-img"/>
-    
-          <div class="msg-bubble">
-            <div class="msg-info">
-              <div class="msg-info-name">BOT</div>
-              <div class="msg-info-time">12:45</div>
-            </div>
-    
-            <div class="msg-text">
-              Hi, welcome to SimpleChat! Go ahead and send me a message. 😄
-            </div>
-          </div>
-        </div>
-    
-        <div class="msg right-msg">
-          <img src="{{request.user.profile_image.url}}" class="msg-img"/>
-    
-          <div class="msg-bubble">
-            <div class="msg-info">
-              <div class="msg-info-name">Sajad</div>
-              <div class="msg-info-time">12:46</div>
-            </div>
-    
-            <div class="msg-text">
-              You can change your name in JS section!
-            </div>
-          </div>
-        </div> -->
+        
       </main>
     
       <form class="msger-inputarea">
@@ -58,7 +31,20 @@
 
 {% block scripts %}
 {% static 'images/user.png' as default_user_img %}
-{{default_user_img|json_script:"default_user_img"}}
-{{request.user.id|json_script:"user_id"}}
+{{request.user.id|json_script:"request_user_id"}}
+{{request.user.username|json_script:"request_username"}}
+{% if request.user.profile_image %}
+{{request.user.profile_image.url|json_script:"request_user_img"}}
+{% else %}
+{{default_user_img|json_script:"request_user_img"}}
+{% endif %}
+{{request.user.profile_image.url|json_script:"request_user_img"}}
+{{chat_user.id|json_script:"chat_user_id"}}
+{{chat_user.username|json_script:"chat_username"}}
+{% if chat_user.profile_image %}
+{{chat_user.profile_image.url|json_script:"chat_user_img"}}
+{% else %}
+{{default_user_img|json_script:"chat_user_img"}}
+{% endif %}
 <script src="{% static 'social/message_detail.js' %}"></script>
 {% endblock scripts %}

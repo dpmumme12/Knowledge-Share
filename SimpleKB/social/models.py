@@ -14,8 +14,10 @@ class Message(models.Model):
     content = models.TextField()
     message_sent_date = models.DateTimeField(auto_now=True)
     message_read = models.BooleanField(default=False)
-    conversation_id = models.IntegerField()
+    conversation_id = models.CharField(max_length=200)
 
     def save(self, *args, **kwargs):
-        self.conversation_id = self.sender.id + self.recipient.id
+        min_id = min(self.sender.id, self.recipient.id)
+        max_id = max(self.sender.id, self.recipient.id)
+        self.conversation_id = str(min_id) + '-' + str(max_id)
         super(Message, self).save(*args, **kwargs)
