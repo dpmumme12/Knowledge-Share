@@ -31,7 +31,6 @@ width: 100%;
 border: var(--border);
 border-radius: 5px;
 background: var(--msger-bg);
-box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
 height: 600px;
 max-height: 600px;
 }
@@ -156,6 +155,14 @@ background: rgb(0, 180, 50);
 
 .msger-chat {
 background-color: #fcfcfe;
+}
+
+.loader {
+    display: none;
+}
+
+.show {
+    display: block !important;
 }
 
 @media all and (max-width:450px) {

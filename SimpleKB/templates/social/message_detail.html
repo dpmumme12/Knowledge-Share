@@ -8,15 +8,27 @@
 {% block body %}
 <div class="pb-5">
   <div class="col-lg-8">
-    <div class="text-end pb-1"><button class="btn btn-success" style="background: rgb(0, 196, 65);">Refresh <i class="fa-solid fa-rotate"></i></button></div>
-    <section class="msger">
+    <div class="text-end pb-1">
+      <button id="refresh-button" class="btn btn-success" style="background: rgb(0, 196, 65);">
+        Refresh <i class="fa-solid fa-rotate"></i>
+      </button>
+    </div>
+    <section class="msger shadow">
       <header class="msger-header">
         <div class="msger-header-title">@{{chat_user.username}}
         </div>
       </header>
     
       <main class="msger-chat">
-        
+        <div class="loader">
+          <div class="text-center">
+            <div class="spinner-grow text-info" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+        <div class="messages">
+        </div>
       </main>
     
       <form class="msger-inputarea">
@@ -38,7 +50,6 @@
 {% else %}
 {{default_user_img|json_script:"request_user_img"}}
 {% endif %}
-{{request.user.profile_image.url|json_script:"request_user_img"}}
 {{chat_user.id|json_script:"chat_user_id"}}
 {{chat_user.username|json_script:"chat_username"}}
 {% if chat_user.profile_image %}

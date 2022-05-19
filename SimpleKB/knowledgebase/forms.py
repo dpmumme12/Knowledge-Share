@@ -87,10 +87,8 @@ class FolderForm(forms.ModelForm):
 
             sub_folders = BulkChangeFolderForm.get_sub_folders(model_to_dict(self.instance),
                                                                self.folders)
-            print(sub_folders)
             folder_id_in_sub_folders = list(filter(lambda x: x['id'] == int(parent_folder.id),
                                             sub_folders))
-            print(folder_id_in_sub_folders)
             if folder_id_in_sub_folders:
                 raise forms.ValidationError('Operation will cause folder inconsistency')
 

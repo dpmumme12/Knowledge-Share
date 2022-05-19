@@ -6,12 +6,22 @@ const chat_user = {"id": JSON.parse(document.getElementById("chat_user_id").text
                    "username": JSON.parse(document.getElementById("chat_username").textContent),
                    "profile_img": JSON.parse(document.getElementById("chat_user_img").textContent)
                   }
-const domain = window.location.origin
+const domain = window.location.origin;
 const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
 const msgerChat = get(".msger-chat");
+const messagesDiv = get(".messages");
+const loader = get(".loader");
 var pagination_page = 1;
+const hideLoader = () => {
+  loader.classList.remove('show');
+};
 
+const showLoader = () => {
+  loader.classList.add('show');
+};
+
+get("#refresh-button").addEventListener("click", refresh_messages)
 
 msgerForm.addEventListener("submit", event => {
   event.preventDefault();
@@ -42,6 +52,7 @@ msgerForm.addEventListener("submit", event => {
   .then((resp) => {
     if(resp.status_code === 201) {
       appendMessage(request_user.username, request_user.profile_img, "right", resp.data.content, new Date(), "beforeend");
+      msgerChat.scrollTop += 500000;
     }
   })
 });
@@ -74,14 +85,14 @@ function appendMessage(name, img, side, text, date, append) {
     </div>
   `;
 
-  msgerChat.insertAdjacentHTML(append, msgHTML);
-  msgerChat.scrollTop += 500000;
+  messagesDiv.insertAdjacentHTML(append, msgHTML);
 }
 
 
 async function load_messages() {
+  showLoader();
   var messages = await get_messages(pagination_page);
-  console.log(messages)
+  var scroll = 0;
   
   messages.results.forEach(message => {
     if(message.sender === request_user.id) {
@@ -90,7 +101,10 @@ async function load_messages() {
     else {
       appendMessage(chat_user.username, chat_user.profile_img, "left", message.content, new Date(message.message_sent_date), "afterbegin");
     }
+   scroll += get(".msg").clientHeight;
   });
+
+  msgerChat.scrollTop += scroll;
 
   if(messages.next !== null) {
     pagination_page++;
@@ -98,7 +112,25 @@ async function load_messages() {
   else {
     pagination_page = null;
   }
+  hideLoader();
 }
+
+
+async function refresh_messages() {
+  pagination_page = 1;
+  messagesDiv.innerHTML = '';
+  await load_messages();
+}
+
+load_messages();
+
+msgerChat.addEventListener('scroll', () => {
+  if (msgerChat.scrollTop === 0 && pagination_page !== null) {
+    load_messages();
+  };
+}, {
+  passive: true
+});
 
 
 // Utils
@@ -116,5 +148,3 @@ function formatDate(date) {
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
 }
-
-load_messages();

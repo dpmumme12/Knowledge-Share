@@ -119,6 +119,13 @@ class MessagesListView(ListModelMixin, CreateModelMixin, GenericAPIView):
     pagination_class = SmallResultSetPagination
 
     def get(self, request, *args, **kwargs):
+        (Message
+         .objects
+         .filter(sender__username=self.request.query_params['username'],
+                 recipient=self.request.user,
+                 message_read=False)
+         .update(message_read=True)
+         )
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
