@@ -1,7 +1,8 @@
 from django.urls import path
 from rest_framework.schemas import get_schema_view
 from .views import DashboardView, MessagesView, NewMessageView, MessageDetailView
-from .api.views import FollowerListView, FollowingListView, FollowUnfollowView, MessagesListView
+from .api.views import (FollowerListView, FollowingListView, FollowUnfollowView,
+                        MessagesListView, NotificationsListView)
 from SimpleKB.utils.schema_generators import ServerSchemaGenerator
 
 
@@ -17,6 +18,7 @@ urlpatterns = [
     path('api/following/<int:pk>', FollowingListView.as_view(), name='following'),
     path('api/followers/<int:pk>', FollowerListView.as_view(), name='followers'),
     path('api/follow-unfollow/<int:pk>', FollowUnfollowView.as_view(), name='follow_unfollow'),
+    path('api/notifications', NotificationsListView.as_view(), name='notifications'),
     path('api/messages', MessagesListView.as_view(), name='message_list'),
     path('api/openapi', get_schema_view(title='SimpleKB.Social',
                                         description='API for the Social app in the project',

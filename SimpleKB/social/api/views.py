@@ -10,9 +10,10 @@ from rest_framework.generics import ListAPIView, CreateAPIView, GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.schemas.openapi import AutoSchema
 from SimpleKB.utils.schema_generators import SerializerSchemaMixin
-from .serializers import UserFollowSerializer, FollowUnFollowSerializer, MessagesSerializer
+from .serializers import (UserFollowSerializer, FollowUnFollowSerializer,
+                          MessagesSerializer, NotificationsSerializer)
 from .pagination import SmallResultSetPagination
-from ..models import Message
+from ..models import Message, Notification
 
 USER_MODEL = get_user_model()
 
@@ -104,6 +105,9 @@ class FollowUnfollowView(SerializerSchemaMixin, GenericAPIView):
             else:
                 request.user.following.add(user)
                 user.followers.add(request.user)
+
+                Notification.objects.create(message=f'{request.user.username} followed you',
+                                            user=user)
                 serializer = self.response_serializer(data={'user_id': user.id,
                                                             'is_following': True})
             if serializer.is_valid():
@@ -140,5 +144,33 @@ class MessagesListView(ListModelMixin, CreateModelMixin, GenericAPIView):
                             | (Q(recipient=self.request.user)
                                & Q(sender__username=foreign_username)))
                     .order_by('-message_sent_date')
+                    )
+        return queryset
+
+
+class NotificationsListView(ListAPIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = NotificationsSerializer
+    pagination_class = SmallResultSetPagination
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        (Notification.
+         objects
+         .filter(user=self.request.user, seen=False)
+         .update(seen=True)
+         )
+        return response
+
+    def delete(self, request, *args, **kwargs):
+        Notification.objects.get(id=request.query_params['id']).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_queryset(self):
+        queryset = (Notification
+                    .objects
+                    .filter(user=self.request.user)
+                    .order_by('-created_on')
                     )
         return queryset

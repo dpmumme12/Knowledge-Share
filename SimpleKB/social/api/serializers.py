@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from ..models import Message
+from ..models import Message, Notification
 
 USER_MODEL = get_user_model()
 
@@ -21,3 +21,9 @@ class MessagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ['sender', 'recipient', 'content', 'message_sent_date']
+
+
+class NotificationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'message', 'user', 'seen', 'created_on']

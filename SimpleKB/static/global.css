@@ -69,6 +69,7 @@ body  {
 .top-right-menu-icon {
     color: gray;
     font-size: 28px;
+    cursor: pointer;
 }
 
 .top-right-menu-img {

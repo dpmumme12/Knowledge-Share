@@ -6,7 +6,6 @@ const chat_user = {"id": JSON.parse(document.getElementById("chat_user_id").text
                    "username": JSON.parse(document.getElementById("chat_username").textContent),
                    "profile_img": JSON.parse(document.getElementById("chat_user_img").textContent)
                   }
-const domain = window.location.origin;
 const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
 const msgerChat = get(".msger-chat");
@@ -14,11 +13,11 @@ const messagesDiv = get(".messages");
 const loader = get(".loader");
 var pagination_page = 1;
 const hideLoader = () => {
-  loader.classList.remove('show');
+  loader.classList.remove('show-loader');
 };
 
 const showLoader = () => {
-  loader.classList.add('show');
+  loader.classList.add('show-loader');
 };
 
 get("#refresh-button").addEventListener("click", refresh_messages)
@@ -62,7 +61,7 @@ async function get_messages(page) {
     let response = await fetch(domain + `/api/messages?page=${page}&username=${chat_user.username}`)
 
     if(!response.ok) {
-      error_message(`An error ocurred gathering the messages: ${response.status}`);
+      error_message(`An error ocurred gathering messages: ${response.status}`);
     }
     
     return await response.json();
@@ -131,20 +130,3 @@ msgerChat.addEventListener('scroll', () => {
 }, {
   passive: true
 });
-
-
-// Utils
-function get(selector, root = document) {
-  return root.querySelector(selector);
-}
-
-function formatDate(date) {
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
-}

@@ -31,8 +31,9 @@ width: 100%;
 border: var(--border);
 border-radius: 5px;
 background: var(--msger-bg);
-height: 600px;
-max-height: 600px;
+min-height: 600px;
+height: 80vh;
+max-height: 80vh;
 }
 
 .msger-header {
@@ -161,7 +162,7 @@ background-color: #fcfcfe;
     display: none;
 }
 
-.show {
+.show-loader {
     display: block !important;
 }
 

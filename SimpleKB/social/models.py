@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from SimpleKB.utils.models import TimeStampedModel
 
 # Create your models here.
 class Message(models.Model):
@@ -20,4 +21,13 @@ class Message(models.Model):
         min_id = min(self.sender.id, self.recipient.id)
         max_id = max(self.sender.id, self.recipient.id)
         self.conversation_id = str(min_id) + '-' + str(max_id)
+
+        Notification.objects.create(message=f'New message from {self.sender.username}',
+                                    user=self.recipient)
         super(Message, self).save(*args, **kwargs)
+
+
+class Notification(TimeStampedModel):
+    message = models.CharField(max_length=300)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
