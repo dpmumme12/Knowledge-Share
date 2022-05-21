@@ -95,9 +95,9 @@
 
 {% endblock body %}
 
-{% block scripts %}
+{% block base_knowledegebase_scripts %}
 {% static 'images/user.png' as default_user_img %}
 {{default_user_img|json_script:"default_user_img"}}
 {{request.user.id|json_script:"user_id"}}
 <script src="{% static 'social/dashboard.js' %}"></script>
-{% endblock scripts %}
+{% endblock base_knowledegebase_scripts %}

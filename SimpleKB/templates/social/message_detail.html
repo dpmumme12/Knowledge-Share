@@ -41,7 +41,7 @@
 
 {% endblock body %}
 
-{% block scripts %}
+{% block base_knowledegebase_scripts %}
 {% static 'images/user.png' as default_user_img %}
 {{request.user.id|json_script:"request_user_id"}}
 {{request.user.username|json_script:"request_username"}}
@@ -58,4 +58,4 @@
 {{default_user_img|json_script:"chat_user_img"}}
 {% endif %}
 <script src="{% static 'social/message_detail.js' %}"></script>
-{% endblock scripts %}
+{% endblock base_knowledegebase_scripts %}

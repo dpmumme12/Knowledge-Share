@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 from SimpleKB.utils.models import TimeStampedModel
 
 # Create your models here.
@@ -22,7 +23,12 @@ class Message(models.Model):
         max_id = max(self.sender.id, self.recipient.id)
         self.conversation_id = str(min_id) + '-' + str(max_id)
 
-        Notification.objects.create(message=f'New message from {self.sender.username}',
+        url = reverse('social:message_detail', args=(self.sender.username,))
+        Notification.objects.create(message=f"""
+                                    New message from
+                                    <a href="{url}"class="text-decoration-none">
+                                    @{self.sender.username}</a>
+                                    """,
                                     user=self.recipient)
         super(Message, self).save(*args, **kwargs)
 

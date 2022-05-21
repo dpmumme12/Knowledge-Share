@@ -44,6 +44,6 @@
 {% include 'blocks/form_popup.html' with id='article-user-form' title='Add article to knowledgebase' form=ArticleUserForm %}
 {% endblock %}
 
-{% block scripts %}
+{% block base_knowledegebase_scripts %}
 <script src="{% static 'prism.js' %}"></script>
-{% endblock scripts %}
+{% endblock base_knowledegebase_scripts %}

@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef, Q
+from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -106,7 +107,12 @@ class FollowUnfollowView(SerializerSchemaMixin, GenericAPIView):
                 request.user.following.add(user)
                 user.followers.add(request.user)
 
-                Notification.objects.create(message=f'{request.user.username} followed you',
+                url = reverse('social:dashboard', args=(request.user.username,))
+                Notification.objects.create(message=f"""
+                                            <a href="{url}"
+                                            class="text-decoration-none">
+                                            @{request.user.username}</a> followed you
+                                            """,
                                             user=user)
                 serializer = self.response_serializer(data={'user_id': user.id,
                                                             'is_following': True})
@@ -164,7 +170,7 @@ class NotificationsListView(ListAPIView):
         return response
 
     def delete(self, request, *args, **kwargs):
-        Notification.objects.get(id=request.query_params['id']).delete()
+        Notification.objects.get(id=request.query_params['pk']).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):

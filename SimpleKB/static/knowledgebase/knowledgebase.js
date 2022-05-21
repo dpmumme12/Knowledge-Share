@@ -3,8 +3,8 @@
 /////////////////////////////////////////////////////
 
 /// getting inital data and setting event listners
-const user_folders = JSON.parse(document.getElementById('user_folders').textContent);
-const folder_id = JSON.parse(document.getElementById('folder_id').textContent);
+const user_folders = JSON.parse(get('#user_folders').textContent);
+const folder_id = JSON.parse(get('#folder_id').textContent);
 var edit_article_elements = document.getElementsByClassName("edit-article-class");
 var edit_folder_elements = document.getElementsByClassName("edit-folder-class");
 var change_folder_elements = document.getElementsByClassName("change-folder-class");
@@ -21,8 +21,8 @@ for (var i = 0; i < edit_article_elements.length; i++) {
   edit_article_elements[i].addEventListener('click', edit_article);
 }
 
-document.getElementById('change-folder-action').addEventListener('click', multiple_change_folder);
-document.getElementById('delete-items-action').addEventListener('click', bulk_delete);
+get('#change-folder-action').addEventListener('click', multiple_change_folder);
+get('#delete-items-action').addEventListener('click', bulk_delete);
 
 function edit_article(event) {
   var button = event.currentTarget;
@@ -98,13 +98,13 @@ function bulk_delete(event) {
 
 /// Function for changing the folder for a single item
 function single_change_folder(event) {
-  var change_folder_popup = new bootstrap.Modal(document.getElementById('ChangeFolderPopup'))
+  var change_folder_popup = new bootstrap.Modal(get('#ChangeFolderPopup'))
   var button = event.currentTarget;
   var id = button.getAttribute('data-item-id');
   var object_type = button.getAttribute('data-item-type');
 
   var object = [{'id': id, 'object_type':object_type}];
-  document.getElementById('id_change_folder-objects').value = JSON.stringify(object);
+  get('#id_change_folder-objects').value = JSON.stringify(object);
 
   if (object[0].object_type === 'folder') {
     var folders = filter_user_folders(object);
@@ -151,7 +151,7 @@ function multiple_change_folder(event) {
     return;
   }
   
-  var change_folder_popup = new bootstrap.Modal(document.getElementById('ChangeFolderPopup'));
+  var change_folder_popup = new bootstrap.Modal(get('#ChangeFolderPopup'));
 
   var objects = [];
   checked_items.forEach(element => {
@@ -161,7 +161,7 @@ function multiple_change_folder(event) {
     objects.push({'id': id, 'object_type':object_type});
   });
 
-  document.getElementById('id_change_folder-objects').value = JSON.stringify(objects);
+  get('#id_change_folder-objects').value = JSON.stringify(objects);
 
   var folder_objects = objects.filter(x => x.object_type === 'folder');
   if (folder_objects.length !== 0) {
@@ -171,7 +171,7 @@ function multiple_change_folder(event) {
     var folders = user_folders;
   }
 
-  var folder_options = document.getElementById('id_change_folder-folder');
+  var folder_options = get('#id_change_folder-folder');
 
   if (folder_id == null) {
     folder_options.innerHTML = '<option value="" selected="">(Root)</option>';

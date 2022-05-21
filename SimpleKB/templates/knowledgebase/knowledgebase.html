@@ -336,12 +336,12 @@
 
 {% endblock body %}
 
-{% block scripts %}
+{% block base_knowledegebase_scripts %}
 {% if request.user == kb_user %}
     {{user_folders|json_script:"user_folders"}}
     {{current_folder.id|json_script:"folder_id"}}
     <script src="{% static 'knowledgebase/knowledgebase.js' %}"></script>
 {% endif %}
-{% endblock scripts %}
+{% endblock base_knowledegebase_scripts %}
 
 

@@ -80,9 +80,9 @@
 
 {% endblock %}
 
-{% block scripts %}
+{% block base_knowledegebase_scripts %}
 {% url 'knowledgebase:article_image_upload' as image_uplaod_url %}
 {{image_uplaod_url|json_script:"article_upload_url"}}
 {{article.id|json_script:"article_id"}}
 <script>var token = '{{csrf_token}}';</script>
-{% endblock scripts %}
+{% endblock base_knowledegebase_scripts %}

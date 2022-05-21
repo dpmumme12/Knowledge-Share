@@ -67,7 +67,7 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            <ul id="notifications-list" class="list-group list-group-flush">
+            <ul id="notifications-list" class="list-group">
             </ul>
             <div id="load-more-btn" class="text-center pt-2">
             </div>
@@ -79,3 +79,9 @@
 </div>
 
 {% endblock main %}
+
+{% block scripts %}
+<script src="{% static 'layouts/base_knowledgebase.js' %}"></script>
+{% block base_knowledegebase_scripts %}
+{% endblock base_knowledegebase_scripts %}
+{% endblock scripts %}

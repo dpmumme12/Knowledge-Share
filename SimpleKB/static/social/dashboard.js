@@ -1,13 +1,13 @@
-const main_follow_button = document.getElementById("main-follow-button");
-const default_user_img = document.getElementById("default_user_img").textContent;
-const user_id = document.getElementById("user_id").textContent;
+const main_follow_button = get("#main-follow-button");
+const default_user_img = JSON.parse(get("#default_user_img").textContent);
+const user_id = JSON.parse(get("#user_id").textContent);
 
 if (main_follow_button !== null) {
   main_follow_button.addEventListener("click", follow_unfollow);
 }
 
-document.getElementById("following-div").addEventListener("click", get_following);
-document.getElementById("followers-div").addEventListener("click", get_following);
+get("#following-div").addEventListener("click", get_following);
+get("#followers-div").addEventListener("click", get_following);
 
 function follow_unfollow(event) {
   var button = event.currentTarget;
@@ -98,11 +98,11 @@ function get_following(event) {
             );
             div1.addEventListener(
               "click",
-              (event) => (window.location.href = `/dashboard/${user.username}`)
+              (event) => (window.location.href = `/Dashboard/${user.username}`)
             );
             const img = document.createElement("img");
             img.classList.add("rounded-circle", "popup-profile-img");
-            if (user.profile_image !== "") {
+            if (user.profile_image !== null) {
               img.src = user.profile_image;
             } else {
               img.src = default_user_img;
@@ -125,10 +125,10 @@ function get_following(event) {
             p.innerHTML = "@" + user.username;
             p.addEventListener(
               "click",
-              (event) => (window.location.href = `/dashboard/${user.username}`)
+              (event) => (window.location.href = `/Dashboard/${user.username}`)
             );
             div1.appendChild(img);
-            if (user.id != user_id && user_id != "null") {
+            if (user.id !== user_id && user_id !== null) {
               div2.appendChild(button);
             }
             parent_div.appendChild(div1);

@@ -1,10 +1,10 @@
-const request_user = {"id": JSON.parse(document.getElementById("request_user_id").textContent),
-                      "username": JSON.parse(document.getElementById("request_username").textContent),
-                      "profile_img": JSON.parse(document.getElementById("request_user_img").textContent)
+const request_user = {"id": JSON.parse(get("#request_user_id").textContent),
+                      "username": JSON.parse(get("#request_username").textContent),
+                      "profile_img": JSON.parse(get("#request_user_img").textContent)
                     }
-const chat_user = {"id": JSON.parse(document.getElementById("chat_user_id").textContent),
-                   "username": JSON.parse(document.getElementById("chat_username").textContent),
-                   "profile_img": JSON.parse(document.getElementById("chat_user_img").textContent)
+const chat_user = {"id": JSON.parse(get("#chat_user_id").textContent),
+                   "username": JSON.parse(get("#chat_username").textContent),
+                   "profile_img": JSON.parse(get("#chat_user_img").textContent)
                   }
 const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
@@ -28,7 +28,7 @@ msgerForm.addEventListener("submit", event => {
   const msgText = msgerInput.value;
   if (!msgText) return;
 
-  fetch(domain + '/api/messages', {
+  fetch('/api/messages', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -50,7 +50,9 @@ msgerForm.addEventListener("submit", event => {
   })
   .then((resp) => {
     if(resp.status_code === 201) {
-      appendMessage(request_user.username, request_user.profile_img, "right", resp.data.content, new Date(), "beforeend");
+      appendMessage(request_user.username, request_user.profile_img,
+                    "right", resp.data.content, new Date(resp.data.message_sent_date),
+                    "beforeend");
       msgerChat.scrollTop += 500000;
     }
   })
@@ -58,7 +60,7 @@ msgerForm.addEventListener("submit", event => {
 
 
 async function get_messages(page) {
-    let response = await fetch(domain + `/api/messages?page=${page}&username=${chat_user.username}`)
+    let response = await fetch(`/api/messages?page=${page}&username=${chat_user.username}`)
 
     if(!response.ok) {
       error_message(`An error ocurred gathering messages: ${response.status}`);
@@ -95,10 +97,14 @@ async function load_messages() {
   
   messages.results.forEach(message => {
     if(message.sender === request_user.id) {
-      appendMessage(request_user.username, request_user.profile_img, "right", message.content, new Date(message.message_sent_date), "afterbegin");
+      appendMessage(request_user.username, request_user.profile_img,
+                    "right", message.content, new Date(message.message_sent_date),
+                    "afterbegin");
     }
     else {
-      appendMessage(chat_user.username, chat_user.profile_img, "left", message.content, new Date(message.message_sent_date), "afterbegin");
+      appendMessage(chat_user.username, chat_user.profile_img,
+                    "left", message.content, new Date(message.message_sent_date),
+                    "afterbegin");
     }
    scroll += get(".msg").clientHeight;
   });

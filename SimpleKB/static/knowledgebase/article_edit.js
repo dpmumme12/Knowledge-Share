@@ -1,7 +1,7 @@
 
 function image_upload_handler (blobInfo, success, failure, progress) {
-    const article_id = JSON.parse(document.getElementById('article_id').textContent);
-    const article_upload_url = JSON.parse(document.getElementById('article_upload_url').textContent);
+    const article_id = JSON.parse(get('#article_id').textContent);
+    const article_upload_url = JSON.parse(get('#article_upload_url').textContent);
     var xhr, formData;
   
     xhr = new XMLHttpRequest();
