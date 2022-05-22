@@ -1,5 +1,7 @@
 {% url 'social:dashboard' request.user.username as dashboard_url %}
 {% url 'knowledgebase:kb' request.user.username as knowledgebase_url %}
+{% url 'newsfeed:news_feed' as newsfeed_url %}
+{% url 'social:messages' as messages_url %}
 {% url 'users:settings' as settings_url %}
 
 <div class="mobile-nav-bar">
@@ -24,9 +26,20 @@
             {% endif %}
           </li>
           {% endif %}
+          <li class="nav-item">
+            {% if request.path == newsfeed_url %}
+              <a class="icon-active" href="{{newsfeed_url}}"><i class="fa-solid fa-newspaper fa-xl"></i></a>
+            {% else %}
+              <a class="nav-icon" href="{{newsfeed_url}}"><i class="fa-solid fa-newspaper fa-xl"></i></a>
+            {% endif %}
+          </li>
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-icon" href="#"><i class="fa-solid fa-envelope fa-xl"></i></a>
+            {% if request.path == messages_url %}
+              <a class="icon-active" href="{{messages_url}}"><i class="fa-solid fa-envelope fa-xl"></i></a>
+            {% else %}
+              <a class="nav-icon" href="{{messages_url}}"><i class="fa-solid fa-envelope fa-xl"></i></a>
+            {% endif %}
           </li>
           {% endif %}
           {% if request.user.is_authenticated %}

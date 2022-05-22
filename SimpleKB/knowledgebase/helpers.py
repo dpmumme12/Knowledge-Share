@@ -1,4 +1,5 @@
-from django.db.models import F, Value, Sum, Q
+from django.db.models import F, Value, Sum, Q, QuerySet
+from typing import Union, List
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.search import (SearchQuery, SearchVector,
                                             SearchRank, TrigramSimilarity as trgm_sim)
@@ -8,44 +9,22 @@ from .models import Article, Folder
 USER_MODEL = get_user_model()
 
 def search_knowledgebase(query: str, kb_user, request_user) -> list:
-    user_model = get_user_model()
-    vector_query = SearchQuery(query)
-    folder_vector = SearchVector('name', weight='A')
-    article_vector = SearchVector('title', weight='A') + SearchVector('content', weight='B')
+    folders = Folder.objects.filter(owner=kb_user)
+    folders = folder_fulltext_search(folders, query)
 
-    folders = (Folder
-               .objects
-               .annotate(rank=SearchRank(folder_vector, vector_query),
-                         similarity=trgm_sim('name', query),
-                         score=Sum(F('rank') + (F('similarity'))))
-               .filter(owner=kb_user, score__gte=0.1)
-               )
-    articles = (Article
-                .objects
-                .annotate(rank=SearchRank(article_vector, vector_query),
-                          similarity=trgm_sim('title', query),
-                          score=Sum(
-                              F('rank') + F('similarity') + trgm_sim('content', query))
-                          )
-                .filter(author=kb_user,
-                        score__gte=0.1,
-                        version_status_id=Article.Version_Status.ACTIVE)
-                )
+    articles = Article.objects.filter(author=kb_user,
+                                      version_status_id=Article.Version_Status.ACTIVE)
+    articles = article_fulltext_search(articles, query)
 
     try:
         foreign_articles = (USER_MODEL
                             .objects
                             .get(id=kb_user.id)
                             .foreign_articles
-                            .annotate(rank=SearchRank(article_vector, vector_query),
-                                      similarity=trgm_sim('title', query),
-                                      article_user_id=F('article_user__id'),
-                                      score=Sum(
-                                          F('rank') + F('similarity') + trgm_sim('content', query))
-                                      )
-                            .filter(score__gte=0.1)
+                            .all()
                             )
-    except user_model.DoesNotExist:
+        foreign_articles = article_fulltext_search(foreign_articles, query)
+    except USER_MODEL.DoesNotExist:
         foreign_articles = []
 
     if request_user != kb_user:
@@ -53,8 +32,10 @@ def search_knowledgebase(query: str, kb_user, request_user) -> list:
 
     folder_content = list(chain(folders, articles, foreign_articles))
 
-    return folder_content.sort(key=lambda x: x.name.lower()
-                               if isinstance(x, Folder) else x.title.lower())
+    folder_content.sort(key=lambda x: x.name.lower()
+                        if isinstance(x, Folder) else x.title.lower())
+
+    return folder_content
 
 
 def get_knowledgebase(folder_id, kb_user, request_user):
@@ -127,3 +108,33 @@ def create_new_version(article: Article) -> Article:
                    )
 
     return new_version
+
+
+def folder_fulltext_search(queryset: QuerySet, query: str) -> QuerySet:
+    vector_query = SearchQuery(query)
+    folder_vector = SearchVector('name', weight='A')
+
+    queryset = (queryset
+                .annotate(rank=SearchRank(folder_vector, vector_query),
+                          similarity=trgm_sim('name', query),
+                          score=Sum(F('rank') + (F('similarity'))))
+                .filter(score__gte=0.1)
+                )
+
+    return queryset
+
+
+def article_fulltext_search(queryset: QuerySet, query: str) -> QuerySet:
+    vector_query = SearchQuery(query)
+    article_vector = SearchVector('title', weight='A') + SearchVector('content', weight='B')
+
+    queryset = (queryset
+                .annotate(rank=SearchRank(article_vector, vector_query),
+                          similarity=trgm_sim('title', query),
+                          score=Sum(
+                              F('rank') + F('similarity') + trgm_sim('content', query))
+                          )
+                .filter(score__gte=0.1)
+                )
+
+    return queryset

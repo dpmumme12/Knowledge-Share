@@ -1,0 +1,16 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'newsfeed/newsfeed.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+test
+
+{% endblock body %}
+
+{% block base_knowledegebase_scripts %}
+{% static 'images/user.png' as default_user_img %}
+<script src="{% static 'newsfeed/newsfeed.js' %}"></script>
+{% endblock base_knowledegebase_scripts %}

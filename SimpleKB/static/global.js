@@ -1,3 +1,7 @@
+$(document).ready(function(){
+    $('.js-example-basic-single').select2();
+  });
+
 //takes cookie name input and gets a cookie from browser if it exists 
 function getCookie(name) {
     let cookieValue = null;

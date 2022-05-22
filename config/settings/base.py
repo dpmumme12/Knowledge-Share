@@ -45,6 +45,7 @@ THIRD_PARTY_APPS = [
     'tinymce',
     "debug_toolbar",
     'rest_framework',
+    'django_filters',
 ]
 
 LOCAL_APPS = [
@@ -52,6 +53,7 @@ LOCAL_APPS = [
     'SimpleKB.knowledgebase',
     'SimpleKB.utils',
     'SimpleKB.social',
+    'SimpleKB.newsfeed',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

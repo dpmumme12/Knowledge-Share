@@ -3,7 +3,7 @@ from rest_framework.schemas import get_schema_view
 from .views import DashboardView, MessagesView, NewMessageView, MessageDetailView
 from .api.views import (FollowerListView, FollowingListView, FollowUnfollowView,
                         MessagesListView, NotificationsListView)
-from SimpleKB.utils.schema_generators import ServerSchemaGenerator
+from SimpleKB.utils.api.schema_generators import ServerSchemaGenerator
 
 
 app_name = 'social'

@@ -10,10 +10,10 @@ from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView, CreateAPIView, GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.schemas.openapi import AutoSchema
-from SimpleKB.utils.schema_generators import SerializerSchemaMixin
+from SimpleKB.utils.api.schema_generators import SerializerSchemaMixin
+from SimpleKB.utils.api.pagination import SmallResultSetPagination
 from .serializers import (UserFollowSerializer, FollowUnFollowSerializer,
                           MessagesSerializer, NotificationsSerializer)
-from .pagination import SmallResultSetPagination
 from ..models import Message, Notification
 
 USER_MODEL = get_user_model()
@@ -32,7 +32,6 @@ class FollowingListView(ListAPIView):
 
     def get_queryset(self):
         requested_user = self.request.user
-        print(self.request.method)
         query = (USER_MODEL
                  .objects
                  .get(id=self.kwargs['pk'])

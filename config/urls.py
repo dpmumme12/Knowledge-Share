@@ -20,9 +20,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('SimpleKB.social.urls', namespace='scoial')),
+    path('', include('SimpleKB.social.urls', namespace='social')),
     path('knowledgebase/', include('SimpleKB.knowledgebase.urls', namespace='knowledgebase')),
     path('users/', include('SimpleKB.users.urls', namespace='users')),
+    path('newsfeed/', include('SimpleKB.newsfeed.urls', namespace='newsfeed')),
     path('tinymce/', include('tinymce.urls')),
 ]
 
