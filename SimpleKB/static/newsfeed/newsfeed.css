@@ -1,0 +1,36 @@
+.articles-div {
+    float: left !important;
+}
+
+.filters-div {
+    background-color: white;
+    padding: 25px;
+    height: 100%;
+}
+
+.article-cover-img {
+    max-height: 150px;
+    max-width: 100%;
+}
+
+.nav-link
+{
+   color: black;
+   text-decoration: none;
+}
+.nav-link:hover
+{
+   text-decoration: underline;
+}
+
+@media all and (max-width:768px) {
+    .articles-div {
+        width: 100%;
+        display: block;
+    }
+
+    .filters-div {
+        width: 100%;
+        display: block;
+    }
+}

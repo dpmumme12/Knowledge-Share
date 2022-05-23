@@ -6,11 +6,41 @@
 {% endblock styles %}
 
 {% block body %}
-test
+<div class="pb-3" style="height: 100%;">
+    <div class="col-md-3 d-inline-block filters-div">
+        <h4>Filters</h4>
+        <form id="search-form">
+            {{filter_form.form.as_p}}
+            <button type="submit" class="btn btn-info">Search</button>
+        </form>
+    </div>
+    <div class="col-md-9 d-inline-block articles-div">
+        <div class="col-md-11" style="background-color: white; padding: 25px;">
+            <h3>Articles</h3>
+            <hr>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-start ">
+                        <div class="col-md-2">
+                            <img src="https://image.shutterstock.com/image-vector/flat-black-newspaper-vector-icon-260nw-1722435181.jpg" class="rounded article-cover-img" alt="..." >
+                        </div>
+                        <div class="col-md-10 ms-2 me-auto">
+                            <a href="" class="nav-link">
+                                <small>source testt</small>
+                                <div class="fw-bold">header of atricle</div>
+                                summary fo contetn in article
+                            </a>   
+                        </div>
+                </li>
+             
+            </ul>
+        </div>
+    </div>
+</div>
 
 {% endblock body %}
 
 {% block base_knowledegebase_scripts %}
 {% static 'images/user.png' as default_user_img %}
+{{default_user_img|json_script:"default_user_img"}}
 <script src="{% static 'newsfeed/newsfeed.js' %}"></script>
 {% endblock base_knowledegebase_scripts %}

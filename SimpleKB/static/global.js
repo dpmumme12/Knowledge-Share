@@ -1,6 +1,8 @@
 $(document).ready(function(){
-    $('.js-example-basic-single').select2();
+    $('.select2').select2();
+    $('.multi-select2').select2({placeholder: "(Please select)"});
   });
+  
 
 //takes cookie name input and gets a cookie from browser if it exists 
 function getCookie(name) {

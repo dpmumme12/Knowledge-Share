@@ -3,6 +3,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 from SimpleKB.utils.models import TimeStampedModel
 
 # Create your models here.
@@ -31,6 +33,11 @@ class Article(TimeStampedModel):
                                            through='Article_User',
                                            through_fields=('article', 'user'),
                                            related_name='foreign_articles')
+
+    @property
+    def truncated_content(self):
+        content = strip_tags(self.content)
+        return Truncator(content).words(20)
 
 
 class ArticleImage(models.Model):

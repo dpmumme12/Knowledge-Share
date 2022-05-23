@@ -20,7 +20,7 @@ class ArticleForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
         self.fields['title'].required = True
-        self.fields['folder'].widget.attrs.update({'class': 'form-select'})
+        self.fields['folder'].widget.attrs.update({'class': 'form-select select2'})
         self.fields['folder'].empty_label = '(Root)'
         self.fields['folder'].queryset = Folder.objects.filter(owner=self.user)
 

@@ -21,6 +21,6 @@ class NewMessageForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['sender'].initial = self.user.id
         self.fields['recipient'].empty_label = '(Please select)'
-        self.fields['recipient'].widget.attrs.update({'class': 'form-select'})
+        self.fields['recipient'].widget.attrs.update({'class': 'form-select select2'})
         self.fields['recipient'].queryset = self.user.following.all()
         self.fields['content'].widget.attrs.update({'class': 'form-control'})
