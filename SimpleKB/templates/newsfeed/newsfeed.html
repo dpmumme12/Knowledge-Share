@@ -8,28 +8,66 @@
 {% block body %}
 <div class="pb-3" style="height: 100%;">
     <div class="col-md-3 d-inline-block filters-div">
-        <h4>Filters</h4>
-        <form id="search-form">
+        <h4 class="desktop-filters-header">Filters</h4>
+        <div class="mobile-filters-header">
+            <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              Filters
+            </button>
+          </h2>
+        </div>
+        <div id="flush-collapseOne" class="collapse"  aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+        <form id="search-form" >
             {{filter_form.form.as_p}}
             <button type="submit" class="btn btn-info">Search</button>
         </form>
+        </div>
     </div>
+    
     <div class="col-md-9 d-inline-block articles-div">
         <div class="col-md-11" style="background-color: white; padding: 25px;">
-            <h3>Articles</h3>
+            <h2>Articles</h2>
             <hr>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex align-items-start ">
-                        <div class="col-md-2">
-                            <img src="https://image.shutterstock.com/image-vector/flat-black-newspaper-vector-icon-260nw-1722435181.jpg" class="rounded article-cover-img" alt="..." >
-                        </div>
-                        <div class="col-md-10 ms-2 me-auto">
-                            <a href="" class="nav-link">
-                                <small>source testt</small>
-                                <div class="fw-bold">header of atricle</div>
-                                summary fo contetn in article
-                            </a>   
-                        </div>
+                <li class="list-group-item pt-3">
+                    <div class="col-md-12 me-auto">
+                            <div class="profile-card pb-2">
+                                <div class="d-inline-block float-start">
+                                <a href="/Dashboard/test" class="text-decoration-none text-dark">
+                                <img src="{{request.user.profile_image.url}}" alt="Profile Picture" class="rounded-circle article-profile-img ">
+                                </div>
+                                <div class="d-inline-block ps-2">
+                                    <h6 class="mb-0">doug mumme</h6>
+                                    <div>@{{request.user.username}}</div>
+                                </div>
+                                 </a>
+                            </div>
+                            <a href="/knowledgebase/Article/101" class="text-decoration-none text-dark">
+                            <h3>header of atricle</h3>
+                            <p>summary fo contetn in article thop is going to be twnety worjd becausee that is all that will displayed for the article...</p>
+                            </a>
+                            <div class="text-end"><small class="text-end">10/20/2022</small></div>
+                    </div>
+                </li>
+                <li class="list-group-item pt-3">
+                    <div class="col-md-12 me-auto">
+                            <div class="profile-card pb-2">
+                                <div class="d-inline-block float-start">
+                                <a href="/Dashboard/test" class="text-decoration-none text-dark">
+                                <img src="{{request.user.profile_image.url}}" alt="Profile Picture" class="rounded-circle article-profile-img ">
+                                </div>
+                                <div class="d-inline-block ps-2">
+                                    <h5 class="mb-0">doug mumme</h5>
+                                    <div>@{{request.user.username}}</div>
+                                </div>
+                                 </a>
+                            </div>
+                            <a href="/knowledgebase/Article/101" class="text-decoration-none text-dark">
+                            <h3>header of atricle</h3>
+                            <p>summary fo contetn in article thop is going to be twnety worjd becausee that is all that will displayed for the article...</p>
+                            </a>
+                            <div class="text-end"><small class="text-end">10/20/2022</small></div>
+                    </div>
                 </li>
              
             </ul>

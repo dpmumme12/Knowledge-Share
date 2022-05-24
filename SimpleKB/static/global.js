@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $('.select2').select2();
-    $('.multi-select2').select2({placeholder: "(Please select)"});
+    $('.multi-select2').select2({placeholder: "(Please select)", width: "100%"});
   });
   
 

@@ -1,5 +1,43 @@
+.accordion-button {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.accordion-button:not(.collapsed) {
+    color: inherit;
+    background-color: inherit;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    z-index: 3;
+    border-color: inherit;
+    outline: 0;
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    transform: rotate(-180deg);
+}
+
 .articles-div {
     float: left !important;
+}
+
+.article-profile-img {
+    height: 40px;
+    width: 40px;
+}
+
+.collapse:not(.show) {
+    display: block;
+  }
+
+.desktop-filters-header {
+    display: block;
 }
 
 .filters-div {
@@ -8,9 +46,8 @@
     height: 100%;
 }
 
-.article-cover-img {
-    max-height: 150px;
-    max-width: 100%;
+.mobile-filters-header {
+    display: none;
 }
 
 .nav-link
@@ -25,12 +62,49 @@
 
 @media all and (max-width:768px) {
     .articles-div {
+        padding-top: 25px;
         width: 100%;
         display: block;
+    }
+
+    .collapse:not(.show) {
+        display: none;
+      }
+
+    .desktop-filters-header {
+        display: none;
     }
 
     .filters-div {
         width: 100%;
         display: block;
+        padding-left: 25px;
+        padding-right: 25px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .filter-accordion {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        color: #212529;
+        text-align: left;
+        background-color: #fff;
+        border: 0;
+        border-radius: 0;
+        overflow-anchor: none;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,border-radius .15s ease;
+    }
+
+    .mobile-filters-header {
+        display: block;
+    }
+
+    #search-form {
+        padding-bottom: 25px;
     }
 }
