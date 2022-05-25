@@ -266,7 +266,7 @@
                         {% endif %}
                         {% for page in folder_content.paginator.page_range %}
                         {% if page > folder_content.number|add:-3 and page < folder_content.number|add:3  %}
-                        <li class="page-item {% if folder_content.number == page  %}active{% endif %}"><a class="page-link" href="?{% if SearchForm.query.value %}query={{SearchForm.query.value}}&{% endif %}page={{ page }}">{{ page }}</a></li>
+                        <li class="page-item {% if folder_content.number == page  %}active{% endif %}"><a class="page-link" style="z-index: auto;" href="?{% if SearchForm.query.value %}query={{SearchForm.query.value}}&{% endif %}page={{ page }}">{{ page }}</a></li>
                         {% endif %}
                         {% endfor %}
                         {% if folder_content.has_next %}

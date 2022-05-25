@@ -16,8 +16,7 @@ async function search_form_submit(event) {
     var form_data = new FormData(get('#search-form'))
     newsfeed_page = 1;
     article_list.innerHTML = '';
-    t = await load_newsfeed(form_data);
-    console.log('funtion done')
+    await load_newsfeed(form_data);
 }
 
 async function get_newsfeed(page, form_data=null) {
@@ -68,10 +67,14 @@ function appendArticle(id, img, title, content, date, username, full_name) {
   }
 
 async function load_newsfeed(form_data) {
+    get('#articleList-load-more-btn').innerHTML = '';
     showLoader();
     var articles = await get_newsfeed(newsfeed_page, form_data);
-    console.log(articles)
 
+    if (articles.results.length === 0) {
+      article_list.innerHTML = '<p>No articles found...</p>';
+    }
+    
     articles.results.forEach(article => {
         var img = article.profile_img;
         if (img === null) {img = default_user_img};
@@ -80,30 +83,19 @@ async function load_newsfeed(form_data) {
                       new Date(article.updated_on), article.username, article.full_name);
     });
 
-    console.log('done appending')
     if(articles.next !== null) {
         newsfeed_page++;
+        load_more = `<button class="btn btn-primary" 
+                    onclick="load_newsfeed()">Load more</button>
+                    `;
+
+        get('#articleList-load-more-btn').innerHTML = load_more;
       }
     else {
         newsfeed_page = null;
-        console.log(newsfeed_page)
+        get('#articleList-load-more-btn').innerHTML = '';
       }
     hideLoader();
 }
-
-window.addEventListener('scroll', () => {
-    const {
-        scrollTop,
-        scrollHeight,
-        clientHeight
-    } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 5 &&
-        newsfeed_page !== null) {
-        console.log('test----------------')
-        load_newsfeed();
-    }
-}, {
-    passive: false
-});
 
 load_newsfeed()

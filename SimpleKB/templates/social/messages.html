@@ -24,11 +24,11 @@
       <li class="list-group-item shadow-sm">
         <div>
         {% if request.user == message.sender %}
-          <div class="d-inline-block"><img src="{% if message.recipient.profile_image %}{{ message.recipient.profile_image}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img"></div>
-          <div class="d-inline-block"><p class="m-0 position-fixed">@{{message.recipient.username}}</p></div>
+          <div class="d-inline-block float-start"><img src="{% if message.recipient.profile_image %}{{ message.recipient.profile_image}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img"></div>
+          <div class="d-inline-block ps-2"><p class="mb-0" style="margin-top: 2.15rem !important;">@{{message.recipient.username}}</p></div>
         {% else %}
-          <div class="d-inline-block"><img src="{% if message.sender.profile_image %}{{ message.sender.profile_image}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img"></div>
-          <div class="d-inline-block"><p class="m-0 position-fixed">@{{message.sender.username}}</p></div>
+          <div class="d-inline-block float-start"><img src="{% if message.sender.profile_image %}{{ message.sender.profile_image}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img"></div>
+          <div class="d-inline-block ps-2"><p class="mb-0" style="margin-top: 2.15rem !important;">@{{message.sender.username}}</p></div>
         {% endif %}
         <div class="d-inline-block float-end">
           <small>{{message.message_sent_date}}</small>
