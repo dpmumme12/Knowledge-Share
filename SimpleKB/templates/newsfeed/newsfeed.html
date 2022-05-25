@@ -28,48 +28,14 @@
         <div class="col-md-11" style="background-color: white; padding: 25px;">
             <h2>Articles</h2>
             <hr>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item pt-3">
-                    <div class="col-md-12 me-auto">
-                            <div class="profile-card pb-2">
-                                <div class="d-inline-block float-start">
-                                <a href="/Dashboard/test" class="text-decoration-none text-dark">
-                                <img src="{{request.user.profile_image.url}}" alt="Profile Picture" class="rounded-circle article-profile-img ">
-                                </div>
-                                <div class="d-inline-block ps-2">
-                                    <h6 class="mb-0">doug mumme</h6>
-                                    <div>@{{request.user.username}}</div>
-                                </div>
-                                 </a>
-                            </div>
-                            <a href="/knowledgebase/Article/101" class="text-decoration-none text-dark">
-                            <h3>header of atricle</h3>
-                            <p>summary fo contetn in article thop is going to be twnety worjd becausee that is all that will displayed for the article...</p>
-                            </a>
-                            <div class="text-end"><small class="text-end">10/20/2022</small></div>
+            <ul id="article-list" class="list-group list-group-flush">
+                <div class="loader">
+                <div class="text-center">
+                    <div class="spinner-grow text-info" role="status">
+                    <span class="visually-hidden">Loading...</span>
                     </div>
-                </li>
-                <li class="list-group-item pt-3">
-                    <div class="col-md-12 me-auto">
-                            <div class="profile-card pb-2">
-                                <div class="d-inline-block float-start">
-                                <a href="/Dashboard/test" class="text-decoration-none text-dark">
-                                <img src="{{request.user.profile_image.url}}" alt="Profile Picture" class="rounded-circle article-profile-img ">
-                                </div>
-                                <div class="d-inline-block ps-2">
-                                    <h5 class="mb-0">doug mumme</h5>
-                                    <div>@{{request.user.username}}</div>
-                                </div>
-                                 </a>
-                            </div>
-                            <a href="/knowledgebase/Article/101" class="text-decoration-none text-dark">
-                            <h3>header of atricle</h3>
-                            <p>summary fo contetn in article thop is going to be twnety worjd becausee that is all that will displayed for the article...</p>
-                            </a>
-                            <div class="text-end"><small class="text-end">10/20/2022</small></div>
-                    </div>
-                </li>
-             
+                </div>
+                </div>
             </ul>
         </div>
     </div>

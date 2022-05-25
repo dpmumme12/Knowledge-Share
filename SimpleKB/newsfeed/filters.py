@@ -43,4 +43,5 @@ class NewsFeedFilter(FilterSet):
 
     def search_filter(self, queryset, name, value):
         out_queryset = article_fulltext_search(queryset, value)
+        out_queryset = out_queryset.order_by('-score')
         return out_queryset

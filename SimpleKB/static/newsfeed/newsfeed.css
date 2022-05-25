@@ -46,6 +46,10 @@
     height: 100%;
 }
 
+.loader {
+    display: none;
+}
+
 .mobile-filters-header {
     display: none;
 }
@@ -58,6 +62,10 @@
 .nav-link:hover
 {
    text-decoration: underline;
+}
+
+.show-loader {
+    display: block !important;
 }
 
 @media all and (max-width:768px) {

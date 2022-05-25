@@ -25,3 +25,11 @@ class NewsFeedListView(ListAPIView):
     pagination_class = SmallResultSetPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = NewsFeedFilter
+
+    def get_queryset(self):
+        queryset = (Article
+                    .objects
+                    .filter(article_status_id=Article.Article_Status.PUBLISHED)
+                    .order_by('-updated_on')
+                    )
+        return queryset
