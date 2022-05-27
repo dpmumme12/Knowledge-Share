@@ -1,0 +1,38 @@
+.navbar {
+    padding: 0;
+}
+  
+.navbar-custom {
+    padding-left: 3rem !important;
+    padding-right: 2rem !important;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.navbar-custom .navbar-brand {
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
+    font-weight: 700;
+}
+
+.navbar-custom .navbar-nav .nav-item .nav-link {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+}
+  
+  @media (max-width: 992px) {
+    .navbar-custom {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      padding-left: 1.5rem !important;
+      padding-right: 1rem;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+  
+    .nav-item {
+      width: 50%;
+      text-align: left;
+    }
+}

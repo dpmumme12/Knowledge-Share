@@ -16,7 +16,7 @@ function follow_unfollow(event) {
     document.getElementById("follower-count").textContent
   );
 
-  fetch(`/api/follow-unfollow/${id}`, {
+  fetch(`/social/api/follow-unfollow/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

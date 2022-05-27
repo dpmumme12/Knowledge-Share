@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href='{% static 'newsfeed/newsfeed.css' %}'>
+<link rel="stylesheet" href='{% static 'articlefeed/articlefeed.css' %}'>
 {% endblock styles %}
 
 {% block body %}
@@ -47,5 +47,5 @@
 {% block base_knowledegebase_scripts %}
 {% static 'images/user.png' as default_user_img %}
 {{default_user_img|json_script:"default_user_img"}}
-<script src="{% static 'newsfeed/newsfeed.js' %}"></script>
+<script src="{% static 'articlefeed/articlefeed.js' %}"></script>
 {% endblock base_knowledegebase_scripts %}

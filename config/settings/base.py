@@ -53,7 +53,7 @@ LOCAL_APPS = [
     'SimpleKB.knowledgebase',
     'SimpleKB.utils',
     'SimpleKB.social',
-    'SimpleKB.newsfeed',
+    'SimpleKB.articlefeed',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

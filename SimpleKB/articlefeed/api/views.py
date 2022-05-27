@@ -14,17 +14,17 @@ from django_filters import rest_framework as filters
 from SimpleKB.utils.api.schema_generators import SerializerSchemaMixin
 from SimpleKB.utils.api.pagination import SmallResultSetPagination
 from SimpleKB.knowledgebase.models import Article
-from .serializers import NewsFeedSerializer
-from ..filters import NewsFeedFilter
+from .serializers import ArticleFeedSerializer
+from ..filters import ArticleFeedFilter
 
 USER_MODEL = get_user_model()
 
-class NewsFeedListView(ListAPIView):
+class ArticleFeedListView(ListAPIView):
     queryset = Article.objects.all()
-    serializer_class = NewsFeedSerializer
+    serializer_class = ArticleFeedSerializer
     pagination_class = SmallResultSetPagination
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_class = NewsFeedFilter
+    filterset_class = ArticleFeedFilter
 
     def get_queryset(self):
         queryset = (Article

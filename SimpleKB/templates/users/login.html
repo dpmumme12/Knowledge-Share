@@ -1,13 +1,15 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_users.html' %}
 {% load static %}
 
 {% block styles %}
+{{ block.super }}
 <link rel="stylesheet" href='{% static 'users/login.css' %}'>
 {% endblock styles %}
 
 
 
 {% block main %}
+{{ block.super }}
 
 {% if form.errors %}
 <div class="alert-danger alert d-flex align-items-center alert-dismissible fade show animate__animated animate__fadeInDown">
@@ -20,7 +22,7 @@
 {% else %}
 {% endif %}
 
-<div class="container">
+<div class="container pt-5">
     <div class="row" style="height: 100vh;">
         <div class="col-lg-7" >
             <div class="welcome-heading animate__animated animate__fadeIn animate__slow">

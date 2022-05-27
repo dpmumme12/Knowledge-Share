@@ -28,7 +28,7 @@ async function get_newsfeed(page, form_data=null) {
         });
     }
 
-    var response = await fetch(`/newsfeed/api/newsfeed?page=${page}&` + search_params);
+    var response = await fetch(`/articlefeed/api/articlefeed?page=${page}&` + search_params);
 
     if(!response.ok) {
       error_message(`An error ocurred gathering notifications: ${response.status}`);

@@ -28,7 +28,7 @@ msgerForm.addEventListener("submit", event => {
   const msgText = msgerInput.value;
   if (!msgText) return;
 
-  fetch('/api/messages', {
+  fetch('/social/api/messages', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -60,7 +60,7 @@ msgerForm.addEventListener("submit", event => {
 
 
 async function get_messages(page) {
-    let response = await fetch(`/api/messages?page=${page}&username=${chat_user.username}`)
+    let response = await fetch(`/social/api/messages?page=${page}&username=${chat_user.username}`)
 
     if(!response.ok) {
       error_message(`An error ocurred gathering messages: ${response.status}`);

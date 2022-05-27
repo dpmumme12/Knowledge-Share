@@ -11,14 +11,14 @@ from django.db.models import F, Value, Q, Max, Sum, Subquery, OuterRef
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
 from SimpleKB.knowledgebase.models import Article
-from .filters import NewsFeedFilter
+from .filters import ArticleFeedFilter
 
 USER_MODEL = get_user_model()
 
 # Create your views here.
-class NewsFeedView(View):
-    template_name = 'newsfeed/newsfeed.html'
+class ArticleFeedView(View):
+    template_name = 'articlefeed/articlefeed.html'
 
     def get(self, request, *args, **kwargs):
-        filter_form = NewsFeedFilter(request=request)
+        filter_form = ArticleFeedFilter(request=request)
         return render(request, self.template_name, {'filter_form': filter_form})

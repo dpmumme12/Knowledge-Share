@@ -27,7 +27,7 @@ urlpatterns = [
     path('social/', include('SimpleKB.social.urls', namespace='social')),
     path('knowledgebase/', include('SimpleKB.knowledgebase.urls', namespace='knowledgebase')),
     path('users/', include('SimpleKB.users.urls', namespace='users')),
-    path('newsfeed/', include('SimpleKB.newsfeed.urls', namespace='newsfeed')),
+    path('articlefeed/', include('SimpleKB.articlefeed.urls', namespace='articlefeed')),
     path('tinymce/', include('tinymce.urls')),
 ]
 

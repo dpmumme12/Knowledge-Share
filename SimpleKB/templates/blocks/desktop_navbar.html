@@ -1,6 +1,6 @@
 {% url 'social:dashboard' request.user.username as dashboard_url %}
 {% url 'knowledgebase:kb' request.user.username as knowledgebase_url %}
-{% url 'newsfeed:news_feed' as newsfeed_url %}
+{% url 'articlefeed:article_feed' as articlefeed_url %}
 {% url 'social:messages' as messages_url %}
 {% url 'users:settings' as settings_url %}
 
@@ -26,10 +26,10 @@
         </li>
         {% endif %}
         <li class="nav-item">
-          {% if request.path == newsfeed_url %}
-            <a class="icon-active" href="{{newsfeed_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Article feed"><i class="fa-solid fa-newspaper fa-2x"></i></a>
+          {% if request.path == articlefeed_url %}
+            <a class="icon-active" href="{{articlefeed_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Article feed"><i class="fa-solid fa-newspaper fa-2x"></i></a>
           {% else %}
-            <a class="nav-icon" href="{{newsfeed_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Article feed"><i class="fa-solid fa-newspaper fa-2x"></i></a>
+            <a class="nav-icon" href="{{articlefeed_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Article feed"><i class="fa-solid fa-newspaper fa-2x"></i></a>
           {% endif %}
         </li>
         {% if request.user.is_authenticated %}

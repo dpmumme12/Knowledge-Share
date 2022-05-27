@@ -13,7 +13,7 @@ def get_following(request):
 
     return USER_MODEL.objects.get(id=request.user.id).following.all()
 
-class NewsFeedFilter(FilterSet):
+class ArticleFeedFilter(FilterSet):
     search_query = filters.CharFilter(
         label='Search:',
         method='search_filter',
