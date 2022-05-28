@@ -1,7 +1,5 @@
 from rest_framework.schemas.openapi import SchemaGenerator, AutoSchema
-from rest_framework.generics import GenericAPIView
-from rest_framework.views import APIView
-from rest_framework import exceptions, serializers
+from rest_framework import exceptions
 import warnings
 
 

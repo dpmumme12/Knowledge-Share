@@ -1,13 +1,12 @@
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 from django.views.generic import View, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
-from ..forms import (ArticleForm, FolderForm, BulkChangeFolderForm, BulkDeleteForm,
+from ..forms import (FolderForm, BulkChangeFolderForm, BulkDeleteForm,
                      SearchForm, ArticleHeaderForm)
 from ..models import Article, Folder
 from ..helpers import search_knowledgebase, get_knowledgebase
@@ -42,7 +41,7 @@ class KnowledgeBaseView(View):
         edit_folder_form = FolderForm(folder_id=folder_id,
                                       prefix='edit_folder')
 
-        # Querying to get the current folders content
+        # Query's to get the current folders content if search is provided
         if search_form.data.get('query') and search_form.is_valid():
             query = search_form.cleaned_data['query']
             folder_content = search_knowledgebase(query, kb_user, request.user)
@@ -88,6 +87,10 @@ class KnowledgeBaseView(View):
 
 
 class KB_ArticleEditView(View):
+    """
+    View to update jtsu the header information of an Article
+    """
+
     def post(self, request, **kwargs):
         article_id = kwargs.pop('pk', None)
         instance = Article.objects.get(id=article_id)

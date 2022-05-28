@@ -1,17 +1,17 @@
 from django.urls import path
 from rest_framework.schemas import get_schema_view
+from SimpleKB.utils.api.schema_generators import ServerSchemaGenerator
 from .views import DashboardView, MessagesView, NewMessageView, MessageDetailView
 from .api.views import (FollowerListView, FollowingListView, FollowUnfollowView,
                         MessagesListView, NotificationsListView)
-from SimpleKB.utils.api.schema_generators import ServerSchemaGenerator
 
 
 app_name = 'social'
 urlpatterns = [
-    path('Dashboard/<str:username>', DashboardView.as_view(), name='dashboard'),
-    path('Messages', MessagesView.as_view(), name='messages'),
-    path('NewMessage', NewMessageView.as_view(), name='new_message'),
-    path('Messages/<str:username>', MessageDetailView.as_view(), name='message_detail'),
+    path('dashboard/<str:username>', DashboardView.as_view(), name='dashboard'),
+    path('messages', MessagesView.as_view(), name='messages'),
+    path('messages/create', NewMessageView.as_view(), name='new_message'),
+    path('messages/detail/<str:username>', MessageDetailView.as_view(), name='message_detail'),
 
 
     # API endpoints

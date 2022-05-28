@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.conf import settings
-from django.contrib.auth import (authenticate, login, logout, get_user,
-                                 get_user_model, update_session_auth_hash)
+from django.contrib.auth import (authenticate, login, get_user,
+                                 update_session_auth_hash)
 from django.contrib import messages
 from .forms import UserRegisterationForm, UserSettingsForm, ChangePasswordForm
 

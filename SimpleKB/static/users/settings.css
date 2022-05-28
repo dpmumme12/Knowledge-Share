@@ -1,5 +1,21 @@
+.account-settings-form {
+    width: 450px;
+}
+
+.delete-account-div {
+    border: 0.2px solid rgb(216, 0, 0);
+    height: 80px;
+    width: 300px;
+    padding: 20px;
+}
+
 .settings-div {
     display: inline-flex;
+}
+
+.settings-nav {
+    flex-direction: column;
+    padding-right: 20px;
 }
 
 .settings-nav-border {
@@ -11,11 +27,6 @@
     background-color: currentColor;
     opacity: .25;
     height: 600px;
-}
-
-.settings-nav {
-    flex-direction: column;
-    padding-right: 20px;
 }
 
 .settings-nav-item {
@@ -30,17 +41,6 @@
 
 .settings-tab-content {
     padding-left: 25px;
-}
-
-.account-settings-form {
-    width: 450px;
-}
-
-.delete-account-div {
-    border: 0.2px solid rgb(216, 0, 0);
-    height: 80px;
-    width: 300px;
-    padding: 20px;
 }
 
 @media all and (max-width:650px) {
@@ -58,11 +58,6 @@
         flex-direction: row;
         padding-right: 0px;
     }
-
-    .settings-tab-content {
-        padding-left: 0px;
-        padding-top: 10px;
-    }
     
     .settings-nav-border {
         display: block;
@@ -73,5 +68,10 @@
         opacity: .25;
         height: auto;
         border-bottom: 1px solid currentColor;
+    }
+
+    .settings-tab-content {
+        padding-left: 0px;
+        padding-top: 10px;
     }
 }

@@ -41,7 +41,7 @@ class ChangePasswordForm(PasswordChangeForm):
 
 class UserSettingsForm(forms.ModelForm):
     """
-    Settings form to set alter user's data
+    Settings form to alter user's data
     """
     prefix = 'change_folder'
 

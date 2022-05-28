@@ -22,7 +22,7 @@
 header.masthead {
   position: relative;
   overflow: hidden;
-  padding-top: calc(15rem + 72px);
+  padding-top: calc(10rem + 72px);
   padding-bottom: 7rem;
   background-image: url("/static/images/5559852.jpg");
   background-repeat: no-repeat;

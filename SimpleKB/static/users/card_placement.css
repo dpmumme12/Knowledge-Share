@@ -10,20 +10,20 @@ body {
     transform: translateY(20%);
 }
 
-.password-reset-card-placement {
-    width: 30%;
-    margin: 0;
-    position: relative;
-    -ms-transform: translateY(150%);
-    transform: translateY(150%);
-}
-
 .password-confirm-card-placement {
     width: 30%;
     margin: 0;
     position: relative;
     -ms-transform: translateY(100%);
     transform: translateY(100%);
+}
+
+.password-reset-card-placement {
+    width: 30%;
+    margin: 0;
+    position: relative;
+    -ms-transform: translateY(150%);
+    transform: translateY(150%);
 }
 
 .password-email-sent-card-placement {
@@ -42,14 +42,6 @@ body {
         transform: translateY(22%);
     }
 
-    .password-reset-card-placement {
-        width: 100%;
-        margin: 0;
-        position: relative;
-        -ms-transform: translateY(150%);
-        transform: translateY(150%);
-    }
-
     .password-confirm-card-placement {
         width: 100%;
         margin: 0;
@@ -64,6 +56,14 @@ body {
         position: relative;
         -ms-transform: translateY(400%);
         transform: translateY(400%);
+    }
+
+    .password-reset-card-placement {
+        width: 100%;
+        margin: 0;
+        position: relative;
+        -ms-transform: translateY(150%);
+        transform: translateY(150%);
     }
   }
   

@@ -2,6 +2,10 @@ body {
     background-image: url("/static/images/5559852.jpg"); 
 }
 
+.text-white {
+  color: white;
+}
+
 .vertical-center {
     margin: 0;
     position: relative;
@@ -15,20 +19,15 @@ body {
     transform: translateY(150%);
 }
 
-.text-white {
-    color: white;
-}
-
   @media all and (max-width:992px) {
-      .vertical-center {
-        -ms-transform: translateY(0);
-        transform: translateY(0);
-      }
-
-      .welcome-heading {
-          text-align: center;
-        -ms-transform: translateY(0);
-        transform: translateY(0);
-    
+    .vertical-center {
+      -ms-transform: translateY(0);
+      transform: translateY(0);
     }
+
+    .welcome-heading {
+        text-align: center;
+      -ms-transform: translateY(0);
+      transform: translateY(30%);
+  }
   }

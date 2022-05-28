@@ -3,13 +3,9 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import View, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.db.models import Q
 from django.contrib import messages
-from datetime import datetime
 from ..forms import ArticleForm, ArticleUserForm
-from ..models import Article, ArticleImage, Folder
+from ..models import Article, ArticleImage
 from ..helpers import publish_article, create_new_version
 
 
@@ -51,6 +47,8 @@ class ArticleEditView(View):
     template_name = 'knowledgebase/article_edit.html'
 
     def get(self, request, article_id=None):
+
+        # Creates new article if no id is supplied
         if article_id is None:
             article = Article.objects.create(
                 author=request.user,
@@ -72,9 +70,19 @@ class ArticleEditView(View):
         })
 
     def post(self, request, article_id):
+        """
+        Updates an article instance and takes extra
+        actions if a submit_type is supllied.
+
+        Submit types:
+        1. New_Version: Creates new version of the article.
+        2. Publish: Publishes the article.
+        """
+
         article = get_object_or_404(Article, id=article_id)
         form = ArticleForm(request.POST, user=request.user, instance=article)
         submit_type = request.POST['SubmitButton']
+
         if submit_type:
             submit_type = int(submit_type)
 
@@ -105,6 +113,8 @@ class ArticleDeleteView(SuccessMessageMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
+        # If deleting active version fo article.
+        # Deletes all versions as well
         if self.object.version_status_id == Article.Version_Status.ACTIVE:
             Article.objects.filter(uuid=self.object.uuid).delete()
         else:
@@ -139,4 +149,5 @@ class RemoveForeignArticleView(View):
         article.foreign_users.remove(request.user)
         messages.success(request, 'Article removed from knowledgebase!')
 
+        # Redirects back to the url that mad ethe request
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

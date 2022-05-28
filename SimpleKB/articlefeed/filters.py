@@ -14,6 +14,9 @@ def get_following(request):
     return USER_MODEL.objects.get(id=request.user.id).following.all()
 
 class ArticleFeedFilter(FilterSet):
+    """
+    Filter used for searching articles.
+    """
     search_query = filters.CharFilter(
         label='Search:',
         method='search_filter',

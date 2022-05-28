@@ -3,18 +3,17 @@ from django.db.models import Exists, OuterRef, Q
 from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
-from rest_framework.generics import ListAPIView, CreateAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.schemas.openapi import AutoSchema
 from SimpleKB.utils.api.schema_generators import SerializerSchemaMixin
 from SimpleKB.utils.api.pagination import SmallResultSetPagination
+from ..models import Message, Notification
 from .serializers import (UserFollowSerializer, FollowUnFollowSerializer,
                           MessagesSerializer, NotificationsSerializer)
-from ..models import Message, Notification
 
 USER_MODEL = get_user_model()
 

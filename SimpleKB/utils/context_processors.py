@@ -1,6 +1,10 @@
 from SimpleKB.social.models import Notification
 
 def notifications(request):
+    """
+    Context processor that gets the users unread
+    notifications count for the context.
+    """
     if not request.user.is_authenticated:
         return {}
     notification_count = (Notification

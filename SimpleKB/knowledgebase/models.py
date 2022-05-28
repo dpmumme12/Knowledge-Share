@@ -2,7 +2,6 @@ import uuid as uuid_lib
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from SimpleKB.utils.models import TimeStampedModel
@@ -45,6 +44,17 @@ class ArticleImage(models.Model):
     image = models.ImageField()
 
 
+class Article_User(models.Model):
+    article = models.ForeignKey('Article', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    folder = models.ForeignKey('Folder', on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['article', 'user'], name='unique article_user')
+        ]
+
+
 class Folder(TimeStampedModel):
     name = models.CharField(max_length=200)
     parent_folder = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
@@ -59,14 +69,3 @@ class Folder(TimeStampedModel):
         Returns a list of the users folders
         """
         return list(Folder.objects.filter(owner=user))
-
-
-class Article_User(models.Model):
-    article = models.ForeignKey('Article', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    folder = models.ForeignKey('Folder', on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['article', 'user'], name='unique article_user')
-        ]

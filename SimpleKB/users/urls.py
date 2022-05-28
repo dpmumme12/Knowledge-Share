@@ -6,7 +6,7 @@ from .forms import LoginForm, ResetPasswodForm, PasswordSetForm
 app_name = 'users'
 urlpatterns = [
     path('', RegisterationView.as_view(), name='register'),
-    path('Login', auth_views.LoginView.as_view(
+    path('login', auth_views.LoginView.as_view(
         template_name='users/login.html',
         authentication_form=LoginForm), name='login'),
     path('logout', auth_views.logout_then_login, name='logout'),
@@ -22,6 +22,6 @@ urlpatterns = [
         post_reset_login=True,
         success_url=reverse_lazy('knowledgebase:dashboard'),
         form_class=PasswordSetForm), name='password_reset_confirm'),
-    path('Settings', UserSettingsView.as_view(), name='settings'),
-    path('Delete/Account', DeleteAccountView.as_view(), name='delete_account'),
+    path('settings', UserSettingsView.as_view(), name='settings'),
+    path('delete/Account', DeleteAccountView.as_view(), name='delete_account'),
 ]

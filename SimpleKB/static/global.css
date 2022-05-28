@@ -1,87 +1,3 @@
-body  {
-    background-color: rgb(245, 245, 245);
-}
-
-.col-nav {
-    flex: 0 0 auto;
-    width: 70px;
-}
-
-.main-body {
-    padding-left: 3%;
-    padding-right: 3%;
-}
-
-.rounded-corners {
-    border-radius: 20px;
-}
-
-.nav-bar-col {
-    width: 70px;
-    max-width: 70px;
-    min-width: 70px;
-    position: fixed;
-    z-index: 999;
-    height: 100%;
-    text-align: center;
-}
-
-.nav-bg-color {
-    background-color:  #385a86;
-}
-
-.nav-item {
-    padding-top: 30px;
-    padding-bottom: 25px;
-}
-
-.nav-icon {
-    color: rgba(255,255,255,0.6);
-}
-
-.icon-active {
-    color: aliceblue;
-}
-
-.nav-icon:hover, .icon-active:hover  {
-    color: aliceblue;
-}
-
-.mobile-nav-bar {
-    display: none;
-}
-
-.header {
-    text-align: right;
-}
-
-.top-right-menu {
-    padding-top: 10px;
-    display: inline-block;
-}
-
-.top-right-menu-item {
-    text-align: right;
-    display: inline;
-    padding-left: 15px;
-}
-
-.top-right-menu-icon {
-    color: gray;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-.top-right-menu-img {
-    height: 33px;
-    width: 33px;
-    margin-bottom: 6px;
-}
-
-.badge {
-    font-size: 12px;
-}
-
 .alert {
     height: 30px;
     margin: auto;
@@ -110,8 +26,92 @@ body  {
     opacity: 0.55;
 }
 
+.badge {
+    font-size: 12px;
+}
+
+body  {
+    background-color: rgb(245, 245, 245);
+}
+
+.col-nav {
+    flex: 0 0 auto;
+    width: 70px;
+}
+
 .form-errors {
     color: rgb(225, 0, 0);
+}
+
+.header {
+    text-align: right;
+}
+
+.icon-active {
+    color: aliceblue;
+}
+
+.main-body {
+    padding-left: 3%;
+    padding-right: 3%;
+}
+
+.mobile-nav-bar {
+    display: none;
+}
+
+.nav-bar-col {
+    width: 70px;
+    max-width: 70px;
+    min-width: 70px;
+    position: fixed;
+    z-index: 999;
+    height: 100%;
+    text-align: center;
+}
+
+.nav-bg-color {
+    background-color:  #385a86;
+}
+
+.nav-icon {
+    color: rgba(255,255,255,0.6);
+}
+
+.nav-icon:hover, .icon-active:hover  {
+    color: aliceblue;
+}
+
+.nav-item {
+    padding-top: 30px;
+    padding-bottom: 25px;
+}
+
+.rounded-corners {
+    border-radius: 20px;
+}
+
+.top-right-menu {
+    padding-top: 10px;
+    display: inline-block;
+}
+
+.top-right-menu-icon {
+    color: gray;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.top-right-menu-img {
+    height: 33px;
+    width: 33px;
+    margin-bottom: 6px;
+}
+
+.top-right-menu-item {
+    text-align: right;
+    display: inline;
+    padding-left: 15px;
 }
 
 @media all and (max-width:992px) {

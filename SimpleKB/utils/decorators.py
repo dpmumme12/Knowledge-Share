@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
 
-def athenticated_user(view_func):
+def authenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('index')
