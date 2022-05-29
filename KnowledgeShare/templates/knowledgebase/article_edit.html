@@ -1,0 +1,92 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block title %}
+Edit Article - {{article.title}}
+{% endblock title %}
+
+{% block styles %}
+<script src="{% static 'knowledgebase/article_edit.js' %}"></script>
+{{ArticleForm.media}}
+<link rel="stylesheet" href="{% static 'knowledgebase/article_edit.css' %}">
+{% endblock styles %}
+
+{% block body %}
+<div class="editor-wrapper">
+    <div class="pb-3">
+        <div class="pb-5 d-inline-block float-end">
+                <div class="pe-2 d-inline-block">
+                    {% if  article.version_status_id == article.Version_Status.ACTIVE %}
+                        <button class="btn btn-danger confirmation-popup-class action-button" 
+                                type="submit"
+                                data-confirm-text="Deleting active version of article will delete every version. Are you sure?"
+                                data-confirm-url="{% url 'knowledgebase:article_delete' article.id %}">Delete Article</button>
+                    {% else %}
+                        <button class="btn btn-danger confirmation-popup-class action-button" 
+                            type="submit"
+                            data-confirm-text="Delete article version?"
+                            data-confirm-url="{% url 'knowledgebase:article_delete' article.id %}">Delete Version</button>
+                    {% endif %}
+                </div>
+            {% if article.article_status_id == article.Article_Status.DRAFT or article.article_status_id == article.Article_Status.PUBLISHED %}
+                <div class="pe-2 d-inline-block">
+                    <button class="btn btn-info action-button" type="submit" name="SubmitButton" form="ArticleForm">Save</button>
+                </div>
+                {% if article.article_status_id == article.Article_Status.DRAFT %}
+                    <div class="pe-3 d-inline-block end-div">
+                        <button class="btn btn-success action-button" type="submit" name="SubmitButton" value={{article.Article_Status.PUBLISHED}} form="ArticleForm">Publish</button>
+                    </div>
+                {% else %}
+                    <div class="pe-3 d-inline-block end-div">
+                        <button class="btn btn-success action-button" type="submit" name="SubmitButton" value={{article.Version_Status.NEW_VERSION}} form="ArticleForm">Create New Version</button>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="d-inline-block">
+            <a id="actions-dropdown" class="form-select text-decoration-none article-versions" data-bs-toggle="dropdown">
+                Version {{article.version}} - {{article.get_version_status_id_display}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for version in article_versions %}
+                <li>
+                    <a class="dropdown-item article-versions-item" {% if version.id != article.id %}href="{% url 'knowledgebase:article_edit' version.id %}"{% endif %}>
+                        Version {{version.version}} - {{version.get_version_status_id_display}}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <form method="post" id="ArticleForm">
+        {% csrf_token %}
+        <div class="pb-4 d-inline-block col-12">
+            <div class="d-inline-block col-sm-8 article-title">
+                <label for="{{ ArticleForm.title.id_for_label }}">Title:</label>
+                {{ ArticleForm.title }}
+                <div class="form-errors">{{ ArticleForm.title.errors }}</div>
+            </div>
+            <div class="d-inline-block col-sm-2 folder-dropdown">
+                <label for="{{ ArticleForm.folder.id_for_label }}">Folder:</label>
+                {{ ArticleForm.folder }}
+                <div class="form-errors">{{ ArticleForm.folder.errors }}</div>
+            </div>
+        </div>
+        <div class="pb-3">
+            {{ ArticleForm.content }}
+            <div class="form-errors">{{ ArticleForm.content.errors }}</div>
+        </div>
+    </form>
+</div>
+
+{% include 'blocks/confirmation_popup.html' %}
+
+{% endblock %}
+
+{% block base_knowledegebase_scripts %}
+{% url 'knowledgebase:article_image_upload' as image_uplaod_url %}
+{{image_uplaod_url|json_script:"article_upload_url"}}
+{{article.id|json_script:"article_id"}}
+<script>var token = '{{csrf_token}}';</script>
+{% endblock base_knowledegebase_scripts %}

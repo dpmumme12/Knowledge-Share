@@ -1,0 +1,61 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block meta %}
+<meta name="description" content="View what others have shared by looking the article feed.">
+{% endblock meta %}
+
+{% block title %}
+Article Feed
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'articlefeed/articlefeed.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+<div class="pt-2" style="height: 100%;">
+    <div class="col-md-3 d-inline-block filters-div">
+        <h4 class="desktop-filters-header">Filters</h4>
+        <div class="mobile-filters-header">
+            <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              Filters
+            </button>
+          </h2>
+        </div>
+        <div id="flush-collapseOne" class="collapse"  aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+        <form id="search-form" >
+            {{filter_form.form.as_p}}
+            <button type="submit" class="btn btn-info">Search</button>
+        </form>
+        </div>
+    </div>
+    
+    <div class="col-md-9 d-inline-block articles-div pb-5">
+        <div class="col-md-11" style="background-color: white; padding: 25px;">
+            <h2>Articles</h2>
+            <hr>
+            <ul id="article-list" class="list-group list-group-flush">
+            </ul>
+            <div class="loader">
+                <div class="text-center">
+                    <div class="spinner-grow text-info" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="articleList-load-more-btn" class="text-center pt-2"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
+
+{% block base_knowledegebase_scripts %}
+{% static 'images/user.png' as default_user_img %}
+{% url 'articlefeed:article_list' as articlefeed_api_url %}
+{{articlefeed_api_url|json_script:"articlefeed_api_url"}}
+{{default_user_img|json_script:"default_user_img"}}
+<script src="{% static 'articlefeed/articlefeed.js' %}"></script>
+{% endblock base_knowledegebase_scripts %}

@@ -1,0 +1,19 @@
+.article {
+    padding-top: 15px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.profile-img {
+    width: 70px;
+    height: 70px;
+}
+
+@media all and (max-width: 500px) {
+    .article {
+        padding-top: 60px;
+    }
+}

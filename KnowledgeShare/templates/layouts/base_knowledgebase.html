@@ -1,0 +1,95 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block main %}
+
+<div class="container-fluid">
+  <div class="row">
+    <!--   Desktop Navbar    -->
+    {% include "blocks/desktop_navbar.html" %}
+    <!--   Mobile Navbar    -->
+    {% include "blocks/mobile_navbar.html" %}
+    <!--   Main body    -->
+    <div class="col g-0">
+      <div id="messages">
+        {% if messages %}
+            {% for message in messages %}
+              <div id="message_{{ forloop.counter }}"
+                  class="{% if message.tags %} alert-{{message.tags}} {% endif %} alert d-flex align-items-center alert-dismissible fade show animate__animated animate__fadeInDown">
+            
+                    <svg class="bi flex-shrink-0 me-2" width="17" height="17" role="img">
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <use xlink:href="#info-fill"/>
+                      {% endif %}
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <use xlink:href="#check-circle-fill"/>
+                      {% endif %}
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                      {% endif %}
+                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                      {% endif %}
+                    </svg>
+
+                  {{ message }}
+                <a class="alert-close-button" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></a>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      <div class="main-body text-break">
+        <div class="header pb-3">
+          <div class="top-right-menu">
+            {% if request.user.is_authenticated %}
+            <div class="top-right-menu-item">
+              <a id="notifications-toggle" class="top-right-menu-icon position-relative">
+                <i class="fa-solid fa-bell"></i>
+                <span id="notification-count" class="position-absolute top-100 start-100 translate-middle badge rounded-pill bg-danger badge">{{notifications}}</span>
+              </a>
+            </div>
+            {% endif %}
+            <div class="top-right-menu-item">
+              <a class="top-right-menu-icon dropdown" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                <img src="{% if request.user.profile_image %}{{request.user.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle top-right-menu-img">
+              </a>
+              <ul class="dropdown-menu">
+                {% if request.user.is_authenticated %}
+                <li><a class="dropdown-item" href="{% url 'users:logout' %}"><i class="fa-solid fa-right-from-bracket pe-3"></i>Logout</a></li>
+                {% else %}
+                <li><a class="dropdown-item" href="{% url 'users:login' %}"><i class="fa-solid fa-right-to-bracket pe-3"></i>Login</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {% block body %}
+        {% endblock body %}
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="notifications-canvas" aria-labelledby="notificationsLabel">
+          <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">Notifications</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul id="notifications-list" class="list-group">
+            </ul>
+            <div id="load-more-btn" class="text-center pt-2">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock main %}
+
+{% block scripts %}
+{% url 'social:notifications' as notifications_url %}
+{{notifications_url|json_script:"notifications_url"}}
+<script src="{% static 'layouts/base_knowledgebase.js' %}"></script>
+{% block base_knowledegebase_scripts %}
+{% endblock base_knowledegebase_scripts %}
+{% endblock scripts %}

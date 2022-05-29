@@ -24,11 +24,12 @@ urlpatterns = [
          TemplateView.as_view(template_name='landingpage/landingpage.html'),
          name='landing_page'),
     path('admin/', admin.site.urls),
-    path('social/', include('SimpleKB.social.urls', namespace='social')),
-    path('knowledgebase/', include('SimpleKB.knowledgebase.urls', namespace='knowledgebase')),
-    path('users/', include('SimpleKB.users.urls', namespace='users')),
-    path('articlefeed/', include('SimpleKB.articlefeed.urls', namespace='articlefeed')),
+    path('social/', include('KnowledgeShare.social.urls', namespace='social')),
+    path('users/', include('KnowledgeShare.users.urls', namespace='users')),
+    path('articlefeed/', include('KnowledgeShare.articlefeed.urls', namespace='articlefeed')),
     path('tinymce/', include('tinymce.urls')),
+    path('knowledgebase/',
+         include('KnowledgeShare.knowledgebase.urls', namespace='knowledgebase')),
 ]
 
 if settings.DEBUG:

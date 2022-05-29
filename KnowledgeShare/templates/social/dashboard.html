@@ -1,0 +1,116 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block title %}
+Dashboard
+{% endblock title %}
+
+{% block meta %}
+<meta name="description" content="Dashboard of a user's account/profile,">
+<meta property="og:description" content="View {{dashboard_user.username}}'s profile!">
+{% endblock meta %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'social/dashboard.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+<div class="pb-5">
+<div class="card text-center w-100">
+    <div class="card-body">
+      <div class="card-title">
+        <div>
+            <img src="{% if dashboard_user.profile_image %}{{dashboard_user.profile_image.url}}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Picture" class="rounded-circle profile-img">
+        </div>
+        {% if  dashboard_user.first_name and dashboard_user.last_name %}
+            <h4>
+                {{dashboard_user.first_name}} {{dashboard_user.last_name}}
+            </h4>
+        {% endif %}
+        <h5>
+            @{{dashboard_user.username}}
+        </h5>
+        <div class="pt-2">
+            <div id="following-div" class="d-inline-block pe-3 follow-div" data-url="{% url 'social:following' dashboard_user.id %}">
+                <h6>following</h6>
+                <p>{{dashboard_user.count_following}}</p>
+            </div>
+            <div id="followers-div" class="d-inline-block ps-3 follow-div" data-url="{% url 'social:followers' dashboard_user.id %}">
+                <h6>followers</h6>
+                <p id="follower-count">{{dashboard_user.count_followers}}</p>
+            </div>
+        </div>
+      </div>
+      <p class="card-text">{{dashboard_user.bio}}</p>
+      {% if not dashboard_user == request.user and request.user.is_authenticated %}
+      {% if not dashboard_user in request.user.following.all %}
+        <button id="main-follow-button" class="btn btn-primary" data-id="{{dashboard_user.id}}">Follow</button>
+      {% else %}
+        <button id="main-follow-button" class="btn btn-danger"  data-id="{{dashboard_user.id}}">Unfollow</button>
+      {% endif %}
+      {% endif %}
+    </div>
+</div>
+<div class="pt-4 pb-3">
+  <div class="pb-4 activity-card d-inline-block">
+    <div class="card text-center pt-2">
+        <div class="card-body">
+          <h3 class="card-title">Recent articles</h3>
+          <div class="border-bottom pt-1"></div>
+          <ul class="list-group list-group-flush">
+            {% for article in recent_articles %}
+            <li class="list-group-item text-start">
+              <h4 class="mb-0">{{article.title}}</h4>
+              <small>Updated on: {{article.updated_on}}</small>
+              <p class="pt-2">{{article.content|striptags|truncatewords_html:20}}&nbsp;&nbsp;<a href="{% url 'knowledgebase:article' article.id %}">view more</a></p>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-start">
+              <p class="pt-2 mb-0">No activity yet...</p>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
+  </div>
+  <div class="kb-card activity-card d-inline-block float-end">
+    <div class="card text-center pt-2">
+      <div class="card-body">
+        <h4 class="card-title">Check out {% if  dashboard_user.first_name and dashboard_user.last_name %} 
+                                          {{dashboard_user.first_name}} {{dashboard_user.last_name}}'s 
+                                        {% else %} {{dashboard_user.username}}'s 
+                                        {% endif %} knowledgebase</h4>
+        <div class="pt-4">
+        <a href="{% url 'knowledgebase:kb' dashboard_user.username %}" class="btn btn-primary">View knowledgebase</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- modals -->
+<div id="following-followers-popup" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="modal-title" class="modal-title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <ul id="modal-list" class="list-group list-group-flush">
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}
+
+{% block base_knowledegebase_scripts %}
+{% static 'images/user.png' as default_user_img %}
+{{default_user_img|json_script:"default_user_img"}}
+{{request.user.id|json_script:"user_id"}}
+<script src="{% static 'social/dashboard.js' %}"></script>
+{% endblock base_knowledegebase_scripts %}
