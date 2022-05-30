@@ -1,5 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
 import json
+import sys
 from .base import *
 
 # JSON-based secrets module
@@ -37,6 +38,12 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'TestDB'
+    }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
