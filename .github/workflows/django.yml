@@ -7,8 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  DJANGO_SETTINGS_MODULE: 'config.settings.prd'
-  DJANGO_SECRET_KEY: 'Django-insecure_Test-secret-key1234567uyjh'
+  DJANGO_SETTINGS_MODULE: 'config.settings.ci_testing'
 
 jobs:
   build:
