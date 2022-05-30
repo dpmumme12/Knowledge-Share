@@ -1,5 +1,5 @@
 """
-WSGI config for simpleKB project.
+WSGI config for simpleKB project. 
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
