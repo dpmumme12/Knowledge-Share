@@ -1,11 +1,10 @@
-from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import RequestFactory, TestCase
-
 from ..views import DashboardView, MessagesView, MessageDetailView, NewMessageView
 
 USER_MODEL = get_user_model()
+
 
 class SocialViewsTest(TestCase):
     def setUp(self):

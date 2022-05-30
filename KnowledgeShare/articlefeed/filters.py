@@ -1,17 +1,18 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django_filters import FilterSet, filters
-from pkg_resources import empty_provider
 from KnowledgeShare.knowledgebase.models import Article
 from KnowledgeShare.knowledgebase.helpers import article_fulltext_search
 
 USER_MODEL = get_user_model()
+
 
 def get_following(request):
     if not request or not request.user.is_authenticated:
         return USER_MODEL.objects.none()
 
     return USER_MODEL.objects.get(id=request.user.id).following.all()
+
 
 class ArticleFeedFilter(FilterSet):
     """

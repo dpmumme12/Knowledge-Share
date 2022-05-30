@@ -48,6 +48,7 @@ class ArticleHeaderForm(forms.ModelForm):
             self.fields['folder'].choices += [(folder.id, folder.name)
                                               for folder in self.folders]
 
+
 class FolderForm(forms.ModelForm):
     """
     Form to create/edit folder.

@@ -9,6 +9,7 @@ from .serializers import ArticleFeedSerializer
 
 USER_MODEL = get_user_model()
 
+
 class ArticleFeedListView(ListAPIView):
     serializer_class = ArticleFeedSerializer
     pagination_class = SmallResultSetPagination

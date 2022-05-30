@@ -3,6 +3,7 @@ from django.conf import settings
 from django.urls import reverse
 from KnowledgeShare.utils.models import TimeStampedModel
 
+
 # Create your models here.
 class Message(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL,

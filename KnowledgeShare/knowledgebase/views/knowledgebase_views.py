@@ -12,6 +12,7 @@ from ..forms import (FolderForm, BulkChangeFolderForm, BulkDeleteForm,
 from ..models import Article, Folder
 from ..helpers import search_knowledgebase, get_knowledgebase
 
+
 # Create your views here.
 class KnowledgeBaseView(View):
     template_name = 'knowledgebase/knowledgebase.html'

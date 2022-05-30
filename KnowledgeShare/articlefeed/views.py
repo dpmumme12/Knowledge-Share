@@ -5,6 +5,7 @@ from .filters import ArticleFeedFilter
 
 USER_MODEL = get_user_model()
 
+
 # Create your views here.
 class ArticleFeedView(View):
     template_name = 'articlefeed/articlefeed.html'

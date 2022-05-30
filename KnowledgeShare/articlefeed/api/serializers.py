@@ -4,6 +4,7 @@ from KnowledgeShare.knowledgebase.models import Article
 
 USER_MODEL = get_user_model()
 
+
 class ArticleFeedSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_author_username')
     profile_img = serializers.SerializerMethodField('get_author_profile_img')

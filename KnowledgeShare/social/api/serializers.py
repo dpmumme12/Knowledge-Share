@@ -4,6 +4,7 @@ from ..models import Message, Notification
 
 USER_MODEL = get_user_model()
 
+
 class FollowUnFollowSerializer(serializers.Serializer):
     is_following = serializers.BooleanField()
     user_id = serializers.IntegerField()
@@ -19,6 +20,7 @@ class NotificationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'message', 'user', 'seen', 'created_on']
+
 
 class UserFollowSerializer(serializers.ModelSerializer):
     is_following = serializers.BooleanField(default=False)

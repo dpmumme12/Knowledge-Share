@@ -7,6 +7,7 @@ from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from KnowledgeShare.utils.models import TimeStampedModel
 
+
 # Create your models here.
 class Article(TimeStampedModel):
 

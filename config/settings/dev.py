@@ -6,6 +6,7 @@ from .base import *
 with open('dev_env.json') as f:
     env_vars = json.load(f)
 
+
 def get_env_var(var, env_vars=env_vars):
     '''Get the secret variable or return explicit exception.'''
     try:
@@ -13,6 +14,7 @@ def get_env_var(var, env_vars=env_vars):
     except KeyError:
         error_msg = f'Set the {var} environment variable'
     raise ImproperlyConfigured(error_msg)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-_r%7wu1$(4_r0l-1zvcr#_ut1(u%s49t2)h6!%dbdbqnmqvbna'

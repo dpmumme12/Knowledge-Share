@@ -10,6 +10,7 @@ from .models import Message
 
 USER_MODEL = get_user_model()
 
+
 # Create your views here.
 class DashboardView(View):
     template_name = 'social/dashboard.html'

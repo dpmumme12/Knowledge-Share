@@ -5,6 +5,7 @@ from ..models import Article
 
 USER_MODEL = get_user_model()
 
+
 class ArticleViewsTest(TestCase):
     def setUp(self):
         self.test_user1 = USER_MODEL.objects.create_user(

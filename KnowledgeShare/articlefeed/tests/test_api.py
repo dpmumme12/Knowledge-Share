@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase
 
 USER_MODEL = get_user_model()
 
+
 class ArticleFeedAPITestCases(APITestCase):
     def setUp(self):
         self.test_user = USER_MODEL.objects.create_user(

@@ -6,6 +6,7 @@ from ..models import Notification
 
 USER_MODEL = get_user_model()
 
+
 class SocialAPITestCases(APITestCase):
     def setUp(self):
         self.test_user = USER_MODEL.objects.create_user(

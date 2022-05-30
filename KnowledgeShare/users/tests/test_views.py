@@ -4,6 +4,7 @@ from django.test import RequestFactory, TestCase
 
 USER_MODEL = get_user_model()
 
+
 class UsersViewsTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()

@@ -4,6 +4,7 @@ from django.test import TestCase
 
 USER_MODEL = get_user_model()
 
+
 class ArticleFeedViewsTest(TestCase):
 
     def test_articlefeed_view(self):

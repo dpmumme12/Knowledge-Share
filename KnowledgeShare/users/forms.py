@@ -3,6 +3,7 @@ from django.contrib.auth.forms import (UserCreationForm, AuthenticationForm, Pas
                                        PasswordResetForm, SetPasswordForm)
 from .models import User
 
+
 class UserRegisterationForm(UserCreationForm):
     """
     Inherits Django's UserCreationForm to create new users with no privileges

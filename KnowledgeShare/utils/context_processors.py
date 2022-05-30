@@ -1,5 +1,6 @@
 from KnowledgeShare.social.models import Notification
 
+
 def notifications(request):
     """
     Context processor that gets the users unread
