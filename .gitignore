@@ -3,3 +3,5 @@ commands.txt
 app/env.json
 .vscode/
 dev_env.json
+logs/*
+KnowledgeShare/media/*
