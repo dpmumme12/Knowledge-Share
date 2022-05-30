@@ -8,6 +8,7 @@ on:
 
 env:
   DJANGO_SETTINGS_MODULE: 'config.settings.prd'
+  DJANGO_SECRET_KEY: 'Django-insecure_Test-secret-key1234567uyjh'
 
 jobs:
   build:
