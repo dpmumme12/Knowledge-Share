@@ -1,4 +1,4 @@
-from django.db.models import F, Sum, Q, QuerySet
+from django.db.models import F, Sum, QuerySet
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.search import (SearchQuery, SearchVector,
                                             SearchRank, TrigramSimilarity as trgm_sim)
@@ -31,37 +31,6 @@ def article_fulltext_search(queryset: QuerySet, query: str) -> QuerySet:
                 )
 
     return queryset
-
-
-def create_new_version(article: Article) -> Article:
-    """
-    Creates a new version of an article.
-
-    Args:
-        (article) required: The article to create
-        a new version for.
-    """
-
-    (Article
-     .objects
-     .filter(uuid=article.uuid, version_status_id=Article.Version_Status.NEW_VERSION)
-     .delete()
-     )
-    new_version = (Article
-                   .objects
-                   .create(author=article.author,
-                           title=article.title,
-                           slug=article.slug,
-                           article_status_id=Article.Article_Status.DRAFT,
-                           content=article.content,
-                           version=article.version + 1,
-                           version_status_id=Article.Version_Status.NEW_VERSION,
-                           uuid=article.uuid,
-                           folder=article.folder
-                           )
-                   )
-
-    return new_version
 
 
 def folder_fulltext_search(queryset: QuerySet, query: str) -> QuerySet:
@@ -111,10 +80,10 @@ def get_knowledgebase(folder_id: int, kb_user: USER_MODEL,
     try:
         foreign_articles = (USER_MODEL
                             .objects
-                            .get(id=kb_user.id, article_user__folder=folder_id)
+                            .get(id=kb_user.id)
                             .foreign_articles
                             .annotate(article_user_id=F('article_user__id'))
-                            .filter()
+                            .filter(article_user__folder=folder_id)
                             .select_related('author')
                             )
     except USER_MODEL.DoesNotExist:
@@ -129,28 +98,6 @@ def get_knowledgebase(folder_id: int, kb_user: USER_MODEL,
                         if isinstance(x, Folder) else x.title.lower())
 
     return folder_content
-
-
-def publish_article(article: Article) -> Article:
-    """
-    Takes and Article instance and publishes it.
-
-    Args:
-        (article) required: The article instance to be published.
-    """
-
-    (Article
-     .objects
-     .filter(Q(uuid=article.uuid), ~Q(id=article.id))
-     .update(article_status_id=Article.Article_Status.ARCHIVED,
-             version_status_id=Article.Version_Status.HISTORY)
-     )
-
-    article.article_status_id = Article.Article_Status.PUBLISHED
-    article.version_status_id = Article.Version_Status.ACTIVE
-    article.save()
-
-    return article
 
 
 def search_knowledgebase(query: str, kb_user: USER_MODEL,

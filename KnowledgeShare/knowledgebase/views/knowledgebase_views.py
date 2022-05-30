@@ -89,7 +89,7 @@ class KnowledgeBaseView(View):
 
 class KB_ArticleEditView(LoginRequiredMixin, View):
     """
-    View to update jtsu the header information of an Article
+    View to update just the header information of an Article
     """
 
     def post(self, request, **kwargs):

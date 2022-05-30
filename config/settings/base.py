@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import django
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -21,14 +20,8 @@ APPS_DIR = BASE_DIR / 'KnowledgeShare'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_r%7wu1$(4_r0l-1zvcr#_ut1(u%s49t2)h6!%dbdbqnmqvbna'
-
-ALLOWED_HOSTS = ['*']
-
 
 # Application definition
-
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,6 +52,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -137,26 +131,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-MEDIA_ROOT = APPS_DIR / 'media'
 STATIC_ROOT = APPS_DIR / 'static_root'
 STATICFILES_DIRS = [APPS_DIR / 'static']
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Rest Framework settings
-
-REST_FRAMEWORK = {
-    'URL_FIELD_NAME': 'http://127.0.0.1:8000'
-}
-
-
 # TinyMCE Settings
-
 TINYMCE_SPELLCHECKER = True
 
 TINYMCE_DEFAULT_CONFIG = {

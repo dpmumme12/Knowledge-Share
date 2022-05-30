@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from ..forms import ArticleForm, ArticleUserForm
 from ..models import Article, ArticleImage
-from ..helpers import publish_article, create_new_version
 
 
 class ArticleView(View):
@@ -58,7 +57,7 @@ class ArticleEditView(LoginRequiredMixin, View):
             )
             return redirect('knowledgebase:article_edit', article_id=article.id)
 
-        current_article = get_object_or_404(Article, id=article_id)
+        current_article = get_object_or_404(Article, id=article_id, author=request.user)
         article_versions = (Article
                             .objects
                             .filter(uuid=current_article.uuid)
@@ -80,7 +79,7 @@ class ArticleEditView(LoginRequiredMixin, View):
         2. Publish: Publishes the article.
         """
 
-        article = get_object_or_404(Article, id=article_id)
+        article = get_object_or_404(Article, id=article_id, author=request.user)
         form = ArticleForm(request.POST, user=request.user, instance=article)
         submit_type = request.POST['SubmitButton']
 
@@ -88,14 +87,14 @@ class ArticleEditView(LoginRequiredMixin, View):
             submit_type = int(submit_type)
 
         if submit_type == Article.Version_Status.NEW_VERSION:
-            new_version = create_new_version(article)
+            new_version = article.create_new_version()
             messages.info(request, 'New version created')
             return redirect('knowledgebase:article_edit', article_id=new_version.id)
 
         if form.is_valid():
             form.save()
             if submit_type == Article.Article_Status.PUBLISHED:
-                publish_article(article)
+                article.publish_article()
                 messages.success(request, 'Article published successfully!')
             else:
                 messages.success(request, 'Article saved successfully!')

@@ -10,7 +10,7 @@ class ServerSchemaGenerator(SchemaGenerator):
     """
     def get_schema(self, *args, **kwargs):
         schema = super().get_schema(*args, **kwargs)
-        schema['servers'] = [{"url": 'http://127.0.0.1:8000'}]
+        schema['servers'] = [{"url": 'http://knowledge-shared.com'}]
         return schema
 
 

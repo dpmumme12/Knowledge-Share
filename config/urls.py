@@ -30,6 +30,9 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('knowledgebase/',
          include('KnowledgeShare.knowledgebase.urls', namespace='knowledgebase')),
+    path('cookie-policy',
+         TemplateView.as_view(template_name='policies/cookiepolicy.html'),
+         name='cookie_policy'),
 ]
 
 if settings.DEBUG:

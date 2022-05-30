@@ -1,5 +1,6 @@
 import uuid as uuid_lib
 from django.db import models
+from django.db.models import Q
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import strip_tags
@@ -38,10 +39,54 @@ class Article(TimeStampedModel):
         content = strip_tags(self.content)
         return Truncator(content).words(20)
 
+    def create_new_version(self):
+        """
+        Creates a new version of an article and returns it.
+        """
+
+        (Article
+         .objects
+         .filter(uuid=self.uuid, version_status_id=Article.Version_Status.NEW_VERSION)
+         .delete()
+         )
+        new_version = (Article
+                       .objects
+                       .create(author=self.author,
+                               title=self.title,
+                               slug=self.slug,
+                               article_status_id=self.Article_Status.DRAFT,
+                               content=self.content,
+                               version=self.version + 1,
+                               version_status_id=self.Version_Status.NEW_VERSION,
+                               uuid=self.uuid,
+                               folder=self.folder
+                               )
+                       )
+
+        return new_version
+
+    def publish_article(self):
+        """
+        Publishes an article.
+        """
+
+        (Article
+         .objects
+         .filter(Q(uuid=self.uuid), ~Q(id=self.id))
+         .update(article_status_id=self.Article_Status.ARCHIVED,
+                 version_status_id=self.Version_Status.HISTORY)
+         )
+
+        self.article_status_id = Article.Article_Status.PUBLISHED
+        self.version_status_id = Article.Version_Status.ACTIVE
+        self.save()
+
+        return self
+
 
 class ArticleImage(models.Model):
     article_id = models.ForeignKey('Article', on_delete=models.CASCADE)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='article_images')
 
 
 class Article_User(models.Model):

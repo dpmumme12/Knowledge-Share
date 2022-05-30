@@ -1,0 +1,14 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+
+{% block title %}
+(403) - Forbidden
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <div class="position-absolute top-50 start-50 translate-middle" >
+        <div class="padding-bottom-15" style="text-align: center;"><h5>Error 403 - Forbidden</h5></div>
+        <div class="padding-bottom-5" style="text-align: center;"><p>{% if exception %}{{ exception }}{% else %}You don't have permission to access this resource.{% endif %}</p></div>
+    </div>
+</div>
+{% endblock body %}

@@ -20,7 +20,7 @@ urlpatterns = [
     path('api/follow-unfollow/<int:pk>', FollowUnfollowView.as_view(), name='follow_unfollow'),
     path('api/notifications', NotificationsListView.as_view(), name='notifications'),
     path('api/messages', MessagesListView.as_view(), name='message_api'),
-    path('api/openapi', get_schema_view(title='SimpleKB.Social',
+    path('api/openapi', get_schema_view(title='KnowledgeShare.Social',
                                         description='API for the Social app in the project',
                                         generator_class=ServerSchemaGenerator,
                                         version='1.0.0'), name='openapi-schema'),

@@ -4,17 +4,6 @@ from django.test import RequestFactory, TestCase
 
 USER_MODEL = get_user_model()
 
-
-def add_middleware_to_request(request, middleware_class):
-    middleware = middleware_class(request)
-    middleware.process_request(request)
-    return request
-
-def add_middleware_to_response(request, middleware_class):
-    middleware = middleware_class()
-    middleware.process_response(request)
-    return request
-
 class UsersViewsTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
