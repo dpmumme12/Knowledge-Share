@@ -67,7 +67,7 @@ class DeleteAccountView(LoginRequiredMixin, View):
         except Exception as e:
             messages.error(request, str(e))
             return redirect('users:settings')
-        return redirect('users:login')
+        return redirect('users:settings')
 
 
 class LoginRedirectView(View):
