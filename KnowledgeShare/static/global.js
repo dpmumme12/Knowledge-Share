@@ -21,6 +21,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
+
 function error_message(message) {
     document.getElementById('messages').innerHTML = `
     <div class="alert-error alert d-flex align-items-center alert-dismissible 
@@ -35,6 +36,7 @@ function error_message(message) {
     </div>
     `;
 }
+
 
 // Utils
 function get(selector, root = document) {
