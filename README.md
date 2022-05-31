@@ -1,6 +1,6 @@
 # Knowledge-Share
 
-Knowledge-Share is a web app whose focus is to help people build up and share a collection of knowledge in the form of a knowledgebase.
+[Knowledge-Share](https://www.knowledge-shared.com) is a web app whose focus is to help people build up and share a collection of knowledge in the form of a knowledgebase.
 
 
 ### Built With
