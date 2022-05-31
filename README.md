@@ -5,9 +5,9 @@ Knowledge-Share is a web app whose focus is to help people build up and share a 
 
 ### Built With
 
- [Django](https://www.djangoproject.com/)
- [django-rest-framework](https://www.django-rest-framework.org/)
- [Bootstrap](https://getbootstrap.com/)
+ * [Django](https://www.djangoproject.com/)
+ * [django-rest-framework](https://www.django-rest-framework.org/)
+ * [Bootstrap](https://getbootstrap.com/)
 
 ## Authors
 
