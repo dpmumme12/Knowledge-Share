@@ -1,4 +1,9 @@
-get('#notifications-toggle').addEventListener('click', show_notifications);
+try {
+  get('#notifications-toggle').addEventListener('click', show_notifications);
+} 
+catch (error) {
+  console.error(error);
+}
 const notifications_url = JSON.parse(get('#notifications_url').textContent);
 var notification_page = 1;
 
