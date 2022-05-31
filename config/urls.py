@@ -23,7 +23,7 @@ urlpatterns = [
     path('',
          TemplateView.as_view(template_name='landingpage/landingpage.html'),
          name='landing_page'),
-    path('admin/', admin.site.urls),
+    path('management-center/', admin.site.urls),
     path('social/', include('KnowledgeShare.social.urls', namespace='social')),
     path('users/', include('KnowledgeShare.users.urls', namespace='users')),
     path('articlefeed/', include('KnowledgeShare.articlefeed.urls', namespace='articlefeed')),
