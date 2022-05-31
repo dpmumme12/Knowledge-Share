@@ -87,9 +87,11 @@
 {% endblock main %}
 
 {% block scripts %}
+{% if request.user.is_authenticated %}
 {% url 'social:notifications' as notifications_url %}
 {{notifications_url|json_script:"notifications_url"}}
 <script src="{% static 'layouts/base_knowledgebase.js' %}"></script>
+{% endif %}
 {% block base_knowledegebase_scripts %}
 {% endblock base_knowledegebase_scripts %}
 {% endblock scripts %}
