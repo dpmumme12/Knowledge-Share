@@ -41,7 +41,6 @@ DATABASES = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 MEDIA_ROOT = APPS_DIR / 'media'
-STATIC_URL = 'static/'
 
 
 # Email Settings
