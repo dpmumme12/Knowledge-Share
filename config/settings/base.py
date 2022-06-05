@@ -136,7 +136,7 @@ STATIC_ROOT = APPS_DIR / 'static_root'
 
 STATICFILES_DIRS = [APPS_DIR / 'static']
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 STATIC_URL = 'static/'
 
