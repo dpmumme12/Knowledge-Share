@@ -39,6 +39,7 @@ THIRD_PARTY_APPS = [
     "debug_toolbar",
     'rest_framework',
     'django_filters',
+    'cloudinary',
 ]
 
 LOCAL_APPS = [
