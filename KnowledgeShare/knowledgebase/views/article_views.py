@@ -113,7 +113,7 @@ class ArticleDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        # If deleting active version fo article.
+        # If deleting active version for article.
         # Deletes all versions as well
         if self.object.version_status_id == Article.Version_Status.ACTIVE:
             Article.objects.filter(uuid=self.object.uuid).delete()

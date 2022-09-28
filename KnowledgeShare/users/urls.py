@@ -20,7 +20,7 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
         template_name='users/password_reset_confirm.html',
         post_reset_login=True,
-        success_url=reverse_lazy('knowledgebase:dashboard'),
+        success_url=reverse_lazy('users:login_redirect'),
         form_class=PasswordSetForm), name='password_reset_confirm'),
     path('settings', UserSettingsView.as_view(), name='settings'),
     path('delete/account', DeleteAccountView.as_view(), name='delete_account'),
