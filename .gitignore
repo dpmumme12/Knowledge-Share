@@ -5,3 +5,4 @@ app/env.json
 dev_env.json
 logs/*
 KnowledgeShare/media/*
+.idea/
