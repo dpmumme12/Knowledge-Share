@@ -7,7 +7,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 ALLOWED_HOSTS = ['knowledge-shared.com', 'www.knowledge-shared.com']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 # Database
