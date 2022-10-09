@@ -175,9 +175,3 @@ TINYMCE_DEFAULT_CONFIG = {
     #     "plugins": ['autosave', 'lists', 'autolink']
     # }
 }
-
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
-]
