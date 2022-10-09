@@ -42,7 +42,7 @@ Dashboard
         </div>
       </div>
       <p class="card-text">{{dashboard_user.bio}}</p>
-      {% ifn not dashboard_user == request.user and request.user.is_authenticated %}
+      {% if not dashboard_user == request.user and request.user.is_authenticated %}
       {% if not dashboard_user in request.user.following.all %}
         <button id="main-follow-button" class="btn btn-primary" data-id="{{dashboard_user.id}}">Follow</button>
       {% else %}
