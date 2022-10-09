@@ -47,7 +47,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.environ['EMAIL_HOST_USER']
 DEFAULT_TO_EMAIL = os.environ['DEFAULT_TO_EMAIL']
-SERVER_EMAIL = os.environ['EMAIL_HOST_USER']
+
 
 ADMINS = [('Doug Mumme', 'dougmumme@gmail.com')]
 
