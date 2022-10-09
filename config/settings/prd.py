@@ -71,7 +71,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['mail_admins'],
-            'level': 'CRITICAL',
+            'level': 'ERROR',
             'propagate': True,
         },
     },
