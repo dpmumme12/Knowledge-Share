@@ -48,6 +48,8 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.environ['EMAIL_HOST_USER']
 DEFAULT_TO_EMAIL = os.environ['DEFAULT_TO_EMAIL']
 
+ADMINS = [('Doug Mumme', 'dougmumme@gmail.com')]
+
 
 LOGGING = {
     'version': 1,
