@@ -59,7 +59,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'format': '[{levelname}] {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
         'simple': {
@@ -70,15 +70,16 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'logs/logger.log',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'when': 'midnight',
+            'filename': 'logs/log',
             'formatter': 'verbose'
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'ERROR',
+            'level': 'INFO',
             'propagate': True,
         },
     },
