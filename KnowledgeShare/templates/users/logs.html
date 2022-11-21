@@ -1,0 +1,16 @@
+{% extends 'layouts/base_knowledgebase.html' %}
+{% load static %}
+
+{% block title %}
+Logs
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href='{% static 'users/logs.css' %}'>
+{% endblock styles %}
+
+{% block body %}
+{% for log in logs %}
+  {{log.log.level}} - {{log.log.message}} - {{log.log.traceback}}
+{% endfor %}
+{% endblock body %}

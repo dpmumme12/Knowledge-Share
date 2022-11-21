@@ -1,6 +1,7 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
-from .views import RegisterationView, UserSettingsView, DeleteAccountView, LoginRedirectView
+from .views import (RegisterationView, UserSettingsView, DeleteAccountView,
+                    LoginRedirectView, LoggingView)
 from .forms import LoginForm, ResetPasswodForm, PasswordSetForm
 
 app_name = 'users'
@@ -24,5 +25,6 @@ urlpatterns = [
         form_class=PasswordSetForm), name='password_reset_confirm'),
     path('settings', UserSettingsView.as_view(), name='settings'),
     path('delete/account', DeleteAccountView.as_view(), name='delete_account'),
-    path('login/redirect', LoginRedirectView.as_view(), name='login_redirect')
+    path('login/redirect', LoginRedirectView.as_view(), name='login_redirect'),
+    path('logs', LoggingView.as_view(), name='logs')
 ]

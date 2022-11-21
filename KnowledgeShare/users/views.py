@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import (authenticate, login, logout, get_user,
                                  update_session_auth_hash)
 from django.contrib import messages
+from KnowledgeShare.utils.xml import XMLParse
 from .forms import UserRegisterationForm, UserSettingsForm, ChangePasswordForm
 
 
@@ -73,3 +74,15 @@ class DeleteAccountView(LoginRequiredMixin, View):
 class LoginRedirectView(View):
     def get(self, request):
         return redirect('social:dashboard', request.user.username)
+
+
+class LoggingView(View):
+    template_name = 'users/logs.html'
+
+    def get(self, request):
+        logs_xml = XMLParse('logs\log')
+        logs = logs_xml.serialize_xml()
+        
+        print(logs)
+
+        return render(request, self.template_name, {'logs': logs})

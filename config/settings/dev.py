@@ -1,6 +1,5 @@
 from django.core.exceptions import ImproperlyConfigured
 import json
-import sys
 from .base import *
 
 # JSON-based secrets module
@@ -58,22 +57,21 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'verbose': {
-            'format': '[{levelname}] {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
         'simple': {
             'format': '{levelname} {message}',
             'style': '{',
         },
+        'verbose': {
+            '()': 'KnowledgeShare.utils.formatters.XMLLogFormatter'
+        }
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'when': 'midnight',
             'filename': 'logs/log',
-            'formatter': 'verbose'
+            'formatter': 'verbose',
         },
     },
     'loggers': {
