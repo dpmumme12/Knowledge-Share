@@ -1,5 +1,7 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import (authenticate, login, logout, get_user,
@@ -76,13 +78,22 @@ class LoginRedirectView(View):
         return redirect('social:dashboard', request.user.username)
 
 
-class LoggingView(View):
+class LoggingView(LoginRequiredMixin, View):
     template_name = 'users/logs.html'
 
     def get(self, request):
-        logs_xml = XMLParse('logs\log')
-        logs = logs_xml.serialize_xml()
-        
-        print(logs)
+
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+
+        date = request.GET.get('date')
+        log_filepath = 'logs\\log'
+        if date and date != datetime.today().strftime('%Y-%m-%d'):
+            log_filepath += F'.{date}'
+        try:
+            logs_xml = XMLParse(log_filepath)
+            logs = logs_xml.serialize_xml()
+        except FileNotFoundError:
+            logs = None
 
         return render(request, self.template_name, {'logs': logs})

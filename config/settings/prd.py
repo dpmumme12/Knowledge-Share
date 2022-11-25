@@ -56,22 +56,27 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+        'simple': {
+            'format': '{levelname} {message}',
             'style': '{',
         },
+        'verbose': {
+            '()': 'KnowledgeShare.utils.formatters.XMLLogFormatter'
+        }
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'formatter': 'verbose'
-        }
+        'file': {
+            'level': os.environ['LOG_LEVEL'],
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'when': 'midnight',
+            'filename': 'logs/log',
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+            'handlers': ['file'],
+            'level': os.environ['LOG_LEVEL'],
             'propagate': True,
         },
     },

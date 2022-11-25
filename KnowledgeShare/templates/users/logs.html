@@ -1,5 +1,6 @@
 {% extends 'layouts/base_knowledgebase.html' %}
 {% load static %}
+{% load utils_tags %}
 
 {% block title %}
 Logs
@@ -10,7 +11,51 @@ Logs
 {% endblock styles %}
 
 {% block body %}
-{% for log in logs %}
-  {{log.log.level}} - {{log.log.message}} - {{log.log.traceback}}
-{% endfor %}
+
+<div class="card mb-5">
+  <div class="card-body d">
+    <form method="get" action="{% url 'users:logs' %}">
+      <div class="col-2 d-inline-block me-3">
+        <label for="DateInput" class="form-label">Date:</label>
+        <input type="date" class="form-control" id="DateInput" name="date">
+      </div>
+      <div class="col-3 d-inline-block">
+        <button type="submit" class="btn btn-primary align-baseline">Search</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<table class="table table-bordered table-light table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Level</th>
+      <th scope="col">Time of Log</th>
+      <th scope="col">Module</th>
+      <th scope="col">Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+      <tr>
+        <td>{{log.log.level}}</td>
+        <td>{{log.log.time|date_time:"%Y-%m-%d %H:%M:%S,%f~%m/%d/%Y %H:%M:%S"}}</td>
+        <td>{{log.log.module}}</td>
+        <td>{{log.log.message}}</td>
+        <td>
+          {% if log.log.traceback %}
+            <a data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="collapse">
+              Expand
+            </a>
+          {% endif %}
+        </td>
+      </tr>
+      {% if log.log.traceback %}
+        <tr class="collapse" id="collapse{{ forloop.counter }}">
+          <td colspan="5">{{log.log.traceback|linebreaksbr}}</td>
+        </tr>
+      {% endif %}    
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock body %}

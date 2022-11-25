@@ -23,6 +23,7 @@ urlpatterns = [
     path('',
          TemplateView.as_view(template_name='landingpage/landingpage.html'),
          name='landing_page'),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('management-center/', admin.site.urls),
     path('social/', include('KnowledgeShare.social.urls', namespace='social')),
     path('users/', include('KnowledgeShare.users.urls', namespace='users')),

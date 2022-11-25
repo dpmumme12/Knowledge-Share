@@ -2,6 +2,7 @@
 {% url 'knowledgebase:kb' request.user.username as knowledgebase_url %}
 {% url 'articlefeed:article_feed' as articlefeed_url %}
 {% url 'social:messages' as messages_url %}
+{% url 'users:logs' as logs_url %}
 {% url 'users:settings' as settings_url %}
 
 <div class="col-nav g-0 nav-bar-desktop">
@@ -38,6 +39,15 @@
           <a class="icon-active" href="{{messages_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Messages"><i class="fa-solid fa-envelope fa-2x"></i></a>
           {% else %}
           <a class="nav-icon" href="{{messages_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Messages"><i class="fa-solid fa-envelope fa-2x"></i></a>
+          {% endif %}
+        </li>
+        {% endif %}
+        {% if request.user.is_authenticated and request.user.is_superuser%}
+        <li class="nav-item">
+          {% if request.path == logs_url %}
+            <a class="icon-active" href="{{logs_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Logs"><i class="fa-solid fa-file-code fa-2x"></i></a>
+          {% else %}
+            <a class="nav-icon" href="{{logs_url}}" data-bs-toggle="tooltip" data-bs-placement="right" title="Logs"><i class="fa-solid fa-file-code fa-2x"></i></a>
           {% endif %}
         </li>
         {% endif %}

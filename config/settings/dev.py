@@ -67,7 +67,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': get_env_var('LOG_LEVEL'),
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'when': 'midnight',
             'filename': 'logs/log',
@@ -77,7 +77,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'INFO',
+            'level': get_env_var('LOG_LEVEL'),
             'propagate': True,
         },
     },
