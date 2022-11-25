@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 
+
 class XMLParse:
     """
     Takes in a filepath to xml document when class instantiated

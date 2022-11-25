@@ -1,6 +1,7 @@
 import logging
 from xml.sax.saxutils import escape
 
+
 class XMLLogFormatter(logging.Formatter):
     """
     Custom formatter overwritting the default logging.Formatter class.
