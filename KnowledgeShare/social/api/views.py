@@ -121,9 +121,9 @@ class FollowUnfollowView(SerializerSchemaMixin, GenericAPIView):
                 return Response(serializer.data, status.HTTP_201_CREATED)
         except Exception:
             logger.exception('FollowUnfollowView failed for requesting user %s and target user %s',
-                              request.user.pk, pk)
+                             request.user.pk, pk)
             raise APIException('Unable to process the follow/unfollow request.',
-                                status.HTTP_500_INTERNAL_SERVER_ERROR)
+                               status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class MessagesListView(ListModelMixin, CreateModelMixin, GenericAPIView):
