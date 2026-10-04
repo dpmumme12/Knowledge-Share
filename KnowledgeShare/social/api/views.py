@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import get_user_model
 from django.db.models import Exists, OuterRef, Q
 from django.urls import reverse
@@ -16,6 +18,7 @@ from .serializers import (UserFollowSerializer, FollowUnFollowSerializer,
                           MessagesSerializer, NotificationsSerializer)
 
 USER_MODEL = get_user_model()
+logger = logging.getLogger('django')
 
 
 class FollowingListView(ListAPIView):
@@ -116,8 +119,11 @@ class FollowUnfollowView(SerializerSchemaMixin, GenericAPIView):
                                                             'is_following': True})
             if serializer.is_valid():
                 return Response(serializer.data, status.HTTP_201_CREATED)
-        except Exception as e:
-            raise APIException(str(e), status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception:
+            logger.exception('FollowUnfollowView failed for requesting user %s and target user %s',
+                              request.user.pk, pk)
+            raise APIException('Unable to process the follow/unfollow request.',
+                                status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class MessagesListView(ListModelMixin, CreateModelMixin, GenericAPIView):
