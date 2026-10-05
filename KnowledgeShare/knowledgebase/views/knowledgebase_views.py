@@ -14,7 +14,7 @@ from ..helpers import search_knowledgebase, get_knowledgebase
 
 
 # Create your views here.
-class KnowledgeBaseView(View):
+class KnowledgeBaseView(LoginRequiredMixin, View):
     template_name = 'knowledgebase/knowledgebase.html'
 
     def get(self, request, **kwargs):

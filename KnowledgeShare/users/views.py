@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.core.exceptions import PermissionDenied
@@ -87,9 +88,10 @@ class LoggingView(LoginRequiredMixin, View):
             raise PermissionDenied()
 
         date = request.GET.get('date')
-        log_filepath = 'logs\\log'
+        log_filename = 'log'
         if date and date != datetime.today().strftime('%Y-%m-%d'):
-            log_filepath += F'.{date}'
+            log_filename = F'{log_filename}.{date}'
+        log_filepath = Path('logs') / log_filename
         try:
             logs_xml = XMLParse(log_filepath)
             logs = logs_xml.serialize_xml()
